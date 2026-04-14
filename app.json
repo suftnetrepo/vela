@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "Vela",
+    "slug": "vela",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "vela",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFBFC"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.vela.cycle",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Use Face ID to securely unlock Vela",
+        "NSCameraUsageDescription": "Camera access is not required",
+        "NSPhotoLibraryUsageDescription": "Photo access is not required"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#FFFBFC"
+      },
+      "package": "com.vela.cycle",
+      "permissions": [
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-secure-store",
+      "expo-local-authentication",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#E8748A"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
