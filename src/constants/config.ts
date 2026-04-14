@@ -41,4 +41,5 @@ export const SETTINGS_KEYS = {
   PREMIUM_EXPIRES_AT:       'premium_expires_at',
   FIRST_DAY_OF_WEEK:        'first_day_of_week',
   TEMPERATURE_UNIT:         'temperature_unit',
+  MOOD_VISIBLE_PREFIX:      'mood_visible_',
 } as const

@@ -126,6 +126,11 @@ export default function SettingsScreen() {
             onPress={() => router.push('/(app)/(settings)/notifications')} />
         </Section>
 
+        <Section title="LOGGING">
+          <MenuRow icon="heart" label="Manage Moods" subtitle="Choose which moods appear when logging"
+            onPress={() => router.push('/(app)/(settings)/moods')} />
+        </Section>
+
         <Section title="APPEARANCE">
           <MenuRow icon="palette" label="Theme"
             subtitle={settings.theme.charAt(0).toUpperCase() + settings.theme.slice(1)}

@@ -1,0 +1,408 @@
+import React, { useState, useEffect, useCallback } from 'react'
+import {
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native'
+import {
+  Stack,
+  StyledText,
+  StyledPressable,
+  StyledPage,
+  StyledHeader
+} from 'fluent-styles'
+import { router } from 'expo-router'
+import { useColors } from '../../../src/hooks/useColors'
+import { useRecordsStore } from '../../../src/stores/records.store'
+import { setMoodVisible, resetMoodsToDefault } from '../../../src/hooks/useMoods'
+import { settingsService } from '../../../src/services/settings.service'
+import { ALL_MOODS, MOOD_SETTING_PREFIX } from '../../../src/constants/moods'
+import { VelaIcon } from '../../../src/components/shared/VelaIcon'
+import { dialogueService, toastService } from 'fluent-styles'
+import type { MoodDef } from '../../../src/constants/moods'
+
+// ─── Load visibility from DB — uses same 1/0 logic as useMoods ───────────────
+async function loadVisibility(): Promise<Record<string, boolean>> {
+  const all = await settingsService.getAll()
+  const result: Record<string, boolean> = {}
+  for (const mood of ALL_MOODS) {
+    const key = `${MOOD_SETTING_PREFIX}${mood.key}`
+    if (key in all) {
+      result[mood.key] = all[key] === 1 || all[key] === true
+    } else {
+      result[mood.key] = mood.defaultVisible
+    }
+  }
+  return result
+}
+
+// ─── Section header ───────────────────────────────────────────────────────────
+function SectionHeader({ label, count }: { label: string; count: number }) {
+  const Colors = useColors()
+  return (
+    <Stack
+      flexDirection="row"
+      alignItems="center"
+      gap={8}
+      paddingHorizontal={20}
+      paddingTop={24}
+      paddingBottom={10}
+    >
+      <StyledText fontSize={11} fontWeight="700" color={Colors.textTertiary} letterSpacing={0.8}>
+        {label}
+      </StyledText>
+      <Stack
+        backgroundColor={Colors.primaryFaint}
+        borderRadius={10}
+        paddingHorizontal={7}
+        paddingVertical={2}
+      >
+        <StyledText fontSize={10} fontWeight="700" color={Colors.primary}>{count}</StyledText>
+      </Stack>
+    </Stack>
+  )
+}
+
+// ─── Custom tick indicator — clearly visible checked vs unchecked ─────────────
+function TickBox({ checked, color }: { checked: boolean; color: string }) {
+  if (checked) {
+    return (
+      <Stack
+        width={26}
+        height={26}
+        borderRadius={13}
+        backgroundColor={color}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <StyledText fontSize={13} color="#fff">✓</StyledText>
+      </Stack>
+    )
+  }
+  return (
+    <Stack
+      width={26}
+      height={26}
+      borderRadius={13}
+      borderWidth={2}
+      borderColor="#D1D5DB"
+      backgroundColor="transparent"
+    />
+  )
+}
+
+// ─── Single mood row ──────────────────────────────────────────────────────────
+function MoodRow({
+  mood,
+  checked,
+  onToggle,
+}: {
+  mood:     MoodDef
+  checked:  boolean
+  onToggle: (key: string, val: boolean) => void
+}) {
+  const Colors = useColors()
+  return (
+    <StyledPressable
+      onPress={() => onToggle(mood.key, !checked)}
+      flexDirection="row"
+      alignItems="center"
+      paddingHorizontal={20}
+      paddingVertical={13}
+      backgroundColor={checked ? Colors.primaryFaint : Colors.surface}
+      gap={14}
+    >
+      {/* Emoji circle */}
+      <Stack
+        width={44}
+        height={44}
+        borderRadius={22}
+        backgroundColor={checked ? Colors.surface : Colors.surfaceAlt}
+        alignItems="center"
+        justifyContent="center"
+        borderWidth={1}
+        borderColor={Colors.border}
+      >
+        <StyledText fontSize={22}>{mood.emoji}</StyledText>
+      </Stack>
+
+      {/* Label + default badge */}
+      <Stack flex={1} gap={3}>
+        <StyledText
+          fontSize={15}
+          fontWeight={checked ? '700' : '400'}
+          color={checked ? Colors.textPrimary : Colors.textSecondary}
+        >
+          {mood.label}
+        </StyledText>
+        {mood.defaultVisible && (
+          <Stack
+            alignSelf="flex-start"
+            backgroundColor={Colors.primary + '20'}
+            borderRadius={6}
+            paddingHorizontal={6}
+            paddingVertical={1}
+          >
+            <StyledText fontSize={10} fontWeight="700" color={Colors.primaryDark}>
+              Default
+            </StyledText>
+          </Stack>
+        )}
+      </Stack>
+
+      {/* Tick */}
+      <TickBox checked={checked} color={Colors.primary} />
+    </StyledPressable>
+  )
+}
+
+// ─── Divider ──────────────────────────────────────────────────────────────────
+function RowDivider() {
+  const Colors = useColors()
+  return <Stack height={1} backgroundColor={Colors.border} marginLeft={78} />
+}
+
+// ─── Main screen ──────────────────────────────────────────────────────────────
+export default function MoodsSettingsScreen() {
+  const Colors         = useColors()
+  const invalidateData = useRecordsStore(s => s.invalidateData)
+
+  const [visibility, setVisibility] = useState<Record<string, boolean>>({})
+  const [loading,    setLoading]    = useState(true)
+  const [saving,     setSaving]     = useState(false)
+
+  const load = useCallback(async () => {
+    setLoading(true)
+    try {
+      const vis = await loadVisibility()
+      setVisibility(vis)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => { load() }, [load])
+
+  const checkedCount = Object.values(visibility).filter(Boolean).length
+
+  // Toggle a single mood — optimistic UI update then persist
+  const handleToggle = useCallback(async (key: string, val: boolean) => {
+    setVisibility(prev => ({ ...prev, [key]: val }))
+    setSaving(true)
+    try {
+      await setMoodVisible(key, val)
+      invalidateData()
+    } finally {
+      setSaving(false)
+    }
+  }, [invalidateData])
+
+  // Reset to defaults
+  const handleReset = useCallback(async () => {
+    const ok = await dialogueService.confirm({
+      title:        'Reset to defaults?',
+      message:      'This will restore the original mood selection.',
+      icon:         '🔄',
+      confirmLabel: 'Reset',
+      cancelLabel:  'Cancel',
+    })
+    if (!ok) return
+    setSaving(true)
+    try {
+      await resetMoodsToDefault()
+      await load()
+      invalidateData()
+      toastService.success('Moods reset', 'Default selection restored.')
+    } finally {
+      setSaving(false)
+    }
+  }, [load, invalidateData])
+
+  const defaultMoods = ALL_MOODS.filter(m => m.defaultVisible)
+  const extraMoods   = ALL_MOODS.filter(m => !m.defaultVisible)
+
+  return (
+    <StyledPage flex={1} backgroundColor={Colors.background}>
+      <StyledHeader marginHorizontal={16}>
+        <StyledHeader.Full>
+          <Stack flexDirection="row" alignItems="center" gap={12} marginBottom={14}>
+          <StyledPressable
+            onPress={() => router.back()}
+            width={40}
+            height={40}
+            borderRadius={20}
+            backgroundColor={Colors.primaryFaint}
+            alignItems="center"
+            justifyContent="center"
+            borderWidth={1}
+            borderColor={Colors.border}
+          >
+            <VelaIcon name="chevron-left" size={20} color={Colors.primary} />
+          </StyledPressable>
+          <Stack flex={1}>
+            <StyledText fontSize={22} fontWeight="800" color={Colors.textPrimary}>
+              Manage Moods
+            </StyledText>
+            <StyledText fontSize={13} color={Colors.textSecondary}>
+              Choose which moods appear when logging
+            </StyledText>
+          </Stack>
+          {saving && <ActivityIndicator size="small" color={Colors.primary} />}
+        </Stack>
+        </StyledHeader.Full>
+        
+      </StyledHeader>
+   
+      {/* ── Header ─────────────────────────────────────────────────────────── */}
+      <Stack
+        backgroundColor={Colors.surface}
+        paddingBottom={16}
+        paddingHorizontal={20}
+        borderBottomWidth={1}
+        borderBottomColor={Colors.border}
+      >
+      
+        {/* Stats bar */}
+        <Stack
+          flexDirection="row"
+          backgroundColor={Colors.primaryFaint}
+          borderRadius={16}
+          padding={14}
+          borderWidth={1}
+          borderColor={Colors.border}
+        >
+          <Stack flex={1} alignItems="center" gap={2}>
+            <StyledText fontSize={22} fontWeight="800" color={Colors.primary}>
+              {checkedCount}
+            </StyledText>
+            <StyledText fontSize={11} fontWeight="600" color={Colors.textSecondary}>Selected</StyledText>
+          </Stack>
+          <Stack width={1} backgroundColor={Colors.border} marginVertical={4} />
+          <Stack flex={1} alignItems="center" gap={2}>
+            <StyledText fontSize={22} fontWeight="800" color={Colors.textSecondary}>
+              {ALL_MOODS.length - checkedCount}
+            </StyledText>
+            <StyledText fontSize={11} fontWeight="600" color={Colors.textSecondary}>Hidden</StyledText>
+          </Stack>
+          <Stack width={1} backgroundColor={Colors.border} marginVertical={4} />
+          <Stack flex={1} alignItems="center" gap={2}>
+            <StyledText fontSize={22} fontWeight="800" color={Colors.textTertiary}>
+              {ALL_MOODS.length}
+            </StyledText>
+            <StyledText fontSize={11} fontWeight="600" color={Colors.textSecondary}>Total</StyledText>
+          </Stack>
+        </Stack>
+      </Stack>
+
+      {/* ── Body ───────────────────────────────────────────────────────────── */}
+      {loading ? (
+        <Stack flex={1} alignItems="center" justifyContent="center" gap={12}>
+          <ActivityIndicator size="large" color={Colors.primary} />
+          <StyledText fontSize={14} color={Colors.textSecondary}>Loading moods…</StyledText>
+        </Stack>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 120 }}
+        >
+          {/* Default moods */}
+          <SectionHeader label="DEFAULT MOODS" count={defaultMoods.length} />
+          <Stack
+            backgroundColor={Colors.surface}
+            marginHorizontal={16}
+            borderRadius={20}
+            overflow="hidden"
+            borderWidth={1}
+            borderColor={Colors.border}
+            shadowColor="#000"
+            shadowOffset={{ width: 0, height: 2 }}
+            shadowOpacity={0.06}
+            shadowRadius={10}
+            elevation={2}
+          >
+            {defaultMoods.map((mood, i) => (
+              <Stack key={mood.key}>
+                <MoodRow
+                  mood={mood}
+                  checked={visibility[mood.key] ?? mood.defaultVisible}
+                  onToggle={handleToggle}
+                />
+                {i < defaultMoods.length - 1 && <RowDivider />}
+              </Stack>
+            ))}
+          </Stack>
+
+          {/* More moods */}
+          <SectionHeader label="MORE MOODS" count={extraMoods.length} />
+          <Stack
+            backgroundColor={Colors.surface}
+            marginHorizontal={16}
+            borderRadius={20}
+            overflow="hidden"
+            borderWidth={1}
+            borderColor={Colors.border}
+            shadowColor="#000"
+            shadowOffset={{ width: 0, height: 2 }}
+            shadowOpacity={0.06}
+            shadowRadius={10}
+            elevation={2}
+          >
+            {extraMoods.map((mood, i) => (
+              <Stack key={mood.key}>
+                <MoodRow
+                  mood={mood}
+                  checked={visibility[mood.key] ?? false}
+                  onToggle={handleToggle}
+                />
+                {i < extraMoods.length - 1 && <RowDivider />}
+              </Stack>
+            ))}
+          </Stack>
+
+          {/* Reset button */}
+          <Stack marginHorizontal={16} marginTop={28}>
+            <StyledPressable
+              onPress={handleReset}
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="center"
+              gap={8}
+              paddingVertical={16}
+              borderRadius={16}
+              backgroundColor={Colors.surfaceAlt}
+              borderWidth={1}
+              borderColor={Colors.border}
+            >
+              <VelaIcon name="cycle" size={16} color={Colors.textSecondary} />
+              <StyledText fontSize={14} fontWeight="600" color={Colors.textSecondary}>
+                Reset to defaults
+              </StyledText>
+            </StyledPressable>
+          </Stack>
+
+          {/* Tip */}
+          <Stack
+            marginHorizontal={16}
+            marginTop={16}
+            flexDirection="row"
+            alignItems="flex-start"
+            gap={8}
+            backgroundColor={Colors.primaryFaint}
+            borderRadius={14}
+            padding={14}
+            borderWidth={1}
+            borderColor={Colors.border}
+          >
+            <StyledText fontSize={16}>💡</StyledText>
+            <StyledText fontSize={12} color={Colors.textSecondary} flex={1} lineHeight={18}>
+              Changes apply immediately. Moods marked{' '}
+              <StyledText fontSize={12} fontWeight="700" color={Colors.primary}>Default</StyledText>
+              {' '}are pre-selected by Vela as the most useful for cycle tracking.
+            </StyledText>
+          </Stack>
+        </ScrollView>
+      )}
+    </StyledPage>
+  )
+}
+
+

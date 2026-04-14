@@ -10,7 +10,7 @@ import { useColors } from '../../src/hooks/useColors'
 import { useDailyLog } from '../../src/hooks/useDailyLog'
 import { useCycles } from '../../src/hooks/useCycles'
 import { FlowTab }     from '../../src/components/log/FlowTab'
-import { SymptomsTab } from '../../src/components/log/SymptomsTab'
+import { SymptomsTab, MOOD_KEY_PREFIX } from '../../src/components/log/SymptomsTab'
 import { JournalTab }  from '../../src/components/log/JournalTab'
 import type { FlowData }    from '../../src/components/log/FlowTab'
 import type { JournalData } from '../../src/components/log/JournalTab'
@@ -21,10 +21,6 @@ import { logService }  from '../../src/services/log.service'
 import { useRecordsStore } from '../../src/stores/records.store'
 
 type LogTab = 'flow' | 'symptoms' | 'journal'
-
-const FLOW_MAP: Record<string, string> = {
-  light: 'light', medium: 'medium', heavy: 'heavy',
-}
 
 export default function LogScreen() {
   const Colors  = useColors()
@@ -49,10 +45,10 @@ export default function LogScreen() {
     discharge: null,
   })
 
-  // Symptoms
+  // All selected keys — includes both symptom keys and mood_ prefixed keys
   const [symptoms, setSymptoms] = useState<string[]>([])
 
-  // Journal
+  // Journal (energy + notes only — mood moved to symptoms tab)
   const [journalData, setJournalData] = useState<JournalData>({
     mood:        '',
     energyLevel: 3,
@@ -69,7 +65,18 @@ export default function LogScreen() {
                    ? flow as any : null,
       discharge: log.flow === 'spotting' ? 'spotting' : null,
     })
-    setSymptoms(log.symptoms.map(s => s.symptomKey))
+
+    // Symptom keys from DB — already include any mood_ prefixed ones saved previously
+    const symptomKeys = log.symptoms.map(s => s.symptomKey)
+
+    // Also migrate legacy single mood from daily_logs.mood if present
+    // and no mood_ keys exist yet in symptom_logs
+    const hasMoodKeys = symptomKeys.some(k => k.startsWith(MOOD_KEY_PREFIX))
+    if (log.mood && !hasMoodKeys) {
+      symptomKeys.push(`${MOOD_KEY_PREFIX}${log.mood}`)
+    }
+
+    setSymptoms(symptomKeys)
     setJournalData({
       mood:        log.mood ?? '',
       energyLevel: log.energyLevel ?? 3,
@@ -82,7 +89,7 @@ export default function LogScreen() {
     setSaving(true)
     const id = loaderService.show({ label: 'Saving…', variant: 'dots' })
     try {
-      // Resolve flow string from FlowData
+      // Resolve flow string
       let flowStr: string | undefined
       if (flowData.hasFlow === false) flowStr = 'none'
       else if (flowData.hasFlow === true) {
@@ -90,9 +97,15 @@ export default function LogScreen() {
         else flowStr = flowData.level ?? 'light'
       }
 
+      // Extract first mood key for the legacy daily_logs.mood column
+      const moodKeys    = symptoms.filter(k => k.startsWith(MOOD_KEY_PREFIX))
+      const legacyMood  = moodKeys.length > 0
+        ? moodKeys[0].replace(MOOD_KEY_PREFIX, '')
+        : undefined
+
       await saveLog({
         flow:        flowStr,
-        mood:        journalData.mood || undefined,
+        mood:        legacyMood,
         energyLevel: journalData.energyLevel,
         notes:       journalData.notes || undefined,
         cycleId:     active?.id,
@@ -149,12 +162,10 @@ export default function LogScreen() {
         titleAlignment="left"
         marginHorizontal={16}
         shapeProps={{
-          size:48,
-          backgroundColor: theme.colors.pink[50]
+          size: 48,
+          backgroundColor: theme.colors.pink[50],
         }}
-        backArrowProps={{
-          color:theme.colors.pink[500]
-        }}
+        backArrowProps={{ color: theme.colors.pink[500] }}
         showBackArrow
         onBackPress={() => router.back()}
         showStatusBar
@@ -216,9 +227,7 @@ export default function LogScreen() {
       {/* Sticky save button */}
       <Stack
         position="absolute"
-        bottom={0}
-        left={0}
-        right={0}
+        bottom={0} left={0} right={0}
         paddingHorizontal={20}
         paddingBottom={36}
         paddingTop={12}
@@ -257,3 +266,4 @@ export default function LogScreen() {
     </StyledPage>
   )
 }
+
