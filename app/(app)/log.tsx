@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import {
   Stack, StyledText, StyledScrollView, StyledPage,
   StyledHeader, StyledPressable, TabBar,
+  theme,
+  StyledSpacer,
 } from 'fluent-styles'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useColors } from '../../src/hooks/useColors'
@@ -142,9 +144,17 @@ export default function LogScreen() {
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
       {/* Header */}
-      <StyledHeader
+      <StyledPage.Header
         title={formatDisplayDate(fromDateStr(date))}
-        titleAlignment="center"
+        titleAlignment="left"
+        marginHorizontal={16}
+        shapeProps={{
+          size:48,
+          backgroundColor: theme.colors.pink[50]
+        }}
+        backArrowProps={{
+          color:theme.colors.pink[500]
+        }}
         showBackArrow
         onBackPress={() => router.back()}
         showStatusBar
@@ -158,6 +168,7 @@ export default function LogScreen() {
           ) : null
         }
       />
+      <StyledSpacer marginVertical={4} />
 
       {/* Tab bar */}
       <Stack paddingHorizontal={20} paddingBottom={4}>

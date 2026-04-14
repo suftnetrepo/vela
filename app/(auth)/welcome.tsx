@@ -9,23 +9,31 @@ import type { VelaIconName } from '../../src/components/shared/VelaIcon'
 
 const { width: W } = Dimensions.get('window')
 
-interface PageDef { icon: VelaIconName; title: string; subtitle: string }
+interface PageDef {
+  icon:     VelaIconName
+  headline: string        // large coloured word
+  title:    string        // supporting title line
+  subtitle: string
+}
 
 const PAGES: PageDef[] = [
   {
     icon:     'flower',
-    title:    'Your cycle.\nYour data.\nYour phone.',
-    subtitle: 'Vela is a private, offline period tracker. No accounts, no cloud, no data sharing.',
+    headline: 'Vela',
+    title:    'Your cycle, privately.',
+    subtitle: 'A fully offline period tracker. No accounts, no cloud, no data sharing — ever.',
   },
   {
     icon:     'phase-predicted',
-    title:    'Predict your cycle',
+    headline: 'Predict',
+    title:    'Know your cycle.',
     subtitle: 'Vela learns your unique pattern and predicts your next period, fertile window, and ovulation day.',
   },
   {
     icon:     'shield-check',
-    title:    'Total privacy',
-    subtitle: 'Every detail you log stays on your device. Vela has zero network access — not even analytics.',
+    headline: 'Private',
+    title:    'Your data stays here.',
+    subtitle: 'Everything you log lives only on your phone. Zero network requests. Zero tracking. Forever.',
   },
 ]
 
@@ -38,44 +46,74 @@ export default function WelcomeScreen() {
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
-      <Stack flex={1} alignItems="center" justifyContent="center" paddingHorizontal={32} gap={32}>
+      <Stack flex={1} justifyContent="center" paddingHorizontal={32} gap={0}>
 
-        {/* Icon hero */}
-        <Stack width={120} height={120} borderRadius={60} backgroundColor={Colors.primaryFaint}
-          alignItems="center" justifyContent="center" borderWidth={3} borderColor={Colors.border}>
-          <VelaIcon name={p.icon} size={54} color={Colors.primary} />
+        {/* Icon */}
+        <Stack alignItems="center" marginBottom={36}>
+          <Stack
+            width={130}
+            height={130}
+            borderRadius={65}
+            backgroundColor={Colors.primaryFaint}
+            alignItems="center"
+            justifyContent="center"
+            borderWidth={2.5}
+            borderColor={Colors.border}
+          >
+            <VelaIcon name={p.icon} size={60} color={Colors.primary} />
+          </Stack>
         </Stack>
 
-        {/* Text */}
-        <Stack gap={12} alignItems="center">
+        {/* Big coloured headline word */}
+        <Stack alignItems="center" marginBottom={8}>
           <StyledText
-            fontSize={30}
+            fontSize={56}
             fontWeight="800"
+            color={Colors.primary}
+            textAlign="center"
+            letterSpacing={-1}
+          >
+            {p.headline}
+          </StyledText>
+        </Stack>
+
+        {/* Supporting title */}
+        <Stack alignItems="center" marginBottom={14}>
+          <StyledText
+            fontSize={22}
+            fontWeight="700"
             color={Colors.textPrimary}
             textAlign="center"
-            lineHeight={38}
           >
             {p.title}
           </StyledText>
+        </Stack>
+
+        {/* Subtitle */}
+        <Stack alignItems="center" marginBottom={40}>
           <StyledText
             fontSize={16}
             color={Colors.textSecondary}
             textAlign="center"
-            lineHeight={24}
+            lineHeight={25}
           >
             {p.subtitle}
           </StyledText>
         </Stack>
 
         {/* Privacy badge on last page */}
-        {isLast && <PrivacyBadge />}
+        {isLast && (
+          <Stack marginBottom={32}>
+            <PrivacyBadge />
+          </Stack>
+        )}
 
-        {/* Dots */}
-        <Stack horizontal gap={8} alignItems="center">
+        {/* Page dots */}
+        <Stack flexDirection="row" gap={8} alignItems="center" justifyContent="center">
           {PAGES.map((_, i) => (
             <Stack
               key={i}
-              width={i === page ? 20 : 8}
+              width={i === page ? 24 : 8}
               height={8}
               borderRadius={4}
               backgroundColor={i === page ? Colors.primary : Colors.border}
@@ -84,38 +122,27 @@ export default function WelcomeScreen() {
         </Stack>
       </Stack>
 
-      {/* Bottom actions */}
-      <Stack paddingHorizontal={32} paddingBottom={48} gap={12}>
-        {isLast ? (
-          <StyledPressable
-            backgroundColor={Colors.primary}
-            borderRadius={30}
-            paddingVertical={18}
-            alignItems="center"
-            onPress={() => router.replace('/(auth)/onboarding')}
-            shadowColor={Colors.primary}
-            shadowOffset={{ width: 0, height: 4 }}
-            shadowOpacity={0.35}
-            shadowRadius={12}
-            elevation={6}
-          >
-            <StyledText fontSize={17} fontWeight="800" color={Colors.textInverse}>
-              Get started
-            </StyledText>
-          </StyledPressable>
-        ) : (
-          <StyledPressable
-            backgroundColor={Colors.primary}
-            borderRadius={30}
-            paddingVertical={18}
-            alignItems="center"
-            onPress={() => setPage(p => p + 1)}
-          >
-            <StyledText fontSize={17} fontWeight="800" color={Colors.textInverse}>
-              Next
-            </StyledText>
-          </StyledPressable>
-        )}
+      {/* Actions */}
+      <Stack paddingHorizontal={32} paddingBottom={52} gap={12}>
+        <StyledPressable
+          backgroundColor={Colors.primary}
+          borderRadius={30}
+          paddingVertical={18}
+          alignItems="center"
+          onPress={isLast
+            ? () => router.replace('/(auth)/onboarding')
+            : () => setPage(p => p + 1)
+          }
+          shadowColor={Colors.primary}
+          shadowOffset={{ width: 0, height: 4 }}
+          shadowOpacity={0.32}
+          shadowRadius={14}
+          elevation={6}
+        >
+          <StyledText fontSize={17} fontWeight="800" color={Colors.textInverse}>
+            {isLast ? 'Get started' : 'Next'}
+          </StyledText>
+        </StyledPressable>
 
         {!isLast && (
           <StyledPressable

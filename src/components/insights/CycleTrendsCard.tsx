@@ -7,7 +7,7 @@
  */
 
 import React from 'react'
-import { Stack, StyledText, StyledPressable } from 'fluent-styles'
+import { Stack, StyledText, StyledPressable, StyledCard, theme } from 'fluent-styles'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
 import { CyclePhasePillBar } from '../shared/CyclePhasePillBar'
@@ -30,9 +30,7 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
     : null
 
   return (
-    <Stack backgroundColor={Colors.surface} borderRadius={24} overflow="hidden"
-      shadowColor="#000" shadowOffset={{ width: 0, height: 2 }}
-      shadowOpacity={0.07} shadowRadius={12} elevation={3}>
+    <StyledCard backgroundColor={Colors.surface} borderRadius={24}  shadow='light' >
 
       {/* Header */}
       <Stack flexDirection="row" alignItems="center" justifyContent="space-between"
@@ -130,6 +128,6 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
           currentDay={currentDay}
         />
       </Stack>
-    </Stack>
+    </StyledCard>
   )
 }

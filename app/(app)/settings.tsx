@@ -61,10 +61,13 @@ export default function SettingsScreen() {
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
-      <StyledHeader title="Settings" titleAlignment="left" showStatusBar
+      <StyledPage.Header 
+        marginHorizontal={32}
+        title="Settings" titleAlignment="left" showStatusBar
         backgroundColor={Colors.background}
         titleProps={{ fontSize: 22, fontWeight: '800', color: Colors.textPrimary }} />
-      <StyledScrollView contentContainerStyle={{ padding: 20, paddingBottom: 48, gap: 20 }}
+      
+      <StyledScrollView contentContainerStyle={{ padding: 16, paddingBottom: 48, gap: 20 }}
         showsVerticalScrollIndicator={false}>
 
         {/* Profile card */}

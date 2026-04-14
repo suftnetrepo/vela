@@ -35,6 +35,13 @@ export default function HomeScreen() {
       icon:         '🌸',
       confirmLabel: 'Yes, start',
       cancelLabel:  'Cancel',
+      theme:        'light',
+      colors: {
+        primaryBg: Colors.primary,
+        primaryBorder: Colors.textInverse,
+        secondaryBg: Colors.surface,
+        secondaryBorder: Colors.border,
+      },
     })
     if (!ok) return
     const id = loaderService.show({ label: 'Logging…', variant: 'dots' })
@@ -51,10 +58,10 @@ export default function HomeScreen() {
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
-      <StyledHeader
+      <StyledPage.Header
         title="Vela"
         titleAlignment="left"
-        showStatusBar
+        marginHorizontal={16}
         backgroundColor={Colors.background}
         titleProps={{ fontSize: 24, fontWeight: '800', color: Colors.textPrimary }}
         rightIcon={
@@ -78,6 +85,7 @@ export default function HomeScreen() {
         }
       />
 
+    
       <StyledScrollView
         contentContainerStyle={{ paddingBottom: 48 }}
         showsVerticalScrollIndicator={false}

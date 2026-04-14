@@ -51,7 +51,9 @@ export default function InsightsScreen() {
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
-      <StyledHeader title="Insights" titleAlignment="left" showStatusBar
+      <StyledPage.Header 
+        marginHorizontal={32}
+        title="Insights" titleAlignment="left" showStatusBar
         backgroundColor={Colors.background}
         titleProps={{ fontSize: 22, fontWeight: '800', color: Colors.textPrimary }} />
 

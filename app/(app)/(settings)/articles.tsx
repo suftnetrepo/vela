@@ -4,6 +4,7 @@ import {
   StyledHeader, StyledPressable,
 } from 'fluent-styles'
 import { router } from 'expo-router'
+
 import { useColors } from '../../../src/hooks/useColors'
 import { VelaIcon } from '../../../src/components/shared/VelaIcon'
 import type { VelaIconName } from '../../../src/components/shared/VelaIcon'
@@ -149,7 +150,7 @@ export default function ArticlesScreen() {
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
-      <StyledHeader title="Learn" titleAlignment="left" showStatusBar showBackArrow
+      <StyledHeader title="Learn" titleAlignment="left"  showBackArrow
         onBackPress={() => router.push('/(app)/settings')}
         backgroundColor={Colors.background}
         titleProps={{ fontSize: 22, fontWeight: '800', color: Colors.textPrimary }} />

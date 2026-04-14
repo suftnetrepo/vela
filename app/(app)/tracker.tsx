@@ -244,7 +244,9 @@ export default function TrackerScreen() {
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
-      <StyledHeader title="Tracker" titleAlignment="left" showStatusBar
+      <StyledPage.Header 
+        marginHorizontal={32}
+        title="Tracker" titleAlignment="left" 
         backgroundColor={Colors.background}
         titleProps={{ fontSize: 22, fontWeight: '800', color: Colors.textPrimary }} />
 

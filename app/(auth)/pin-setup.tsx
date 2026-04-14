@@ -28,6 +28,9 @@ export default function PinSetupScreen() {
       return
     }
     await securityService.setPin(pin)
+    // Mark hasPin = true but keep isLocked = false for this session.
+    // The user just set the PIN — they shouldn't be immediately locked out.
+    // isLocked will only be true on the NEXT app launch.
     setHasPin(true)
     toastService.success('PIN set', 'Your data is now protected.')
     router.replace('/(app)/home')
