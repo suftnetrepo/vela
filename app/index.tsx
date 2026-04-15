@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { router, useRootNavigationState } from 'expo-router'
 import { useAuthStore } from '../src/stores/auth.store'
 import { useSettingsStore } from '../src/stores/settings.store'
@@ -10,11 +10,6 @@ export default function Index() {
   const onboardingComplete  = useSettingsStore(s => s.onboardingComplete)
   const pinSkipped          = useSettingsStore(s => s.pinSkipped)
   const bootReady           = useSettingsStore(s => s.bootReady)
-
-  // Track whether onboarding was already complete at mount time.
-  // If it wasn't (first launch / just completed), we skip the lock screen
-  // even if hasPin becomes true mid-session (user just set their PIN).
-  const wasOnboardingComplete = useRef(onboardingComplete)
 
   useEffect(() => {
     // ⚠️ CRITICAL: Block routing until boot is completely ready
@@ -31,28 +26,28 @@ export default function Index() {
     console.log(`[🧭 VELA ROUTER] onboardingComplete=${onboardingComplete}, hasPin=${hasPin}, pinSkipped=${pinSkipped}, isLocked=${isLocked}`)
     console.log('═══════════════════════════════════════════════════════════════\n')
 
-    // ROUTING LOGIC (in order of evaluation):
+    // ROUTING LOGIC (guaranteed to have hydrated state due to bootReady guard):
     // 1. Onboarding not complete → welcome
     // 2. Onboarding complete but PIN not created and not skipped → PIN setup
-    // 3. Onboarding complete, PIN setup done (created or skipped), user locked → lock screen
-    // 4. Otherwise → home
+    // 3. Onboarding complete, PIN exists and app is locked → lock screen
+    // 4. Otherwise → home (PIN skipped or doesn't exist, or already unlocked)
 
     if (!onboardingComplete) {
       // First-time users: send to welcome
       console.log('[🧭 VELA ROUTER] → DECISION: New user (onboarding incomplete) → WELCOME\n')
       router.replace('/(auth)/welcome')
-    } else if (!hasPin && !pinSkipped && wasOnboardingComplete.current) {
+    } else if (!hasPin && !pinSkipped) {
       // Onboarding done, but PIN setup not yet done or skipped
       // Send to PIN setup for first time
       console.log('[🧭 VELA ROUTER] → DECISION: Onboarding complete, PIN not handled → PIN SETUP\n')
       router.replace('/(auth)/pin-setup')
-    } else if (isLocked && hasPin && wasOnboardingComplete.current) {
-      // Onboarding done, PIN was already set up in a previous session, user is locked
+    } else if (isLocked && hasPin) {
+      // Onboarding done, PIN exists and app is locked
       // Send to lock screen
       console.log('[🧭 VELA ROUTER] → DECISION: Onboarding complete, PIN exists, app locked → LOCK SCREEN\n')
       router.replace('/(lock)/lock-screen')
     } else {
-      // All setup done: onboarding complete, PIN handled (created or skipped)
+      // All setup done: onboarding complete AND (PIN skipped OR no PIN requirement OR already unlocked)
       // Send to main app
       console.log('[🧭 VELA ROUTER] → DECISION: All setup complete → HOME\n')
       router.replace('/(app)/home')
