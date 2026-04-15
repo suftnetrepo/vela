@@ -9,6 +9,7 @@ interface SettingsState {
   notificationsEnabled: boolean
   avgCycleLength:     number
   avgPeriodLength:    number
+  bootReady:          boolean
   setTheme:           (t: ThemeName) => void
   setIsPremium:       (v: boolean)   => void
   setOnboardingComplete: (v: boolean) => void
@@ -16,6 +17,7 @@ interface SettingsState {
   setNotificationsEnabled: (v: boolean) => void
   setAvgCycleLength:  (n: number)    => void
   setAvgPeriodLength: (n: number)    => void
+  setBootReady:       (v: boolean)   => void
   hydrate: (data: Partial<SettingsState>) => void
 }
 
@@ -27,6 +29,7 @@ export const useSettingsStore = create<SettingsState>(set => ({
   notificationsEnabled: true,
   avgCycleLength:      28,
   avgPeriodLength:     5,
+  bootReady:           false,
 
   setTheme:                t  => set({ theme: t }),
   setIsPremium:            v  => set({ isPremium: v }),
@@ -35,5 +38,6 @@ export const useSettingsStore = create<SettingsState>(set => ({
   setNotificationsEnabled: v  => set({ notificationsEnabled: v }),
   setAvgCycleLength:       n  => set({ avgCycleLength: n }),
   setAvgPeriodLength:      n  => set({ avgPeriodLength: n }),
+  setBootReady:            v  => set({ bootReady: v }),
   hydrate:                 d  => set(d),
 }))

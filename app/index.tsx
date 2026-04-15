@@ -9,11 +9,19 @@ export default function Index() {
   const hasPin              = useAuthStore(s => s.hasPin)
   const onboardingComplete  = useSettingsStore(s => s.onboardingComplete)
   const pinSkipped          = useSettingsStore(s => s.pinSkipped)
+  const bootReady           = useSettingsStore(s => s.bootReady)
 
   // Track whether onboarding was already complete at mount time.
   // If it wasn't (first launch / just completed), we skip the lock screen
   // even if hasPin becomes true mid-session (user just set their PIN).
   const wasOnboardingComplete = useRef(onboardingComplete)
+
+  // ⚠️ CRITICAL: Block routing until boot is completely ready
+  // This prevents race conditions where router runs before hydration completes
+  if (!bootReady) {
+    console.log('[🧭 VELA ROUTER] ⏳ WAITING: Boot not ready yet, delaying routing decision')
+    return null
+  }
 
   useEffect(() => {
     if (!rootNavState?.key) return
@@ -49,7 +57,7 @@ export default function Index() {
       console.log('[🧭 VELA ROUTER] → DECISION: All setup complete → HOME\n')
       router.replace('/(app)/home')
     }
-  }, [rootNavState?.key, isLocked, hasPin, onboardingComplete, pinSkipped])
+  }, [rootNavState?.key, isLocked, hasPin, onboardingComplete, pinSkipped, bootReady])
 
   return null
 }

@@ -25,6 +25,7 @@ SplashScreen.preventAutoHideAsync()
 export default function RootLayout() {
   const [appReady, setAppReady] = useState(false)
   const hydrateSettings = useSettingsStore(s => s.hydrate)
+  const setBootReady = useSettingsStore(s => s.setBootReady)
   const setLocked = useAuthStore(s => s.setLocked)
   const setHasPin = useAuthStore(s => s.setHasPin)
 
@@ -78,11 +79,18 @@ export default function RootLayout() {
           setLocked(true)
         }
 
+        // ⚠️ CRITICAL: Mark boot as ready ONLY after ALL hydration and state setup is complete
+        // This prevents router from making decisions before persisted state is loaded
+        console.log('[⚡ VELA BOOT] → MARKING BOOT READY (router can now run)')
+        setBootReady(true)
         console.log('[⚡ VELA BOOT] ✓ READY: Passing to router\n')
+        
         setAppReady(true)
       } catch (err) {
         console.error('[⚡ VELA BOOT] ✗ ERROR:', err)
         setAppReady(true)
+        // Still mark boot ready even on error to prevent infinite wait
+        setBootReady(true)
       }
     }
     boot()
