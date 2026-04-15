@@ -7,24 +7,21 @@ const dateStr = (d: Date) => format(d, 'yyyy-MM-dd')
 
 export async function seedDatabase(): Promise<void> {
   try {
-    // ⚠️ DEV MODE: Force reset on startup to ensure clean test data
-    // This will clear old dirty data and reseed with realistic cycles
-    // Remove this block when data consistency is no longer an issue
-    const __DEV_FORCE_RESET__ = __DEV__ // Set to false to disable force reset
-
-    if (__DEV_FORCE_RESET__) {
-      console.log('[Vela Seed] 🔄 DEV MODE: Force resetting database...')
-      await db.delete(symptomLogs)
-      await db.delete(dailyLogs)
-      await db.delete(cycles)
-      console.log('[Vela Seed] ✓ Old data cleared')
-    } else {
-      // Check if already seeded (normal mode)
-      const existing = await db.select().from(cycles).limit(1)
-      if (existing.length > 0) {
-        console.log('[Vela Seed] Database already seeded, skipping...')
-        return
-      }
+    // CRITICAL: Only seed if the database is completely empty.
+    // This preserves user's persisted onboarding state, cycle data, and settings.
+    //
+    // IMPORTANT: In development, do NOT force-reset on boot — that breaks onboarding
+    // testing and makes dev behavior non-representative of production.
+    //
+    // If you need to manually reset your dev data, use the dev-reset utility:
+    //   import { resetAndReseedDatabase } from '@/src/db/dev-reset'
+    //   await resetAndReseedDatabase()
+    //
+    // Check if already seeded
+    const existing = await db.select().from(cycles).limit(1)
+    if (existing.length > 0) {
+      console.log('[Vela Seed] Database already seeded, skipping...')
+      return
     }
 
     const today = new Date()
@@ -107,26 +104,33 @@ export async function seedDatabase(): Promise<void> {
     console.log('[Vela Seed] ✓ Seeded sample daily logs')
 
     // ─── DEFAULT SETTINGS ────────────────────────────────────────────
-    const defaultSettings = [
-      { key: 'theme', value: '"rose"' },
-      { key: 'biometric_enabled', value: 'false' },
-      { key: 'average_cycle_length', value: '28' },
-      { key: 'average_period_length', value: '5' },
-      { key: 'notifications_enabled', value: 'true' },
-      { key: 'notify_period_days_before', value: '2' },
-      { key: 'notify_fertile_window', value: 'true' },
-      { key: 'notify_ovulation', value: 'true' },
-      { key: 'onboarding_complete', value: 'true' },
-      { key: 'is_premium', value: 'false' },
-      { key: 'first_day_of_week', value: '"monday"' },
-      { key: 'temperature_unit', value: '"celsius"' },
-    ]
+    // Only seed default settings if the table is completely empty.
+    // This ensures:
+    // 1. First-time users start with onboarding_complete = false
+    // 2. Existing users' settings are never overridden
+    const existingSettings = await db.select().from(settings).limit(1)
+    if (existingSettings.length === 0) {
+      const defaultSettings = [
+        { key: 'theme', value: '"rose"' },
+        { key: 'biometric_enabled', value: 'false' },
+        { key: 'average_cycle_length', value: '28' },
+        { key: 'average_period_length', value: '5' },
+        { key: 'notifications_enabled', value: 'true' },
+        { key: 'notify_period_days_before', value: '2' },
+        { key: 'notify_fertile_window', value: 'true' },
+        { key: 'notify_ovulation', value: 'true' },
+        { key: 'onboarding_complete', value: 'false' }, // ← MUST be false on first boot
+        { key: 'is_premium', value: 'false' },
+        { key: 'first_day_of_week', value: '"monday"' },
+        { key: 'temperature_unit', value: '"celsius"' },
+      ]
 
-    for (const s of defaultSettings) {
-      await db.insert(settings).values({ ...s, updatedAt: now() }).onConflictDoNothing()
+      for (const s of defaultSettings) {
+        await db.insert(settings).values({ ...s, updatedAt: now() }).onConflictDoNothing()
+      }
+
+      console.log('[Vela Seed] ✓ Seeded default settings (first-time boot)')
     }
-
-    console.log('[Vela Seed] ✓ Seeded default settings')
     console.log('[Vela Seed] ✓ Seed complete - realistic test data ready')
     
   } catch (err) {
