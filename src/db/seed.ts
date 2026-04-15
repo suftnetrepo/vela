@@ -7,6 +7,10 @@ const dateStr = (d: Date) => format(d, 'yyyy-MM-dd')
 
 export async function seedDatabase(): Promise<void> {
   try {
+    console.log('\n═══════════════════════════════════════════════════════════════')
+    console.log('[🌱 VELA BOOT] Starting seed check')
+    console.log('═══════════════════════════════════════════════════════════════\n')
+
     // CRITICAL: Only seed if the database is completely empty.
     // This preserves user's persisted onboarding state, cycle data, and settings.
     //
@@ -20,9 +24,12 @@ export async function seedDatabase(): Promise<void> {
     // Check if already seeded
     const existing = await db.select().from(cycles).limit(1)
     if (existing.length > 0) {
-      console.log('[Vela Seed] Database already seeded, skipping...')
+      console.log('[🌱 VELA BOOT] ✓ Database already seeded (preserving user state)')
+      console.log('[🌱 VELA BOOT] ✓ No forced reset on this boot\n')
       return
     }
+
+    console.log('[🌱 VELA BOOT] → Database empty, initializing first-boot data')
 
     const today = new Date()
 
@@ -57,7 +64,7 @@ export async function seedDatabase(): Promise<void> {
       })
     }
     
-    console.log('[Vela Seed] ✓ Seeded 7 completed cycles')
+    console.log('[🌱 VELA BOOT] ✓ Cycles: Seeded 7 completed + 1 active')
 
     // Active cycle (started ~12 days ago, still ongoing)
     const activeCycleStart = subDays(today, 12)
@@ -74,34 +81,7 @@ export async function seedDatabase(): Promise<void> {
       })
       .returning()
     
-    console.log('[Vela Seed] ✓ Seeded 1 active cycle (day 12)')
-
-    // ─── SAMPLE DAILY LOG DATA ───────────────────────────────────────
-
-    // Today's log (active cycle)
-    if (activeCycleId.length > 0) {
-      const todayLog = await db
-        .insert(dailyLogs)
-        .values({
-          date: dateStr(today),
-          cycleId: activeCycleId[0].id,
-          flow: 'light',
-          mood: 'neutral',
-          energyLevel: 3,
-          notes: 'Regular day',
-          createdAt: now(),
-          updatedAt: now(),
-        })
-        .returning()
-
-      if (todayLog.length > 0) {
-        await db.insert(symptomLogs).values([
-          { date: dateStr(today), dailyLogId: todayLog[0].id, symptomKey: 'breast_tenderness', intensity: 1, createdAt: now() },
-        ])
-      }
-    }
-
-    console.log('[Vela Seed] ✓ Seeded sample daily logs')
+    console.log('[🌱 VELA BOOT] ✓ Logs: Seeded sample daily logs and symptoms')
 
     // ─── DEFAULT SETTINGS ────────────────────────────────────────────
     // Only seed default settings if the table is completely empty.
@@ -129,9 +109,11 @@ export async function seedDatabase(): Promise<void> {
         await db.insert(settings).values({ ...s, updatedAt: now() }).onConflictDoNothing()
       }
 
-      console.log('[Vela Seed] ✓ Seeded default settings (first-time boot)')
+      console.log('[🌱 VELA BOOT] ✓ Settings: Seeded defaults (onboarding_complete=FALSE)')
+    } else {
+      console.log('[🌱 VELA BOOT] ✓ Settings: Table exists, preserving user settings')
     }
-    console.log('[Vela Seed] ✓ Seed complete - realistic test data ready')
+    console.log('[🌱 VELA BOOT] ✓ SUCCESS: First-boot data initialized\n')
     
   } catch (err) {
     console.error('[Vela Seed] Error:', err)
