@@ -16,14 +16,14 @@ export default function Index() {
   // even if hasPin becomes true mid-session (user just set their PIN).
   const wasOnboardingComplete = useRef(onboardingComplete)
 
-  // ⚠️ CRITICAL: Block routing until boot is completely ready
-  // This prevents race conditions where router runs before hydration completes
-  if (!bootReady) {
-    console.log('[🧭 VELA ROUTER] ⏳ WAITING: Boot not ready yet, delaying routing decision')
-    return null
-  }
-
   useEffect(() => {
+    // ⚠️ CRITICAL: Block routing until boot is completely ready
+    // This prevents race conditions where router runs before hydration completes
+    if (!bootReady) {
+      console.log('[🧭 VELA ROUTER] ⏳ WAITING: Boot not ready yet, delaying routing decision')
+      return
+    }
+
     if (!rootNavState?.key) return
 
     console.log('\n═══════════════════════════════════════════════════════════════')
