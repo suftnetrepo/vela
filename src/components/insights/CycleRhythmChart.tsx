@@ -143,8 +143,9 @@ export function CycleRhythmChart({ cycles }: Props) {
                   x1={PAD_LEFT} y1={y}
                   x2={CHART_W - PAD_RIGHT} y2={y}
                   stroke={Colors.border}
-                  strokeWidth={1}
-                  strokeDasharray="4 4"
+                  strokeWidth={0.5}
+                  strokeDasharray="3 3"
+                  opacity={0.5}
                 />
                 <SvgText
                   x={PAD_LEFT - 6} y={y + 4}
@@ -170,20 +171,20 @@ export function CycleRhythmChart({ cycles }: Props) {
 
           {/* Avg cycle label */}
           <SvgText
-            x={CHART_W - PAD_RIGHT - 2}
-            y={toY(avgCycle) - 6}
-            fontSize={10} fontWeight="700"
+            x={CHART_W - PAD_RIGHT - 8}
+            y={toY(avgCycle) - 8}
+            fontSize={9} fontWeight="600"
             fill={CYCLE_COLOR} textAnchor="end">
-            {avgCycle} DAYS
+            {avgCycle}d
           </SvgText>
 
           {/* Avg period label */}
           <SvgText
-            x={CHART_W - PAD_RIGHT - 2}
-            y={toY(avgPeriod) - 6}
-            fontSize={10} fontWeight="700"
+            x={CHART_W - PAD_RIGHT - 8}
+            y={toY(avgPeriod) - 8}
+            fontSize={9} fontWeight="600"
             fill={PERIOD_COLOR} textAnchor="end">
-            {avgPeriod} DAYS
+            {avgPeriod}d
           </SvgText>
 
           {/* Cycle dots — hollow circles */}
@@ -200,17 +201,20 @@ export function CycleRhythmChart({ cycles }: Props) {
               stroke={PERIOD_COLOR} strokeWidth={2} />
           ))}
 
-          {/* X-axis month labels */}
-          {completed.map((c, i) => (
-            <SvgText key={i}
-              x={toX(i)} y={CHART_H - 4}
-              fontSize={9} fill={Colors.textTertiary}
-              textAnchor="middle">
-              {format(parseISO(c.startDate), 'MMM')}
-              {'\n'}
-              {format(parseISO(c.startDate), 'd')}
-            </SvgText>
-          ))}
+          {/* X-axis month labels — every other label to reduce density */}
+          {completed.map((c, i) => {
+            const showLabel = completed.length <= 3 || i % 2 === 0 || i === completed.length - 1
+            return showLabel ? (
+              <SvgText key={i}
+                x={toX(i)} y={CHART_H - 4}
+                fontSize={9} fill={Colors.textTertiary}
+                textAnchor="middle">
+                {format(parseISO(c.startDate), 'MMM')}
+                {' '}
+                {format(parseISO(c.startDate), 'd')}
+              </SvgText>
+            ) : null
+          })}
         </Svg>
       </Stack>
 

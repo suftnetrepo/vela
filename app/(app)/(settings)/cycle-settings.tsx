@@ -43,6 +43,8 @@ export default function CycleSettingsScreen() {
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
       <StyledPage.Header
+        title="Cycle Settings"
+        titleAlignment="left"
         marginHorizontal={16}
         shapeProps={{
           size: 48,
@@ -51,11 +53,8 @@ export default function CycleSettingsScreen() {
         backArrowProps={{
           color: theme.colors.pink[500],
         }}
-        title="Cycle Settings"
-        titleAlignment="center"
         showBackArrow
         onBackPress={() => router.push("/(app)/settings")}
-        showStatusBar
         backgroundColor={Colors.background}
         titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
         rightIcon={
@@ -76,6 +75,7 @@ export default function CycleSettingsScreen() {
           </StyledPressable>
         }
       />
+
       <StyledSpacer marginVertical={1} />
       <StyledScrollView
         contentContainerStyle={{ padding: 20, paddingBottom: 40, gap: 20 }}

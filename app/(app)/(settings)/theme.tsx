@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack, StyledScrollView, StyledPage, StyledHeader } from 'fluent-styles'
+import { Stack, StyledScrollView, StyledPage, StyledHeader, theme } from 'fluent-styles'
 import { router } from 'expo-router'
 import { useColors } from '../../../src/hooks/useColors'
 import { useSettings } from '../../../src/hooks/useSettings'
@@ -23,14 +23,21 @@ export default function ThemeScreen() {
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
-      <StyledHeader
+       <StyledPage.Header
         title="Theme"
         titleAlignment="center"
+        marginHorizontal={16}
+        shapeProps={{
+          size: 48,
+          backgroundColor: theme.colors.pink[50],
+        }}
+        backArrowProps={{
+          color: theme.colors.pink[500],
+        }}
         showBackArrow
-        onBackPress={() => router.push('/(app)/settings')}
-        showStatusBar
+        onBackPress={() => router.push("/(app)/settings")}
         backgroundColor={Colors.background}
-        titleProps={{ fontWeight: '700', color: Colors.textPrimary }}
+        titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
       />
       <StyledScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
         <ThemePreview onSelect={handleSelect} />

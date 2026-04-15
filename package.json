@@ -32,7 +32,7 @@
     "drizzle-orm": "^0.38.0",
     "zustand": "^5.0.0",
     "date-fns": "^3.6.0",
-    "fluent-styles": "^1.62.7",
+    "fluent-styles": "^1.62.8",
     "@expo/vector-icons": "^15.1.1"
   },
   "devDependencies": {

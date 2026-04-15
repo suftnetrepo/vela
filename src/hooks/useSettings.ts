@@ -32,6 +32,11 @@ export function useSettings() {
     store.setOnboardingComplete(true)
   }, [store])
 
+  const skipPin = useCallback(async () => {
+    await settingsService.set(SETTINGS_KEYS.PIN_SKIPPED, true)
+    store.setPinSkipped(true)
+  }, [store])
+
   return {
     ...store,
     setTheme,
@@ -39,5 +44,6 @@ export function useSettings() {
     setCycleLength,
     setPeriodLength,
     completeOnboarding,
+    skipPin,
   }
 }

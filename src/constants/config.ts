@@ -29,9 +29,11 @@ export const APP_CONFIG = {
 export const SETTINGS_KEYS = {
   THEME:                    'theme',
   PIN_HASH:                 'pin_hash',
+  PIN_SKIPPED:              'pin_skipped',
   BIOMETRIC_ENABLED:        'biometric_enabled',
   AVG_CYCLE_LENGTH:         'average_cycle_length',
   AVG_PERIOD_LENGTH:        'average_period_length',
+  LAST_PERIOD_START:        'last_period_start',
   NOTIFICATIONS_ENABLED:    'notifications_enabled',
   NOTIFY_DAYS_BEFORE:       'notify_period_days_before',
   NOTIFY_FERTILE:           'notify_fertile_window',

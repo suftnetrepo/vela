@@ -129,6 +129,9 @@ export default function SettingsScreen() {
         <Section title="LOGGING">
           <MenuRow icon="heart" label="Manage Moods" subtitle="Choose which moods appear when logging"
             onPress={() => router.push('/(app)/(settings)/moods')} />
+          <StyledDivider borderBottomColor={Colors.border} marginHorizontal={16} />
+          <MenuRow icon="activity" label="Manage Symptoms" subtitle="Choose which symptoms appear when logging"
+            onPress={() => router.push('/(app)/(settings)/symptoms')} />
         </Section>
 
         <Section title="APPEARANCE">

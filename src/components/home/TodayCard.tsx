@@ -10,6 +10,7 @@ import type { VelaIconName } from '../shared/VelaIcon'
 interface TodayCardProps {
   prediction:  CyclePrediction | null
   onLogPress?: () => void
+  cycles?: any[]
 }
 
 const PHASE_ICON: Record<string, VelaIconName> = {
@@ -30,8 +31,17 @@ const PHASE_COLOR_KEY: Record<string, string> = {
   predicted_period: 'primaryLight',
 }
 
-export function TodayCard({ prediction, onLogPress }: TodayCardProps) {
+export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
   const Colors = useColors()
+
+  // Generate personalization cue based on cycles
+  const getPredictionConfidence = () => {
+    if (!cycles || cycles.length < 2) return null
+    const completedCycles = cycles.filter(c => c.cycleLength != null)
+    if (completedCycles.length <= 3) return 'Based on your last 3 cycles'
+    if (completedCycles.length <= 7) return 'Based on your last 7 cycles'
+    return 'Updated from your recent logs'
+  }
 
   if (!prediction) {
     return (
@@ -73,73 +83,89 @@ export function TodayCard({ prediction, onLogPress }: TodayCardProps) {
     <Stack backgroundColor={Colors.primaryFaint} borderRadius={24} padding={20} gap={16}
       borderWidth={1} borderColor={Colors.border}>
 
-      {/* Phase header */}
-      <Stack horizontal alignItems="center" justifyContent="space-between">
-        <Stack gap={6} flex={1}>
-          <StyledText fontSize={12} color={Colors.textTertiary} fontWeight="700" letterSpacing={0.8}>
-            CYCLE DAY {prediction.currentCycleDay}
-          </StyledText>
-          <Stack horizontal alignItems="center" gap={10}>
-            <Stack width={40} height={40} borderRadius={20} backgroundColor={Colors.surface}
+      {/* Top section: Cycle day label and title */}
+      <Stack gap={8}>
+        <StyledText fontSize={11} color={Colors.textTertiary} fontWeight="700" letterSpacing={0.6}>
+          CYCLE DAY {prediction.currentCycleDay}
+        </StyledText>
+        {/* Phase with icon and day badge */}
+        <Stack horizontal alignItems="flex-start" justifyContent="space-between" gap={12}>
+          <Stack horizontal alignItems="center" gap={10} flex={1}>
+            <Stack width={36} height={36} borderRadius={18} backgroundColor={Colors.surface}
               alignItems="center" justifyContent="center"
               shadowColor="#000" shadowOffset={{ width: 0, height: 1 }}
               shadowOpacity={0.08} shadowRadius={4} elevation={2}>
-              <VelaIcon name={iconName} size={22} color={phaseColor} />
+              <VelaIcon name={iconName} size={20} color={phaseColor} />
             </Stack>
-            <StyledText fontSize={22} fontWeight="800" color={Colors.textPrimary}>
+            <StyledText fontSize={18} fontWeight="800" color={Colors.textPrimary}>
               {phaseName(prediction.currentPhase)}
             </StyledText>
           </Stack>
-        </Stack>
-
-        {/* Cycle day ring */}
-        <Stack width={64} height={64} borderRadius={32} backgroundColor={Colors.primaryLight}
-          alignItems="center" justifyContent="center" borderWidth={3} borderColor={Colors.primary}>
-          <StyledText fontSize={20} fontWeight="800" color={Colors.primaryDark}>
-            {prediction.currentCycleDay}
-          </StyledText>
+          {/* Cycle day badge - phase color intentionally used for visual feedback */}
+          <Stack width={52} height={52} borderRadius={26} backgroundColor={phaseColor}
+            alignItems="center" justifyContent="center"
+            shadowColor={phaseColor} shadowOffset={{ width: 0, height: 2 }}
+            shadowOpacity={0.20} shadowRadius={6} elevation={3}>
+            <StyledText fontSize={22} fontWeight="800" color={Colors.textInverse}>
+              {prediction.currentCycleDay}
+            </StyledText>
+          </Stack>
         </Stack>
       </Stack>
 
-      {/* Description */}
+      {/* Phase description */}
       <StyledText fontSize={14} color={Colors.textSecondary} lineHeight={21}>
         {phaseDescription(prediction.currentPhase)}
       </StyledText>
 
-      {/* Next period row */}
-      <Stack backgroundColor={Colors.surface} borderRadius={16} padding={14}
-        horizontal alignItems="center" justifyContent="space-between">
-        <Stack horizontal alignItems="center" gap={10}>
-          <Stack width={34} height={34} borderRadius={17} backgroundColor={Colors.primaryFaint}
-            alignItems="center" justifyContent="center">
-            <VelaIcon name="phase-predicted" size={18} color={Colors.primary} />
-          </Stack>
-          <Stack gap={2}>
-            <StyledText fontSize={11} color={Colors.textTertiary} fontWeight="700">NEXT PERIOD</StyledText>
-            <StyledText fontSize={16} fontWeight="800" color={Colors.textPrimary}>
+      {/* Prediction confidence note */}
+      {getPredictionConfidence() && (
+        <StyledText fontSize={12} color={Colors.textTertiary} fontWeight="600" lineHeight={17}>
+          💡 {getPredictionConfidence()}
+        </StyledText>
+      )}
+
+      {/* Next period info + Log button section */}
+      <Stack horizontal alignItems="center" gap={10} justifyContent="space-between" >
+        <Stack backgroundColor={Colors.surface} borderRadius={16} padding={12} gap={4} flex={1}>
+          <StyledText fontSize={10} color={Colors.textTertiary} fontWeight="700">
+            NEXT PERIOD
+          </StyledText>
+          <Stack horizontal alignItems="center" gap={6}>
+            <VelaIcon name="phase-predicted" size={14} color={Colors.primary} />
+            <StyledText fontSize={14} fontWeight="800" color={Colors.textPrimary}>
               {daysUntilText(prediction.daysUntilNextPeriod)}
             </StyledText>
-          </Stack>
-        </Stack>
-
-        <Stack horizontal alignItems="center" gap={8}>
-          {prediction.confidenceDays > 1 && (
-            <Stack backgroundColor={Colors.warningLight} borderRadius={10}
-              paddingHorizontal={8} paddingVertical={4}>
-              <StyledText fontSize={11} color={Colors.warning} fontWeight="600">
+            {prediction.confidenceDays > 1 && (
+              <StyledText fontSize={10} color={Colors.textTertiary} fontWeight="600">
                 ±{prediction.confidenceDays}d
               </StyledText>
-            </Stack>
-          )}
-          {onLogPress && (
-            <StyledPressable backgroundColor={Colors.primary} borderRadius={20}
-              paddingHorizontal={14} paddingVertical={8} onPress={onLogPress}
-              flexDirection="row" alignItems="center" gap={6}>
-              <VelaIcon name="edit" size={13} color={Colors.textInverse} />
-              <StyledText fontSize={13} fontWeight="700" color={Colors.textInverse}>Log</StyledText>
-            </StyledPressable>
-          )}
+            )}
+          </Stack>
         </Stack>
+        {onLogPress && (
+          <StyledPressable
+            backgroundColor={Colors.primary}
+            borderRadius={12}
+            height={52}
+            paddingHorizontal={14}
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="row"
+            gap={6}
+            onPress={onLogPress}
+            shadowColor={Colors.primary}
+            shadowOffset={{ width: 0, height: 3 }}
+            shadowOpacity={0.18}
+            shadowRadius={6}
+            elevation={3}
+          >
+            <VelaIcon name="edit" size={18} color={Colors.textInverse} />
+            <StyledText fontSize={13} fontWeight="700" color={Colors.textInverse}>
+              Log
+            </StyledText>
+          </StyledPressable>
+        )}
       </Stack>
     </Stack>
   )

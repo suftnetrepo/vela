@@ -10,7 +10,7 @@ import { useColors } from '../../src/hooks/useColors'
 import { useDailyLog } from '../../src/hooks/useDailyLog'
 import { useCycles } from '../../src/hooks/useCycles'
 import { FlowTab }     from '../../src/components/log/FlowTab'
-import { SymptomsTab, MOOD_KEY_PREFIX } from '../../src/components/log/SymptomsTab'
+import { SymptomsTab } from '../../src/components/log/SymptomsTab'
 import { JournalTab }  from '../../src/components/log/JournalTab'
 import type { FlowData }    from '../../src/components/log/FlowTab'
 import type { JournalData } from '../../src/components/log/JournalTab'
@@ -19,6 +19,9 @@ import { formatDisplayDate, todayStr, fromDateStr } from '../../src/utils/date'
 import { toastService, loaderService, dialogueService } from 'fluent-styles'
 import { logService }  from '../../src/services/log.service'
 import { useRecordsStore } from '../../src/stores/records.store'
+
+// Mood keys are stored with this prefix in the symptoms table for persistence
+const MOOD_KEY_PREFIX = 'mood_'
 
 type LogTab = 'flow' | 'symptoms' | 'journal'
 
@@ -45,19 +48,39 @@ export default function LogScreen() {
     discharge: null,
   })
 
-  // All selected keys — includes both symptom keys and mood_ prefixed keys
+  // All selected symptom keys (does NOT include moods — moods are in journalData.moods)
   const [symptoms, setSymptoms] = useState<string[]>([])
 
-  // Journal (energy + notes only — mood moved to symptoms tab)
+  // Journal (moods, energy level, and notes)
   const [journalData, setJournalData] = useState<JournalData>({
-    mood:        '',
+    moods:       [],
     energyLevel: 3,
     notes:       '',
   })
 
+  // Reset all log state to defaults (used after delete)
+  const resetLogState = () => {
+    setFlowData({
+      hasFlow:   null,
+      level:     null,
+      discharge: null,
+    })
+    setSymptoms([])
+    setJournalData({
+      moods:       [],
+      energyLevel: 3,
+      notes:       '',
+    })
+    setDirty(false)
+  }
+
   // Hydrate from existing log
   useEffect(() => {
-    if (!log) return
+    if (!log) {
+      // If log is null (deleted or empty day), reset to defaults
+      resetLogState()
+      return
+    }
     const flow = log.flow ?? null
     setFlowData({
       hasFlow:   flow ? true : (log.flow === 'none' ? false : null),
@@ -66,19 +89,22 @@ export default function LogScreen() {
       discharge: log.flow === 'spotting' ? 'spotting' : null,
     })
 
-    // Symptom keys from DB — already include any mood_ prefixed ones saved previously
-    const symptomKeys = log.symptoms.map(s => s.symptomKey)
+    // Separate symptom keys and mood keys from DB
+    const allKeys     = log.symptoms.map(s => s.symptomKey)
+    const symptomKeys = allKeys.filter(k => !k.startsWith(MOOD_KEY_PREFIX))
+    const moodKeys    = allKeys
+      .filter(k => k.startsWith(MOOD_KEY_PREFIX))
+      .map(k => k.replace(MOOD_KEY_PREFIX, ''))
 
     // Also migrate legacy single mood from daily_logs.mood if present
-    // and no mood_ keys exist yet in symptom_logs
-    const hasMoodKeys = symptomKeys.some(k => k.startsWith(MOOD_KEY_PREFIX))
-    if (log.mood && !hasMoodKeys) {
-      symptomKeys.push(`${MOOD_KEY_PREFIX}${log.mood}`)
+    // and no mood_ keys exist yet
+    if (log.mood && moodKeys.length === 0) {
+      moodKeys.push(log.mood)
     }
 
     setSymptoms(symptomKeys)
     setJournalData({
-      mood:        log.mood ?? '',
+      moods:       moodKeys,
       energyLevel: log.energyLevel ?? 3,
       notes:       log.notes ?? '',
     })
@@ -97,10 +123,16 @@ export default function LogScreen() {
         else flowStr = flowData.level ?? 'light'
       }
 
-      // Extract first mood key for the legacy daily_logs.mood column
-      const moodKeys    = symptoms.filter(k => k.startsWith(MOOD_KEY_PREFIX))
-      const legacyMood  = moodKeys.length > 0
-        ? moodKeys[0].replace(MOOD_KEY_PREFIX, '')
+      // Combine symptoms and moods for persistence
+      // Moods are stored with mood_ prefix in the symptoms array
+      const allKeys = [
+        ...symptoms,
+        ...journalData.moods.map(k => `${MOOD_KEY_PREFIX}${k}`),
+      ]
+
+      // Extract first mood for legacy daily_logs.mood column
+      const legacyMood = journalData.moods.length > 0
+        ? journalData.moods[0]
         : undefined
 
       await saveLog({
@@ -109,7 +141,7 @@ export default function LogScreen() {
         energyLevel: journalData.energyLevel,
         notes:       journalData.notes || undefined,
         cycleId:     active?.id,
-        symptoms:    symptoms.map(k => ({ key: k })),
+        symptoms:    allKeys.map(k => ({ key: k })),
       })
       loaderService.hide(id)
       toastService.success('Saved', `${formatDisplayDate(fromDateStr(date))} logged.`)
@@ -136,10 +168,15 @@ export default function LogScreen() {
     const id = loaderService.show({ label: 'Deleting…', variant: 'dots' })
     try {
       await logService.deleteLog(date)
+      
+      // Immediately reset all local UI state to defaults
+      resetLogState()
+      
+      // Invalidate cached data so fresh query returns empty
       invalidateData()
+      
       loaderService.hide(id)
       toastService.info('Log deleted')
-      router.back()
     } catch {
       loaderService.hide(id)
       toastService.error('Could not delete')
@@ -159,7 +196,7 @@ export default function LogScreen() {
       {/* Header */}
       <StyledPage.Header
         title={formatDisplayDate(fromDateStr(date))}
-        titleAlignment="left"
+        titleAlignment="center"
         marginHorizontal={16}
         shapeProps={{
           size: 48,
@@ -168,7 +205,6 @@ export default function LogScreen() {
         backArrowProps={{ color: theme.colors.pink[500] }}
         showBackArrow
         onBackPress={() => router.back()}
-        showStatusBar
         backgroundColor={Colors.background}
         titleProps={{ fontWeight: '700', color: Colors.textPrimary }}
         rightIcon={

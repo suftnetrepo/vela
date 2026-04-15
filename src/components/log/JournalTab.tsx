@@ -1,9 +1,13 @@
 import React from 'react'
-import { Stack, StyledText, StyledPressable, StyledTextInput } from 'fluent-styles'
+import { ActivityIndicator } from 'react-native'
+import { Stack, StyledText, StyledPressable, StyledTextInput, Collapse } from 'fluent-styles'
+import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
+import { useMoods } from '../../hooks/useMoods'
+import { VelaIcon } from '../shared/VelaIcon'
 
 export interface JournalData {
-  mood:        string   // kept for DB compat — no longer used in UI
+  moods:       string[]  // Mood keys selected in this log entry
   energyLevel: number
   notes:       string
 }
@@ -11,6 +15,39 @@ export interface JournalData {
 interface JournalTabProps {
   data:     JournalData
   onChange: (data: JournalData) => void
+}
+
+// ─── Mood emoji chip ──────────────────────────────────────────────────────────
+function MoodChip({
+  emoji, label, moodKey, selected, onPress,
+}: {
+  emoji:   string
+  label:   string
+  moodKey: string
+  selected:boolean
+  onPress: () => void
+}) {
+  const Colors = useColors()
+  return (
+    <StyledPressable
+      onPress={onPress}
+      backgroundColor={selected ? Colors.primaryFaint : Colors.surfaceAlt}
+      borderRadius={20}
+      paddingHorizontal={12}
+      paddingVertical={9}
+      borderWidth={selected ? 2 : 1.5}
+      borderColor={selected ? Colors.primary : Colors.border}
+      flexDirection="row"
+      alignItems="center"
+      gap={6}
+    >
+      <StyledText fontSize={18}>{emoji}</StyledText>
+      <StyledText fontSize={13} fontWeight={selected ? '700' : '400'}
+        color={selected ? Colors.primaryDark : Colors.textSecondary}>
+        {label}
+      </StyledText>
+    </StyledPressable>
+  )
 }
 
 function LogSection({ title, children }: { title: string; children: React.ReactNode }) {
@@ -35,12 +72,76 @@ function LogSection({ title, children }: { title: string; children: React.ReactN
   )
 }
 
+const MAX_MOODS = 3
+
 export function JournalTab({ data, onChange }: JournalTabProps) {
   const Colors = useColors()
+  const { visibleMoods, loading: moodsLoading } = useMoods()
   const set = (patch: Partial<JournalData>) => onChange({ ...data, ...patch })
+
+  const toggleMood = (moodKey: string) => {
+    const isSelected = data.moods.includes(moodKey)
+    // Allow deselection always, but only allow selection if under max
+    if (isSelected) {
+      set({
+        moods: data.moods.filter(k => k !== moodKey)
+      })
+    } else if (data.moods.length < MAX_MOODS) {
+      set({
+        moods: [...data.moods, moodKey]
+      })
+    }
+  }
 
   return (
     <Stack gap={14}>
+
+      {/* ── How am I feeling? (Moods) ────────────────────────────────────── */}
+      <LogSection title="How am I feeling?">
+        <Stack gap={12}>
+          {moodsLoading ? (
+            <Stack flexDirection="row" flexWrap="wrap" gap={12}>
+              {[1, 2, 3, 4].map(i => (
+                <Stack key={i} width={90} height={38} borderRadius={20}
+                  backgroundColor={Colors.border} opacity={0.35} />
+              ))}
+            </Stack>
+          ) : visibleMoods.length === 0 ? (
+            <StyledPressable
+              onPress={() => router.push('/(app)/(settings)/moods')}
+              flexDirection="row"
+              alignItems="center"
+              gap={6}
+              paddingVertical={8}
+            >
+              <VelaIcon name="edit" size={14} color={Colors.primary} />
+              <StyledText fontSize={13} color={Colors.primary} fontWeight="600">
+                Add moods in settings
+              </StyledText>
+            </StyledPressable>
+          ) : (
+            <>
+              <Stack flexDirection="row" flexWrap="wrap" gap={12}>
+                {visibleMoods.map(m => (
+                  <MoodChip
+                    key={m.key}
+                    emoji={m.emoji}
+                    label={m.label}
+                    moodKey={m.key}
+                    selected={data.moods.includes(m.key)}
+                    onPress={() => toggleMood(m.key)}
+                  />
+                ))}
+              </Stack>
+              {data.moods.length === MAX_MOODS && (
+                <StyledText fontSize={12} color={Colors.textTertiary} fontStyle="italic">
+                  Max {MAX_MOODS} moods selected
+                </StyledText>
+              )}
+            </>
+          )}
+        </Stack>
+      </LogSection>
 
       {/* ── Energy level ─────────────────────────────────────────────────── */}
       <LogSection title="Energy level">

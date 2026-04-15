@@ -1,82 +1,112 @@
 import { db } from './client'
 import { cycles, dailyLogs, symptomLogs, settings } from './schema'
-import { format, subDays, subMonths } from 'date-fns'
+import { format, subDays } from 'date-fns'
 
 const now = () => new Date().toISOString()
 const dateStr = (d: Date) => format(d, 'yyyy-MM-dd')
 
 export async function seedDatabase(): Promise<void> {
   try {
-    // Check if already seeded
-    const existing = await db.select().from(cycles).limit(1)
-    if (existing.length > 0) return
+    // ⚠️ DEV MODE: Force reset on startup to ensure clean test data
+    // This will clear old dirty data and reseed with realistic cycles
+    // Remove this block when data consistency is no longer an issue
+    const __DEV_FORCE_RESET__ = __DEV__ // Set to false to disable force reset
+
+    if (__DEV_FORCE_RESET__) {
+      console.log('[Vela Seed] 🔄 DEV MODE: Force resetting database...')
+      await db.delete(symptomLogs)
+      await db.delete(dailyLogs)
+      await db.delete(cycles)
+      console.log('[Vela Seed] ✓ Old data cleared')
+    } else {
+      // Check if already seeded (normal mode)
+      const existing = await db.select().from(cycles).limit(1)
+      if (existing.length > 0) {
+        console.log('[Vela Seed] Database already seeded, skipping...')
+        return
+      }
+    }
 
     const today = new Date()
 
-    // Seed 4 past cycles
-    const cycleStarts = [
-      subDays(today, 5),          // current period (active)
-      subDays(today, 33),         // cycle 2
-      subDays(today, 61),         // cycle 3
-      subDays(today, 90),         // cycle 4
+    // ─── CLEAN REALISTIC CYCLE DATA ───────────────────────────────────
+    // 7 completed cycles with realistic spacing (26-30 days each)
+    // + 1 active cycle (currently ongoing at day 12)
+    // ───────────────────────────────────────────────────────────────
+
+    const completedCycles = [
+      // Working backward from today
+      { startOffset: 268, cycleLength: 28, periodLength: 5 },  // ~9 months ago
+      { startOffset: 240, cycleLength: 29, periodLength: 5 },  // ~8 months ago
+      { startOffset: 211, cycleLength: 28, periodLength: 6 },  // ~7 months ago
+      { startOffset: 183, cycleLength: 30, periodLength: 4 },  // ~6 months ago
+      { startOffset: 153, cycleLength: 27, periodLength: 5 },  // ~5 months ago
+      { startOffset: 126, cycleLength: 28, periodLength: 5 },  // ~4 months ago
+      { startOffset: 98,  cycleLength: 29, periodLength: 6 },  // ~3 months ago
     ]
 
-    const cycleLengths = [28, 29, 27, 28]
-    const periodLengths = [5, 6, 5, 5]
-
-    for (let i = 0; i < cycleStarts.length; i++) {
-      const startDate = dateStr(cycleStarts[i])
-      const isActive = i === 0 ? 1 : 0
-      const cycleLength = i === 0 ? null : cycleLengths[i]
-      const periodLength = periodLengths[i]
-
+    for (const cycle of completedCycles) {
+      const startDate = subDays(today, cycle.startOffset)
+      const endDate = subDays(startDate, -cycle.periodLength + 1)
+      
       await db.insert(cycles).values({
-        startDate,
-        endDate: i === 0 ? null : dateStr(subDays(cycleStarts[i], -periodLengths[i] + 1)),
-        periodLength,
-        cycleLength,
-        isActive,
+        startDate: dateStr(startDate),
+        endDate: dateStr(endDate),
+        periodLength: cycle.periodLength,
+        cycleLength: cycle.cycleLength,
+        isActive: 0,
         createdAt: now(),
         updatedAt: now(),
       })
     }
+    
+    console.log('[Vela Seed] ✓ Seeded 7 completed cycles')
 
-    // Seed today's log
-    await db.insert(dailyLogs).values({
-      date: dateStr(today),
-      cycleId: 1,
-      flow: 'medium',
-      mood: 'tired',
-      energyLevel: 2,
-      notes: 'Feeling a bit crampy today',
-      createdAt: now(),
-      updatedAt: now(),
-    })
+    // Active cycle (started ~12 days ago, still ongoing)
+    const activeCycleStart = subDays(today, 12)
+    const activeCycleId = await db
+      .insert(cycles)
+      .values({
+        startDate: dateStr(activeCycleStart),
+        endDate: null,
+        periodLength: null,
+        cycleLength: null,
+        isActive: 1,
+        createdAt: now(),
+        updatedAt: now(),
+      })
+      .returning()
+    
+    console.log('[Vela Seed] ✓ Seeded 1 active cycle (day 12)')
 
-    await db.insert(symptomLogs).values([
-      { date: dateStr(today), dailyLogId: 1, symptomKey: 'cramps', intensity: 2, createdAt: now() },
-      { date: dateStr(today), dailyLogId: 1, symptomKey: 'bloating', intensity: 1, createdAt: now() },
-    ])
+    // ─── SAMPLE DAILY LOG DATA ───────────────────────────────────────
 
-    // Seed yesterday
-    const yesterday = subDays(today, 1)
-    await db.insert(dailyLogs).values({
-      date: dateStr(yesterday),
-      cycleId: 1,
-      flow: 'heavy',
-      mood: 'sad',
-      energyLevel: 1,
-      createdAt: now(),
-      updatedAt: now(),
-    })
+    // Today's log (active cycle)
+    if (activeCycleId.length > 0) {
+      const todayLog = await db
+        .insert(dailyLogs)
+        .values({
+          date: dateStr(today),
+          cycleId: activeCycleId[0].id,
+          flow: 'light',
+          mood: 'neutral',
+          energyLevel: 3,
+          notes: 'Regular day',
+          createdAt: now(),
+          updatedAt: now(),
+        })
+        .returning()
 
-    await db.insert(symptomLogs).values([
-      { date: dateStr(yesterday), dailyLogId: 2, symptomKey: 'cramps', intensity: 3, createdAt: now() },
-      { date: dateStr(yesterday), dailyLogId: 2, symptomKey: 'headache', intensity: 2, createdAt: now() },
-      { date: dateStr(yesterday), dailyLogId: 2, symptomKey: 'fatigue', intensity: 2, createdAt: now() },
-    ])
+      if (todayLog.length > 0) {
+        await db.insert(symptomLogs).values([
+          { date: dateStr(today), dailyLogId: todayLog[0].id, symptomKey: 'breast_tenderness', intensity: 1, createdAt: now() },
+        ])
+      }
+    }
 
-    // Seed default settings
+    console.log('[Vela Seed] ✓ Seeded sample daily logs')
+
+    // ─── DEFAULT SETTINGS ────────────────────────────────────────────
     const defaultSettings = [
       { key: 'theme', value: '"rose"' },
       { key: 'biometric_enabled', value: 'false' },
@@ -96,8 +126,10 @@ export async function seedDatabase(): Promise<void> {
       await db.insert(settings).values({ ...s, updatedAt: now() }).onConflictDoNothing()
     }
 
-    console.log('[Vela] Seed complete')
+    console.log('[Vela Seed] ✓ Seeded default settings')
+    console.log('[Vela Seed] ✓ Seed complete - realistic test data ready')
+    
   } catch (err) {
-    console.error('[Vela] Seed error:', err)
+    console.error('[Vela Seed] Error:', err)
   }
 }

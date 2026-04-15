@@ -2,14 +2,16 @@ import React, { useState } from 'react'
 import { Stack, StyledText, StyledPressable, StyledPage } from 'fluent-styles'
 import { router } from 'expo-router'
 import { useColors } from '../../src/hooks/useColors'
+import { useSettings } from '../../src/hooks/useSettings'
 import { PinPad } from '../../src/components/shared/PinPad'
 import { securityService } from '../../src/services/security.service'
 import { useAuthStore } from '../../src/stores/auth.store'
-import { toastService } from 'fluent-styles'
+import { toastService, loaderService } from 'fluent-styles'
 
 export default function PinSetupScreen() {
   const Colors          = useColors()
   const setHasPin       = useAuthStore(s => s.setHasPin)
+  const settings        = useSettings()
   const [stage, setStage]       = useState<'create' | 'confirm'>('create')
   const [firstPin, setFirstPin] = useState('')
   const [error, setError]       = useState('')
@@ -27,13 +29,33 @@ export default function PinSetupScreen() {
       setFirstPin('')
       return
     }
-    await securityService.setPin(pin)
-    // Mark hasPin = true but keep isLocked = false for this session.
-    // The user just set the PIN — they shouldn't be immediately locked out.
-    // isLocked will only be true on the NEXT app launch.
-    setHasPin(true)
-    toastService.success('PIN set', 'Your data is now protected.')
-    router.replace('/(app)/home')
+    const id = loaderService.show({ label: 'Securing data…', variant: 'dots' })
+    try {
+      await securityService.setPin(pin)
+      // Mark hasPin = true but keep isLocked = false for this session.
+      // The user just set the PIN — they shouldn't be immediately locked out.
+      // isLocked will only be true on the NEXT app launch.
+      setHasPin(true)
+      loaderService.hide(id)
+      toastService.success('PIN set', 'Your data is now protected.')
+      router.replace('/(app)/home')
+    } catch (err) {
+      loaderService.hide(id)
+      toastService.error('Setup failed', 'Please try again.')
+    }
+  }
+
+  const handleSkip = async () => {
+    const id = loaderService.show({ label: 'Continuing…', variant: 'dots' })
+    try {
+      // Explicitly persist that the user skipped PIN setup
+      await settings.skipPin()
+      loaderService.hide(id)
+      router.replace('/(app)/home')
+    } catch (err) {
+      loaderService.hide(id)
+      toastService.error('Failed', 'Please try again.')
+    }
   }
 
   return (
@@ -55,7 +77,7 @@ export default function PinSetupScreen() {
         <StyledPressable
           paddingVertical={12}
           paddingHorizontal={24}
-          onPress={() => router.replace('/(app)/home')}
+          onPress={handleSkip}
         >
           <StyledText fontSize={14} color={Colors.textTertiary}>
             Skip for now

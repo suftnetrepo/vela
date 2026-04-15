@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { Slot } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import * as SplashScreen from 'expo-splash-screen'
 import {
   useFonts,
@@ -11,7 +10,7 @@ import {
   PlusJakartaSans_700Bold,
   PlusJakartaSans_800ExtraBold,
 } from '@expo-google-fonts/plus-jakarta-sans'
-import { GlobalPortalProvider } from 'fluent-styles'
+import { GlobalPortalProvider, PortalManager } from 'fluent-styles'
 import { initDatabase } from '../src/db/client'
 import { seedDatabase } from '../src/db/seed'
 import { settingsService } from '../src/services/settings.service'
@@ -25,9 +24,9 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const [appReady, setAppReady] = useState(false)
-  const hydrateSettings         = useSettingsStore(s => s.hydrate)
-  const setLocked               = useAuthStore(s => s.setLocked)
-  const setHasPin               = useAuthStore(s => s.setHasPin)
+  const hydrateSettings = useSettingsStore(s => s.hydrate)
+  const setLocked = useAuthStore(s => s.setLocked)
+  const setHasPin = useAuthStore(s => s.setHasPin)
 
   const [fontsLoaded] = useFonts({
     PlusJakartaSans_400Regular,
@@ -45,12 +44,13 @@ export default function RootLayout() {
 
         const all = await settingsService.getAll()
         hydrateSettings({
-          theme:                (all[SETTINGS_KEYS.THEME] as ThemeName) ?? 'rose',
-          isPremium:            Boolean(all[SETTINGS_KEYS.IS_PREMIUM]),
-          onboardingComplete:   Boolean(all[SETTINGS_KEYS.ONBOARDING_COMPLETE]),
+          theme: (all[SETTINGS_KEYS.THEME] as ThemeName) ?? 'rose',
+          isPremium: Boolean(all[SETTINGS_KEYS.IS_PREMIUM]),
+          onboardingComplete: Boolean(all[SETTINGS_KEYS.ONBOARDING_COMPLETE]),
+          pinSkipped: Boolean(all[SETTINGS_KEYS.PIN_SKIPPED]),
           notificationsEnabled: Boolean(all[SETTINGS_KEYS.NOTIFICATIONS_ENABLED] ?? true),
-          avgCycleLength:       Number(all[SETTINGS_KEYS.AVG_CYCLE_LENGTH] ?? 28),
-          avgPeriodLength:      Number(all[SETTINGS_KEYS.AVG_PERIOD_LENGTH] ?? 5),
+          avgCycleLength: Number(all[SETTINGS_KEYS.AVG_CYCLE_LENGTH] ?? 28),
+          avgPeriodLength: Number(all[SETTINGS_KEYS.AVG_PERIOD_LENGTH] ?? 5),
         })
 
         const hasPin = await securityService.hasPin()
@@ -81,10 +81,9 @@ export default function RootLayout() {
 
   return (
     <GlobalPortalProvider>
-      <StatusBar style="auto" />
-      <View style={{ flex: 1, opacity: isReady ? 1 : 0 }}>
+      <PortalManager>
         <Slot />
-      </View>
+      </PortalManager>
     </GlobalPortalProvider>
   )
 }

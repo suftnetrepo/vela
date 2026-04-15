@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Stack, StyledText, StyledScrollView, StyledPage, StyledHeader, StyledPressable, StyledDivider } from 'fluent-styles'
+import { Stack, StyledText, StyledScrollView, StyledPage, StyledHeader, StyledPressable, StyledDivider, theme } from 'fluent-styles'
 import { router } from 'expo-router'
 import { useColors } from '../../../src/hooks/useColors'
 import { useSettingsStore } from '../../../src/stores/settings.store'
@@ -47,9 +47,22 @@ export default function PremiumScreen() {
   if (isPremium) {
     return (
       <StyledPage flex={1} backgroundColor={Colors.background}>
-        <StyledHeader title="Premium" titleAlignment="center" showBackArrow
-          onBackPress={() => router.push('/(app)/settings')} showStatusBar backgroundColor={Colors.background}
-          titleProps={{ fontWeight: '700', color: Colors.textPrimary }} />
+         <StyledPage.Header
+        title="Premium"
+        titleAlignment="center"
+        marginHorizontal={16}
+        shapeProps={{
+          size: 48,
+          backgroundColor: theme.colors.pink[50],
+        }}
+        backArrowProps={{
+          color: theme.colors.pink[500],
+        }}
+        showBackArrow
+        onBackPress={() => router.push('/(app)/settings')}
+        backgroundColor={Colors.background}
+        titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
+      />
         <Stack flex={1} alignItems="center" justifyContent="center" padding={32} gap={20}>
           <Stack width={88} height={88} borderRadius={44} backgroundColor={Colors.primaryFaint}
             alignItems="center" justifyContent="center" borderWidth={2} borderColor={Colors.border}>
@@ -68,9 +81,22 @@ export default function PremiumScreen() {
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
-      <StyledHeader title="" titleAlignment="center" showBackArrow
-        onBackPress={() => router.push('/(app)/settings')} showStatusBar backgroundColor={Colors.background} />
-
+       <StyledPage.Header
+        title=""
+        titleAlignment="center"
+        marginHorizontal={16}
+        shapeProps={{
+          size: 48,
+          backgroundColor: theme.colors.pink[50],
+        }}
+        backArrowProps={{
+          color: theme.colors.pink[500],
+        }}
+        showBackArrow
+        onBackPress={() => router.push('/(app)/settings')}
+        backgroundColor={Colors.background}
+        titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
+      />
       <StyledScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
 
         {/* Hero */}
