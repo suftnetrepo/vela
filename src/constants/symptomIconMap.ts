@@ -83,11 +83,11 @@ export const SYMPTOM_ICON_MAP: Record<string, string> = {
   ovulation_pain:        'pain_ovulation_pain',
   pelvic_pain:           'pain_pelvic_pain',
   shoulder_ache:         'pain_shoulder_ache',   // New: shoulder pain
-  tender_breasts:        'pain_breast_pain',     // Tender breasts → same as breast pain
+  tender_breasts:        'pain_tender_breasts',  // Tender breasts (distinct from breast pain)
   breast_sensitivity:    'pain_breast_sensitivity',
   body_aches:            'pain_body_aches',
-  muscle_pain:           'pain_body_aches',      // Muscle pain → similar to body aches
-  low_back_pain:         'pain_backache',        // Alias for backache
+  muscle_pain:           'pain_muscle_pain',     // Muscle pain (distinct from body aches)
+  low_back_pain:         'pain_low_back_pain',   // Low back pain (distinct from backache)
 
   // ┌─ PHYSICAL CATEGORY ────────────────────────────────────────────────────┐
   // Body state symptoms
