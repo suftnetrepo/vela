@@ -15,6 +15,7 @@ import { initDatabase } from '../src/db/client'
 import { seedDatabase } from '../src/db/seed'
 import { settingsService } from '../src/services/settings.service'
 import { securityService } from '../src/services/security.service'
+import { getEntitlement } from '../src/services/premium.service'
 import { useSettingsStore } from '../src/stores/settings.store'
 import { useAuthStore } from '../src/stores/auth.store'
 import { SETTINGS_KEYS } from '../src/constants/config'
@@ -25,6 +26,7 @@ SplashScreen.preventAutoHideAsync()
 export default function RootLayout() {
   const [appReady, setAppReady] = useState(false)
   const hydrateSettings = useSettingsStore(s => s.hydrate)
+  const setPremiumEntitlement = useSettingsStore(s => s.setPremiumEntitlement)
   const setBootReady = useSettingsStore(s => s.setBootReady)
   const setLocked = useAuthStore(s => s.setLocked)
   const setHasPin = useAuthStore(s => s.setHasPin)
@@ -57,6 +59,10 @@ export default function RootLayout() {
           avgCycleLength: Number(all[SETTINGS_KEYS.AVG_CYCLE_LENGTH] ?? 28),
           avgPeriodLength: Number(all[SETTINGS_KEYS.AVG_PERIOD_LENGTH] ?? 5),
         })
+
+        // Hydrate premium entitlement state
+        const entitlement = await getEntitlement()
+        setPremiumEntitlement(entitlement.isActive, entitlement.plan)
 
         const hasPin = await securityService.hasPin()
         

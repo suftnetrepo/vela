@@ -2,76 +2,68 @@ import React, { useState } from 'react'
 import { Stack, StyledText, StyledScrollView, StyledPage, StyledHeader, StyledPressable, StyledDivider, theme } from 'fluent-styles'
 import { router } from 'expo-router'
 import { useColors } from '../../../src/hooks/useColors'
-import { useSettingsStore } from '../../../src/stores/settings.store'
-import { settingsService } from '../../../src/services/settings.service'
-import { SETTINGS_KEYS, APP_CONFIG } from '../../../src/constants/config'
+import { usePremium } from '../../../src/hooks/usePremium'
 import { VelaIcon } from '../../../src/components/shared/VelaIcon'
 import type { VelaIconName } from '../../../src/components/shared/VelaIcon'
-import { loaderService, toastService } from 'fluent-styles'
+import { PREMIUM_FEATURES, PREMIUM_PRICING } from '../../../src/constants/premium'
+
+type PlanKey = 'MONTHLY' | 'YEARLY' | 'LIFETIME'
 
 interface FeatureDef { icon: VelaIconName; title: string; desc: string }
 
-const FEATURES: FeatureDef[] = [
-  { icon: 'pill',     title: 'Pill reminders',     desc: 'Daily contraception reminders with custom times' },
-  { icon: 'baby',     title: 'Pregnancy mode',     desc: 'Track your pregnancy week by week' },
-  { icon: 'report',   title: 'Detailed reports',   desc: 'Export your cycle data as PDF or CSV' },
-  { icon: 'activity', title: 'Advanced insights',  desc: 'PMS patterns, mood correlations, and more' },
-  { icon: 'palette',  title: 'All themes',         desc: 'Lavender, Sage, and Midnight colour themes' },
-]
-
-const PLANS = [
-  { id: 'monthly',  label: 'Monthly',  price: `£${APP_CONFIG.premium.monthly}/mo`,  sublabel: 'Billed monthly',        badge: null },
-  { id: 'yearly',   label: 'Yearly',   price: `£${APP_CONFIG.premium.yearly}/yr`,   sublabel: 'Just £1.25/month',      badge: 'BEST VALUE' },
-  { id: 'lifetime', label: 'Lifetime', price: `£${APP_CONFIG.premium.lifetime}`,    sublabel: 'One-time payment',      badge: 'MOST POPULAR' },
-]
+const FEATURE_MAPPING: Record<number, VelaIconName> = {
+  0: 'activity',
+  1: 'report',
+  2: 'pill',
+  3: 'baby',
+  4: 'palette',
+  5: 'gift',
+}
 
 export default function PremiumScreen() {
-  const Colors    = useColors()
-  const isPremium = useSettingsStore(s => s.isPremium)
-  const setIsPremium = useSettingsStore(s => s.setIsPremium)
-  const [selected, setSelected] = useState('yearly')
+  const Colors = useColors()
+  const premium = usePremium()
+  const [selected, setSelected] = useState<PlanKey>('YEARLY')
 
-  const handleSubscribe = async () => {
-    const id = loaderService.show({ label: 'Processing…', variant: 'dots' })
-    // Simulate payment (RevenueCat integration point)
-    await new Promise(r => setTimeout(r, 1500))
-    loaderService.hide(id)
-    // Mock success
-    await settingsService.set(SETTINGS_KEYS.IS_PREMIUM, true)
-    setIsPremium(true)
-    toastService.success('Welcome to Premium! ✨', 'All features unlocked.')
-    router.push('/(app)/settings')
+  const handlePurchasePress = async () => {
+    let success = false
+    if (selected === 'MONTHLY')  success = await premium.buyMonthly()
+    if (selected === 'YEARLY')   success = await premium.buyYearly()
+    if (selected === 'LIFETIME') success = await premium.buyLifetime()
+    if (success) router.back()
   }
 
-  if (isPremium) {
+  if (premium.isPremium) {
     return (
       <StyledPage flex={1} backgroundColor={Colors.background}>
-         <StyledPage.Header
-        title="Premium"
-        titleAlignment="center"
-        marginHorizontal={16}
-        shapeProps={{
-          size: 48,
-          backgroundColor: theme.colors.pink[50],
-        }}
-        backArrowProps={{
-          color: theme.colors.pink[500],
-        }}
-        showBackArrow
-        onBackPress={() => router.push('/(app)/settings')}
-        backgroundColor={Colors.background}
-        titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
-      />
+        <StyledPage.Header
+          title="Premium"
+          titleAlignment="center"
+          marginHorizontal={16}
+          shapeProps={{
+            size: 48,
+            backgroundColor: theme.colors.pink[50],
+          }}
+          backArrowProps={{
+            color: theme.colors.pink[500],
+          }}
+          showBackArrow
+          onBackPress={() => router.push('/(app)/settings')}
+          backgroundColor={Colors.background}
+          titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
+        />
         <Stack flex={1} alignItems="center" justifyContent="center" padding={32} gap={20}>
           <Stack width={88} height={88} borderRadius={44} backgroundColor={Colors.primaryFaint}
             alignItems="center" justifyContent="center" borderWidth={2} borderColor={Colors.border}>
             <VelaIcon name="check-circle" size={44} color={Colors.primary} />
           </Stack>
           <StyledText fontSize={22} fontWeight="800" color={Colors.textPrimary} textAlign="center">
-            You're on Premium!
+            You're Premium!
           </StyledText>
           <StyledText fontSize={15} color={Colors.textSecondary} textAlign="center">
-            All features are unlocked. Thank you for supporting Vela.
+            {premium.plan === 'lifetime'
+              ? 'Lifetime access — all features forever.'
+              : `Your ${premium.plan} subscription is active.`}
           </StyledText>
         </Stack>
       </StyledPage>
@@ -80,7 +72,7 @@ export default function PremiumScreen() {
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
-       <StyledPage.Header
+      <StyledPage.Header
         title=""
         titleAlignment="center"
         marginHorizontal={16}
@@ -108,30 +100,30 @@ export default function PremiumScreen() {
             Vela Premium
           </StyledText>
           <StyledText fontSize={15} color={Colors.textSecondary} textAlign="center" lineHeight={22}>
-            Unlock all features and support independent, privacy-first development.
+            Unlock advanced insights, exports, themes, and more. Support independent, privacy-first development.
           </StyledText>
           <Stack backgroundColor={Colors.successLight} borderRadius={20}
             paddingHorizontal={16} paddingVertical={8} horizontal alignItems="center" gap={6}>
             <VelaIcon name="gift" size={14} color={Colors.success} />
             <StyledText fontSize={13} fontWeight="700" color={Colors.success}>
-              7-day free trial included
+              7-day free trial
             </StyledText>
           </Stack>
         </Stack>
 
         {/* Features */}
         <Stack paddingHorizontal={20} gap={10} marginBottom={28}>
-          {FEATURES.map(f => (
+          {PREMIUM_FEATURES.map((f, i) => (
             <Stack key={f.title} horizontal alignItems="flex-start" gap={14}
               backgroundColor={Colors.surface} borderRadius={16} padding={14}
               shadowColor="#000" shadowOffset={{ width: 0, height: 1 }} shadowOpacity={0.04} shadowRadius={6} elevation={1}>
               <Stack width={40} height={40} borderRadius={12} backgroundColor={Colors.primaryFaint}
                 alignItems="center" justifyContent="center">
-                <VelaIcon name={f.icon} size={20} color={Colors.primary} />
+                <VelaIcon name={FEATURE_MAPPING[i] || 'gift'} size={20} color={Colors.primary} />
               </Stack>
               <Stack flex={1} gap={2}>
                 <StyledText fontSize={14} fontWeight="700" color={Colors.textPrimary}>{f.title}</StyledText>
-                <StyledText fontSize={12} color={Colors.textSecondary}>{f.desc}</StyledText>
+                <StyledText fontSize={12} color={Colors.textSecondary}>{f.description}</StyledText>
               </Stack>
             </Stack>
           ))}
@@ -139,10 +131,12 @@ export default function PremiumScreen() {
 
         {/* Plans */}
         <Stack paddingHorizontal={20} gap={10} marginBottom={24}>
-          {PLANS.map(plan => {
-            const isSelected = selected === plan.id
+          {(['YEARLY', 'LIFETIME', 'MONTHLY'] as PlanKey[]).map(key => {
+            const p = PREMIUM_PRICING[key]
+            const isSelected = selected === key
+            const isBestValue = key === 'LIFETIME'
             return (
-              <StyledPressable key={plan.id} onPress={() => setSelected(plan.id)}
+              <StyledPressable key={key} onPress={() => setSelected(key)}
                 backgroundColor={isSelected ? Colors.primaryFaint : Colors.surface}
                 borderRadius={18} padding={18} borderWidth={isSelected ? 2 : 1}
                 borderColor={isSelected ? Colors.primary : Colors.border}
@@ -154,19 +148,39 @@ export default function PremiumScreen() {
                   {isSelected && <VelaIcon name="check" size={13} color={Colors.textInverse} />}
                 </Stack>
                 <Stack flex={1} gap={2}>
-                  <Stack horizontal alignItems="center" gap={8}>
-                    <StyledText fontSize={16} fontWeight="700" color={Colors.textPrimary}>{plan.label}</StyledText>
-                    {plan.badge && (
+                  <Stack horizontal alignItems="center" gap={8} flexWrap="wrap">
+                    <StyledText fontSize={16} fontWeight="700" color={Colors.textPrimary}>{p.label}</StyledText>
+                    {'saving' in p && (
                       <Stack backgroundColor={Colors.primary} borderRadius={8}
                         paddingHorizontal={8} paddingVertical={3}>
-                        <StyledText fontSize={10} fontWeight="800" color={Colors.textInverse}>{plan.badge}</StyledText>
+                        <StyledText fontSize={10} fontWeight="800" color={Colors.textInverse}>{(p as any).saving}</StyledText>
+                      </Stack>
+                    )}
+                    {isBestValue && (
+                      <Stack backgroundColor="#F59E0B" borderRadius={8}
+                        paddingHorizontal={8} paddingVertical={3}>
+                        <StyledText fontSize={10} fontWeight="800" color="#fff">BEST VALUE</StyledText>
                       </Stack>
                     )}
                   </Stack>
-                  <StyledText fontSize={12} color={Colors.textTertiary}>{plan.sublabel}</StyledText>
+                  {'trial' in p && (
+                    <StyledText fontSize={12} color={Colors.primary} fontWeight="600">
+                      {(p as any).trial}
+                    </StyledText>
+                  )}
+                  {key === 'LIFETIME' && (
+                    <StyledText fontSize={12} color={Colors.textTertiary}>
+                      Pay once, use forever
+                    </StyledText>
+                  )}
+                  {key === 'MONTHLY' && (
+                    <StyledText fontSize={12} color={Colors.textTertiary}>
+                      Billed monthly, cancel anytime
+                    </StyledText>
+                  )}
                 </Stack>
                 <StyledText fontSize={16} fontWeight="800" color={isSelected ? Colors.primaryDark : Colors.textPrimary}>
-                  {plan.price}
+                  {p.price}
                 </StyledText>
               </StyledPressable>
             )
@@ -176,21 +190,25 @@ export default function PremiumScreen() {
         {/* CTA */}
         <Stack paddingHorizontal={20} gap={12}>
           <StyledPressable backgroundColor={Colors.primary} borderRadius={30}
-            paddingVertical={18} alignItems="center" onPress={handleSubscribe}
+            paddingVertical={18} alignItems="center" onPress={handlePurchasePress}
             flexDirection="row" justifyContent="center" gap={10}
             shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 4 }}
             shadowOpacity={0.35} shadowRadius={12} elevation={6}>
             <VelaIcon name="premium" size={18} color={Colors.textInverse} />
             <StyledText fontSize={17} fontWeight="800" color={Colors.textInverse}>
-              Start free trial
+              {selected === 'YEARLY'   ? '🎉 Start Free Trial' :
+               selected === 'LIFETIME' ? '⚡ Buy Lifetime'    :
+               '🚀 Start Monthly'}
             </StyledText>
           </StyledPressable>
-          <StyledText fontSize={12} color={Colors.textTertiary} textAlign="center">
-            Cancel anytime. No charge during trial.
-          </StyledText>
+          <StyledPressable onPress={premium.restore}>
+            <StyledText fontSize={12} color={Colors.primary} textAlign="center">
+              Restore purchases
+            </StyledText>
+          </StyledPressable>
           <StyledDivider borderBottomColor={Colors.border} />
           <StyledText fontSize={11} color={Colors.textTertiary} textAlign="center" lineHeight={16}>
-            Payment processed by RevenueCat. Subscription renews automatically unless cancelled 24 hours before renewal date. Prices in GBP.
+            Subscriptions renew automatically. Cancel anytime. Payment charged to your Apple ID at confirmation.
           </StyledText>
         </Stack>
       </StyledScrollView>

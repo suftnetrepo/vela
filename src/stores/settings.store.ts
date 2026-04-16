@@ -1,9 +1,11 @@
 import { create } from 'zustand'
 import type { ThemeName } from '../constants/themes'
+import type { PremiumPlan } from '../services/premium.service'
 
 interface SettingsState {
   theme:              ThemeName
   isPremium:          boolean
+  premiumPlan:        PremiumPlan
   onboardingComplete: boolean
   pinSkipped:         boolean
   notificationsEnabled: boolean
@@ -12,6 +14,7 @@ interface SettingsState {
   bootReady:          boolean
   setTheme:           (t: ThemeName) => void
   setIsPremium:       (v: boolean)   => void
+  setPremiumEntitlement: (active: boolean, plan: PremiumPlan) => void
   setOnboardingComplete: (v: boolean) => void
   setPinSkipped:      (v: boolean)   => void
   setNotificationsEnabled: (v: boolean) => void
@@ -24,6 +27,7 @@ interface SettingsState {
 export const useSettingsStore = create<SettingsState>(set => ({
   theme:               'rose',
   isPremium:           false,
+  premiumPlan:         null,
   onboardingComplete:  false,
   pinSkipped:          false,
   notificationsEnabled: true,
@@ -33,6 +37,7 @@ export const useSettingsStore = create<SettingsState>(set => ({
 
   setTheme:                t  => set({ theme: t }),
   setIsPremium:            v  => set({ isPremium: v }),
+  setPremiumEntitlement: (active, plan) => set({ isPremium: active, premiumPlan: plan }),
   setOnboardingComplete:   v  => set({ onboardingComplete: v }),
   setPinSkipped:           v  => set({ pinSkipped: v }),
   setNotificationsEnabled: v  => set({ notificationsEnabled: v }),
