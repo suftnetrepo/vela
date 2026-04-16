@@ -5,7 +5,6 @@ import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { useMoods } from '../../hooks/useMoods'
 import { VelaIcon } from '../shared/VelaIcon'
-import { getMoodIcon } from '../../constants/symptomIconMap'
 
 export interface JournalData {
   moods:       string[]  // Mood keys selected in this log entry
@@ -18,7 +17,7 @@ interface JournalTabProps {
   onChange: (data: JournalData) => void
 }
 
-// ─── Mood chip with SVG icon ──────────────────────────────────────────────────
+// ─── Mood chip with emoji ──────────────────────────────────────────────────
 function MoodChip({
   emoji, label, moodKey, selected, onPress,
 }: {
@@ -29,7 +28,6 @@ function MoodChip({
   onPress: () => void
 }) {
   const Colors = useColors()
-  const iconName = getMoodIcon(moodKey)
   
   return (
     <StyledPressable
@@ -44,7 +42,7 @@ function MoodChip({
       alignItems="center"
       gap={6}
     >
-      <VelaIcon name={iconName} size={16} color={selected ? Colors.primary : Colors.textSecondary} />
+      <StyledText fontSize={18}>{emoji}</StyledText>
       <StyledText fontSize={13} fontWeight={selected ? '700' : '400'}
         color={selected ? Colors.primaryDark : Colors.textSecondary}>
         {label}

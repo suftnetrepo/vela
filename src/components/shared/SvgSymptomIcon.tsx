@@ -59,21 +59,6 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   skin_dry_skin: { family: 'mci', glyph: 'leaf' },
   skin_rash: { family: 'mci', glyph: 'asterisk-circle-outline' },
 
-  // Mood icons
-  mood_anxious: { family: 'feather', glyph: 'alert-circle' },
-  mood_calm: { family: 'feather', glyph: 'leaf' },
-  mood_confident: { family: 'feather', glyph: 'arrow-up' },
-  mood_emotional: { family: 'feather', glyph: 'heart' },
-  mood_energetic: { family: 'mci', glyph: 'lightning-bolt' },
-  mood_exhausted: { family: 'feather', glyph: 'battery' },
-  mood_happy: { family: 'ionicons', glyph: 'happy-outline' },
-  mood_in_love: { family: 'ionicons', glyph: 'heart' },
-  mood_irritable: { family: 'feather', glyph: 'alert-triangle' },
-  mood_relaxed: { family: 'mci', glyph: 'spa' },
-  mood_sad: { family: 'ionicons', glyph: 'sad-outline' },
-  mood_stressed: { family: 'feather', glyph: 'alert-octagon' },
-  mood_tired: { family: 'mci', glyph: 'sleep' },
-
   // Other icons
   other_fever: { family: 'feather', glyph: 'thermometer' },
   other_medication: { family: 'mci', glyph: 'pill' },
