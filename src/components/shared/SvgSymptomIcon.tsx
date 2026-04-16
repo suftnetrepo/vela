@@ -32,16 +32,16 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   pain_low_back_pain: { family: 'mci', glyph: 'spine' },
 
   // Cervical icons
-  cervical_sticky: { family: 'mci', glyph: 'water-opacity' },
+  cervical_sticky: { family: 'feather', glyph: 'droplet' },
   cervical_creamy: { family: 'feather', glyph: 'cloud' },
-  cervical_egg_white: { family: 'feather', glyph: 'droplet' },
+  cervical_egg_white: { family: 'feather', glyph: 'circle' },
   cervical_cottage_cheese: { family: 'feather', glyph: 'package' },
   cervical_foul_smelling: { family: 'feather', glyph: 'alert-triangle' },
-  cervical_irritation: { family: 'feather', glyph: 'alert-octagon' },
+  cervical_irritation: { family: 'feather', glyph: 'alert-circle' },
   cervical_dry: { family: 'feather', glyph: 'minus' },
-  cervical_watery: { family: 'feather', glyph: 'droplets' },
+  cervical_watery: { family: 'mci', glyph: 'water' },
   cervical_green: { family: 'mci', glyph: 'alert-circle' },
-  cervical_bloodstained: { family: 'mci', glyph: 'water' },
+  cervical_bloodstained: { family: 'feather', glyph: 'zap' },
 
   // Digestive icons
   digestive_constipation: { family: 'feather', glyph: 'pause-circle' },
