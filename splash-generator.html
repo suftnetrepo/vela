@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vela Splash Screen Generator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #2d1b24;
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      font-size: 20px;
+      color: #2d1b24;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .theme-selector {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .theme-btn {
+      padding: 8px 16px;
+      border: 2px solid #e8a0af;
+      background: white;
+      color: #2d1b24;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .theme-btn.active {
+      background: #E8748A;
+      color: white;
+      border-color: #E8748A;
+    }
+
+    .theme-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 512px;
+      height: 512px;
+      border-radius: 12px;
+      margin: 20px auto;
+      background: #FFFBFC;
+      border: 1px solid #f3d4da;
+      position: relative;
+    }
+
+    .preview.rose {
+      background: #FFFBFC;
+    }
+
+    .preview.lavender {
+      background: #FAFAFF;
+    }
+
+    .preview.sage {
+      background: #FAFCFB;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .controls {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #f3d4da;
+    }
+
+    button {
+      padding: 12px 24px;
+      background: #E8748A;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: #C4506A;
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .instructions {
+      background: #fff3f5;
+      border-left: 4px solid #E8748A;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #7a5060;
+      line-height: 1.6;
+    }
+
+    code {
+      background: #f0e0e5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+    }
+
+    .feature {
+      margin-bottom: 12px;
+    }
+
+    .feature strong {
+      color: #2d1b24;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌸 Vela Splash Screen Generator</h1>
+
+    <div class="grid">
+      <!-- Preview Section -->
+      <div class="card">
+        <h2>Preview</h2>
+        <div class="theme-selector">
+          <button class="theme-btn active" data-theme="rose">Rose</button>
+          <button class="theme-btn" data-theme="lavender">Lavender</button>
+          <button class="theme-btn" data-theme="sage">Sage</button>
+        </div>
+
+        <div id="previewContainer" class="preview rose">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="bgGradient" cx="50%" cy="30%" r="70%">
+                <stop offset="0%" style="stop-color:#FFFCFD;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#FFFBFC;stop-opacity:1" />
+              </radialGradient>
+            </defs>
+            <rect width="512" height="512" fill="#FFFBFC"/>
+            <rect width="512" height="512" fill="url(#bgGradient)" opacity="0.8"/>
+
+            <g>
+              <g transform="translate(256, 180)">
+                <circle cx="0" cy="-30" r="18" fill="#E8748A" opacity="0.9"/>
+                <circle cx="26" cy="-15" r="18" fill="#E8748A" opacity="0.9"/>
+                <circle cx="26" cy="15" r="18" fill="#E8748A" opacity="0.9"/>
+                <circle cx="0" cy="30" r="18" fill="#E8748A" opacity="0.9"/>
+                <circle cx="-26" cy="15" r="18" fill="#E8748A" opacity="0.9"/>
+                <circle cx="-26" cy="-15" r="18" fill="#E8748A" opacity="0.9"/>
+                <circle cx="0" cy="0" r="14" fill="#E8748A" opacity="1"/>
+              </g>
+
+              <text 
+                x="256"
+                y="300"
+                font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                font-size="56"
+                font-weight="700"
+                fill="#E8748A"
+                text-anchor="middle"
+                letter-spacing="-1.2"
+                dominant-baseline="middle"
+              >
+                Vela
+              </text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="controls">
+          <button onclick="downloadPNG()">📥 Download as PNG (512×512)</button>
+          <button onclick="copySVG()" style="background: #7BAF8E;">📋 Copy SVG Code</button>
+        </div>
+      </div>
+
+      <!-- Instructions Section -->
+      <div class="card">
+        <h2>📋 About This Splash Screen</h2>
+
+        <div class="feature">
+          <strong>Size:</strong> 512×512 pixels (Expo standard)
+        </div>
+
+        <div class="feature">
+          <strong>Format:</strong> PNG (mobile-optimized) or SVG (vector)
+        </div>
+
+        <div class="feature">
+          <strong>Themes:</strong> Rose (default), Lavender, Sage
+        </div>
+
+        <div class="feature">
+          <strong>Display:</strong> Shows during app boot (~1-2 seconds)
+        </div>
+
+        <h3 style="margin-top: 24px; margin-bottom: 12px; font-size: 15px; color: #2d1b24;">📥 How to Export</h3>
+
+        <div class="instructions">
+          <div class="feature">
+            <strong>1. Generate PNG:</strong><br>
+            Click "Download as PNG" above to save the splash screen.
+          </div>
+
+          <div class="feature">
+            <strong>2. Replace file:</strong><br>
+            Save as <code>assets/images/splash.png</code>
+          </div>
+
+          <div class="feature">
+            <strong>3. Configure (optional):</strong><br>
+            Edit <code>app.json</code> splash config if needed
+          </div>
+
+          <div class="feature">
+            <strong>4. Test on device:</strong><br>
+            Run <code>yarn start</code> and watch for splash during boot
+          </div>
+        </div>
+
+        <h3 style="margin-top: 24px; margin-bottom: 12px; font-size: 15px; color: #2d1b24;">🎨 Design</h3>
+
+        <div class="instructions">
+          <div class="feature">
+            • Flower mark: 88px, Vela primary color
+          </div>
+          <div class="feature">
+            • Wordmark: 56px bold, same color
+          </div>
+          <div class="feature">
+            • Background: Theme-specific pastel
+          </div>
+          <div class="feature">
+            • Minimal, calm, premium aesthetic
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const THEMES = {
+      rose: { primary: '#E8748A', background: '#FFFBFC' },
+      lavender: { primary: '#9B8EC4', background: '#FAFAFF' },
+      sage: { primary: '#7BAF8E', background: '#FAFCFB' }
+    };
+
+    function updateTheme(themeName) {
+      const colors = THEMES[themeName];
+      const svg = document.querySelector('#previewContainer svg');
+      const container = document.getElementById('previewContainer');
+
+      // Update background
+      container.className = `preview ${themeName}`;
+      svg.querySelectorAll('rect').forEach(rect => {
+        if (rect === svg.querySelector('rect')) {
+          rect.setAttribute('fill', colors.background);
+        }
+      });
+
+      // Update color
+      svg.querySelectorAll('circle, text').forEach(el => {
+        el.setAttribute('fill', colors.primary);
+      });
+
+      // Update theme buttons
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === themeName);
+      });
+    }
+
+    function downloadPNG() {
+      const svg = document.querySelector('#previewContainer svg');
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+
+      const ctx = canvas.getContext('2d');
+      const image = new Image();
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+
+      image.onload = function() {
+        ctx.drawImage(image, 0, 0);
+        const pngUrl = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.href = pngUrl;
+        link.download = 'splash.png';
+        link.click();
+        URL.revokeObjectURL(url);
+      };
+
+      image.src = url;
+    }
+
+    function copySVG() {
+      const svg = document.querySelector('#previewContainer svg');
+      const svgString = new XMLSerializer().serializeToString(svg);
+      navigator.clipboard.writeText(svgString).then(() => {
+        alert('✅ SVG code copied to clipboard!');
+      });
+    }
+
+    // Event listeners
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        updateTheme(e.target.dataset.theme);
+      });
+    });
+  </script>
+</body>
+</html>

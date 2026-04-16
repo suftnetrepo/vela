@@ -63,7 +63,7 @@ export default function SettingsScreen() {
     <StyledPage flex={1} backgroundColor={Colors.background}>
       <StyledPage.Header 
         marginHorizontal={32}
-        title="Settings" titleAlignment="left" showStatusBar
+        title="Settings" titleAlignment="left"
         backgroundColor={Colors.background}
         titleProps={{ fontSize: 22, fontWeight: '800', color: Colors.textPrimary }} />
       

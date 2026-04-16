@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack, StyledText, StyledPressable } from 'fluent-styles'
+import { Stack, StyledText, StyledPressable, theme } from 'fluent-styles'
 import { useColors } from '../../hooks/useColors'
 import type { CyclePrediction } from '../../algorithm/prediction'
 import { phaseName, phaseDescription } from '../../algorithm/prediction'
@@ -102,11 +102,11 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
             </StyledText>
           </Stack>
           {/* Cycle day badge - phase color intentionally used for visual feedback */}
-          <Stack width={52} height={52} borderRadius={26} backgroundColor={phaseColor}
+          <Stack width={52} height={52} borderRadius={99} backgroundColor={phaseColor}
             alignItems="center" justifyContent="center"
             shadowColor={phaseColor} shadowOffset={{ width: 0, height: 2 }}
             shadowOpacity={0.20} shadowRadius={6} elevation={3}>
-            <StyledText fontSize={22} fontWeight="800" color={Colors.textInverse}>
+            <StyledText fontSize={18} fontWeight="800" color={theme.colors.red[200]}>
               {prediction.currentCycleDay}
             </StyledText>
           </Stack>
