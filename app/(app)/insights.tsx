@@ -12,10 +12,12 @@ import {
 import { useColors } from "../../src/hooks/useColors";
 import { useCycles } from "../../src/hooks/useCycles";
 import { usePrediction } from "../../src/hooks/usePrediction";
+import { usePremium } from "../../src/hooks/usePremium";
 import { CycleTrendsCard } from "../../src/components/insights/CycleTrendsCard";
 import { CycleRhythmChart } from "../../src/components/insights/CycleRhythmChart";
 import { CyclePhasePillBar } from "../../src/components/shared/CyclePhasePillBar";
 import { PatternSummary } from "../../src/components/insights/PatternSummary";
+import { PremiumGate } from "../../src/components/shared/PremiumGate";
 import { VelaIcon } from "../../src/components/shared/VelaIcon";
 import type { VelaIconName } from "../../src/components/shared/VelaIcon";
 import { phaseName, phaseDescription } from "../../src/algorithm/prediction";
@@ -408,38 +410,43 @@ export default function InsightsScreen() {
       >
         {tab === "overview" && (
           <>
-            {prediction ? (
-              <CycleTrendsCard
-                prediction={prediction}
-                activeCycle={activeCycle}
-              />
-            ) : (
-              <Stack
-                backgroundColor={Colors.primaryFaint}
-                borderRadius={20}
-                padding={24}
-                alignItems="center"
-                gap={10}
-                borderWidth={1}
-                borderColor={Colors.border}
-              >
-                <VelaIcon name="flower" size={32} color={Colors.primary} />
-                <StyledText
-                  fontSize={15}
-                  fontWeight="700"
-                  color={Colors.textPrimary}
+            <PremiumGate
+              feature="Cycle Trends"
+              description="AI-powered cycle analytics and trends"
+            >
+              {prediction ? (
+                <CycleTrendsCard
+                  prediction={prediction}
+                  activeCycle={activeCycle}
+                />
+              ) : (
+                <Stack
+                  backgroundColor={Colors.primaryFaint}
+                  borderRadius={20}
+                  padding={24}
+                  alignItems="center"
+                  gap={10}
+                  borderWidth={1}
+                  borderColor={Colors.border}
                 >
-                  Start tracking your cycle
-                </StyledText>
-                <StyledText
-                  fontSize={13}
-                  color={Colors.textSecondary}
-                  textAlign="center"
-                >
-                  Log your first period to see insights here.
-                </StyledText>
-              </Stack>
-            )}
+                  <VelaIcon name="flower" size={32} color={Colors.primary} />
+                  <StyledText
+                    fontSize={15}
+                    fontWeight="700"
+                    color={Colors.textPrimary}
+                  >
+                    Start tracking your cycle
+                  </StyledText>
+                  <StyledText
+                    fontSize={13}
+                    color={Colors.textSecondary}
+                    textAlign="center"
+                  >
+                    Log your first period to see insights here.
+                  </StyledText>
+                </Stack>
+              )}
+            </PremiumGate>
 
             {prediction && (
               <Stack gap={12}>
@@ -579,7 +586,12 @@ export default function InsightsScreen() {
               </Stack>
             )}
 
-            <CycleRhythmChart cycles={cycles} />
+            <PremiumGate
+              feature="Cycle Rhythm Chart"
+              description="Visualize your menstrual rhythm patterns over time"
+            >
+              <CycleRhythmChart cycles={cycles} />
+            </PremiumGate>
 
             {motivationMsg && (
               <Stack
@@ -730,7 +742,12 @@ export default function InsightsScreen() {
 
         {tab === "patterns" && (
           <>
-            <PatternSummary cycles={cycles} />
+            <PremiumGate
+              feature="Pattern Analysis"
+              description="Deep insights into your menstrual patterns and trends"
+            >
+              <PatternSummary cycles={cycles} />
+            </PremiumGate>
 
             <Stack gap={12}>
               <StyledText

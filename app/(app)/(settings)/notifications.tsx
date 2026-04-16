@@ -11,15 +11,18 @@ import {
 import { router } from "expo-router";
 import { useColors } from "../../../src/hooks/useColors";
 import { useSettings } from "../../../src/hooks/useSettings";
+import { usePremium } from "../../../src/hooks/usePremium";
 import { settingsService } from "../../../src/services/settings.service";
 import { notificationService } from "../../../src/services/notification.service";
 import { SETTINGS_KEYS } from "../../../src/constants/config";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
+import { PremiumGate } from "../../../src/components/shared/PremiumGate";
 import { toastService } from "fluent-styles";
 
 export default function NotificationsScreen() {
   const Colors = useColors();
   const settings = useSettings();
+  const premium = usePremium();
 
   const [fertileNotif, setFertileNotif] = useState(true);
   const [ovulationNotif, setOvulationNotif] = useState(true);
@@ -139,53 +142,59 @@ export default function NotificationsScreen() {
         </Stack>
 
         {settings.notificationsEnabled && (
-          <Stack
-            backgroundColor={Colors.surface}
-            borderRadius={20}
-            overflow="hidden"
-            shadowColor="#000"
-            shadowOffset={{ width: 0, height: 1 }}
-            shadowOpacity={0.05}
-            shadowRadius={8}
-            elevation={1}
+          <PremiumGate
+            feature="Smart Reminders"
+            description="Custom pill reminders and smart cycle notifications"
+            compact
           >
-            <Stack paddingHorizontal={16} paddingTop={14} paddingBottom={4}>
-              <StyledText
-                fontSize={12}
-                fontWeight="700"
-                color={Colors.textTertiary}
-                letterSpacing={0.5}
-              >
-                REMINDERS
-              </StyledText>
+            <Stack
+              backgroundColor={Colors.surface}
+              borderRadius={20}
+              overflow="hidden"
+              shadowColor="#000"
+              shadowOffset={{ width: 0, height: 1 }}
+              shadowOpacity={0.05}
+              shadowRadius={8}
+              elevation={1}
+            >
+              <Stack paddingHorizontal={16} paddingTop={14} paddingBottom={4}>
+                <StyledText
+                  fontSize={12}
+                  fontWeight="700"
+                  color={Colors.textTertiary}
+                  letterSpacing={0.5}
+                >
+                  REMINDERS
+                </StyledText>
+              </Stack>
+              <NotifRow
+                label="Period reminder"
+                subtitle={`${daysBefore} days before your next period`}
+                value={settings.notificationsEnabled}
+                onChange={() => {}}
+              />
+              <StyledDivider
+                borderBottomColor={Colors.border}
+                marginHorizontal={16}
+              />
+              <NotifRow
+                label="Fertile window"
+                subtitle="When your fertile window opens"
+                value={fertileNotif}
+                onChange={handleFertileToggle}
+              />
+              <StyledDivider
+                borderBottomColor={Colors.border}
+                marginHorizontal={16}
+              />
+              <NotifRow
+                label="Ovulation day"
+                subtitle="On your estimated ovulation day"
+                value={ovulationNotif}
+                onChange={handleOvulationToggle}
+              />
             </Stack>
-            <NotifRow
-              label="Period reminder"
-              subtitle={`${daysBefore} days before your next period`}
-              value={settings.notificationsEnabled}
-              onChange={() => {}}
-            />
-            <StyledDivider
-              borderBottomColor={Colors.border}
-              marginHorizontal={16}
-            />
-            <NotifRow
-              label="Fertile window"
-              subtitle="When your fertile window opens"
-              value={fertileNotif}
-              onChange={handleFertileToggle}
-            />
-            <StyledDivider
-              borderBottomColor={Colors.border}
-              marginHorizontal={16}
-            />
-            <NotifRow
-              label="Ovulation day"
-              subtitle="On your estimated ovulation day"
-              value={ovulationNotif}
-              onChange={handleOvulationToggle}
-            />
-          </Stack>
+          </PremiumGate>
         )}
 
         <Stack

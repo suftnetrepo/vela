@@ -124,6 +124,9 @@ export default function SettingsScreen() {
           <StyledDivider borderBottomColor={Colors.border} marginHorizontal={16} />
           <MenuRow icon="bell" label="Notifications" subtitle="Period, ovulation & fertile reminders"
             onPress={() => router.push('/(app)/(settings)/notifications')} />
+          <StyledDivider borderBottomColor={Colors.border} marginHorizontal={16} />
+          <MenuRow icon="baby" label="Pregnancy Mode" subtitle="Track pregnancy & postpartum"
+            onPress={() => router.push('/(app)/(settings)/pregnancy')} badge={!settings.isPremium ? 'PRO' : undefined} />
         </Section>
 
         <Section title="LOGGING">

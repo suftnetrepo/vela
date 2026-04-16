@@ -16,6 +16,7 @@ import { useColors } from "../../../src/hooks/useColors";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
 import { useSettingsStore } from "../../../src/stores/settings.store";
 import { settingsService } from "../../../src/services/settings.service";
+import { clearEntitlement, grantEntitlement } from "../../../src/services/premium.service";
 import { SETTINGS_KEYS } from "../../../src/constants/config";
 import { toastService, dialogueService } from "fluent-styles";
 import type { VelaIconName } from "../../../src/components/shared/VelaIcon";
@@ -501,6 +502,37 @@ export default function ProfileScreen() {
           <PrefRow icon="info" label="About Vela" subtitle="Version 1.0.0" />
         </SectionCard>
 
+        {/* Dev controls (only in development) */}
+        {__DEV__ && (
+          <SectionCard title="DEVELOPMENT">
+            <PrefRow
+              icon="shield-check"
+              label="Grant Premium (7 days)"
+              subtitle="Test premium features locally"
+              onPress={async () => {
+                await grantEntitlement('monthly', 1)
+                useSettingsStore.setState({ isPremium: true, premiumPlan: 'monthly' })
+                toastService.success('Premium granted for 30 days')
+              }}
+            />
+            <StyledDivider
+              borderBottomColor={Colors.border}
+              marginHorizontal={16}
+            />
+            <PrefRow
+              icon="trash"
+              label="Clear Premium"
+              subtitle="Reset to free tier"
+              destructive
+              onPress={async () => {
+                await clearEntitlement()
+                useSettingsStore.setState({ isPremium: false, premiumPlan: null })
+                toastService.info('Premium entitlement cleared')
+              }}
+            />
+          </SectionCard>
+        )}
+      
         {/* Footer */}
         <Stack alignItems="center" gap={4} paddingTop={4}>
           <Stack

@@ -15,7 +15,7 @@ import { initDatabase } from '../src/db/client'
 import { seedDatabase } from '../src/db/seed'
 import { settingsService } from '../src/services/settings.service'
 import { securityService } from '../src/services/security.service'
-import { getEntitlement } from '../src/services/premium.service'
+import { getEntitlement, initializeRevenueCat } from '../src/services/premium.service'
 import { useSettingsStore } from '../src/stores/settings.store'
 import { useAuthStore } from '../src/stores/auth.store'
 import { SETTINGS_KEYS } from '../src/constants/config'
@@ -42,6 +42,9 @@ export default function RootLayout() {
   useEffect(() => {
     async function boot() {
       try {
+        // Initialize RevenueCat first (for app lifecycle)
+        await initializeRevenueCat()
+
         await initDatabase()
         await seedDatabase()
 
@@ -60,7 +63,7 @@ export default function RootLayout() {
           avgPeriodLength: Number(all[SETTINGS_KEYS.AVG_PERIOD_LENGTH] ?? 5),
         })
 
-        // Hydrate premium entitlement state
+        // Hydrate premium entitlement state from RevenueCat
         const entitlement = await getEntitlement()
         setPremiumEntitlement(entitlement.isActive, entitlement.plan)
 
