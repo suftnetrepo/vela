@@ -100,7 +100,7 @@ export default function ArticleScreen() {
 
   const handleBackPress = useCallback(() => {
     if (params.from === 'home') {
-      router.push('/(app)')
+      router.push('/(app)/home')
     } else {
       // Default to articles hub
       router.push('/(app)/(settings)/articles')
