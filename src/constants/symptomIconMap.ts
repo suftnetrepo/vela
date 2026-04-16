@@ -36,14 +36,14 @@ export const SYMPTOM_ICON_MAP: Record<string, string> = {
   // Cervical mucus variations with semantic icons
   cervical_firmness:     'pain_ovulation_pain',  // Firmness → ovulation pain icon
   cervical_opening:      'pain_pelvic_pain',     // Opening → pelvic pain icon
-  cervical_mucus:        'cervical_sticky',      // Default cervical
+  cervical_mucus:        'cervical_watery',      // Default cervical → watery mucus (general)
   cervical_sticky:       'cervical_sticky',      // Sticky mucus
   cervical_creamy:       'cervical_creamy',      // Creamy mucus
   cervical_eggwhite:     'cervical_egg_white',   // Egg-white mucus
-  cervical_watery:       'physical_discharge',   // Watery mucus
+  cervical_watery:       'cervical_watery',      // Watery mucus
   cervical_cottage:      'cervical_cottage_cheese', // Cottage cheese (yeast)
-  cervical_green:        'other_medication',     // Green mucus (infection)
-  cervical_bloodstained: 'other_spotting',       // Blood-stained mucus
+  cervical_green:        'cervical_green',       // Green mucus (infection)
+  cervical_bloodstained: 'cervical_bloodstained', // Blood-stained mucus
   cervical_foul:         'cervical_foul_smelling',  // Foul odor (infection)
   cervical_irritation:   'cervical_irritation',  // Cervical irritation
   cervical_dryness:      'cervical_dry',         // Cervical dryness
