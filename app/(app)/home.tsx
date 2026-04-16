@@ -10,6 +10,7 @@ import { useCycles }          from '../../src/hooks/useCycles'
 import { usePrediction }      from '../../src/hooks/usePrediction'
 import { CycleCalendar }      from '../../src/components/calendar/CycleCalendar'
 import { TodayCard }          from '../../src/components/home/TodayCard'
+import { CycleInfoRow }       from '../../src/components/home/CycleInfoRow'
 import { CycleTrendsCard }    from '../../src/components/insights/CycleTrendsCard'
 import { VelaIcon }           from '../../src/components/shared/VelaIcon'
 import { todayStr } from '../../src/utils/date'
@@ -123,7 +124,10 @@ export default function HomeScreen() {
           />
         </Stack>
 
-        {/* 2. Calendar */}
+        {/* 2. Cycle info row */}
+        <CycleInfoRow prediction={prediction} />
+
+        {/* 3. Calendar */}
         <Stack paddingHorizontal={20} paddingBottom={16}>
           <Stack
             backgroundColor={Colors.surface}
