@@ -11,7 +11,6 @@ import {
 import { router } from "expo-router";
 import { useColors } from "../../../src/hooks/useColors";
 import { useSettings } from "../../../src/hooks/useSettings";
-import { usePremium } from "../../../src/hooks/usePremium";
 import { settingsService } from "../../../src/services/settings.service";
 import { notificationService } from "../../../src/services/notification.service";
 import { SETTINGS_KEYS } from "../../../src/constants/config";
@@ -22,7 +21,6 @@ import { toastService } from "fluent-styles";
 export default function NotificationsScreen() {
   const Colors = useColors();
   const settings = useSettings();
-  const premium = usePremium();
 
   const [fertileNotif, setFertileNotif] = useState(true);
   const [ovulationNotif, setOvulationNotif] = useState(true);

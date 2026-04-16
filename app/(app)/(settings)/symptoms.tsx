@@ -8,7 +8,6 @@ import {
   StyledText,
   StyledPressable,
   StyledPage,
-  StyledHeader,
   theme
 } from 'fluent-styles'
 import { router } from 'expo-router'
@@ -212,6 +211,7 @@ export default function SymptomsSettingsScreen() {
       icon:         '🔄',
       confirmLabel: 'Reset',
       cancelLabel:  'Cancel',
+      theme:        'light',
     })
     if (!ok) return
     setSaving(true)

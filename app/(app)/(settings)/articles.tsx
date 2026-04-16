@@ -4,7 +4,6 @@ import {
   StyledText,
   StyledScrollView,
   StyledPage,
-  StyledHeader,
   StyledPressable,
   theme,
 } from "fluent-styles";

@@ -175,9 +175,10 @@ export default function ProfileScreen() {
       message:
         "This will permanently delete all your cycle logs, symptoms, and settings. This cannot be undone.",
       icon: "⚠️",
-      confirmLabel: "Delete everything",
+      confirmLabel: "Delete",
       cancelLabel: "Cancel",
       destructive: true,
+      theme: "light",
     });
     if (!ok) return;
     toastService.info(

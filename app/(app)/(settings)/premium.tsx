@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Stack, StyledText, StyledScrollView, StyledPage, StyledHeader, StyledPressable, StyledDivider, theme } from 'fluent-styles'
+import { Stack, StyledText, StyledScrollView, StyledPage, StyledPressable, StyledDivider, theme } from 'fluent-styles'
 import { router } from 'expo-router'
 import { useColors } from '../../../src/hooks/useColors'
 import { usePremium } from '../../../src/hooks/usePremium'
@@ -8,8 +8,6 @@ import type { VelaIconName } from '../../../src/components/shared/VelaIcon'
 import { PREMIUM_FEATURES, PREMIUM_PRICING } from '../../../src/constants/premium'
 
 type PlanKey = 'MONTHLY' | 'YEARLY' | 'LIFETIME'
-
-interface FeatureDef { icon: VelaIconName; title: string; desc: string }
 
 const FEATURE_MAPPING: Record<number, VelaIconName> = {
   0: 'activity',

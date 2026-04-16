@@ -39,6 +39,7 @@ export default function SecurityScreen() {
       confirmLabel: "Remove",
       cancelLabel: "Cancel",
       destructive: true,
+      theme: "light",
     });
     if (!ok) return;
     await securityService.clearPin();
