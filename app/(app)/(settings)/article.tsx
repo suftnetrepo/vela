@@ -113,7 +113,7 @@ export default function ArticleScreen() {
             color: theme.colors.pink[500],
           }}
           showBackArrow
-          onBackPress={() => router.push("/(app)/settings")}
+          onBackPress={() => router.back()}
           backgroundColor={Colors.background}
           titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
         />
@@ -142,7 +142,7 @@ export default function ArticleScreen() {
           color: theme.colors.pink[500],
         }}
         showBackArrow
-        onBackPress={() => router.push("/(app)/(settings)/articles")}
+        onBackPress={() => router.back()}
         backgroundColor={Colors.background}
         titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
       />
