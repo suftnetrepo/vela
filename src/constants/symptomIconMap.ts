@@ -1,255 +1,246 @@
 /**
- * Symptom & Mood Icon Map — Single source of truth for icon assignments
+ * SYMPTOM_ICON_MAP — Unified source of truth for symptom & mood SVG icons
  *
- * This file maps each symptom and mood key to a unique, meaningful icon.
- * Keeps icon logic centralized and reusable across:
- * - Log screen symptom grid
- * - Symptom management settings
- * - Manage moods picker
- * - Future article/education cards
+ * Maps all symptom and mood keys to their corresponding SVG icon names.
+ * Icons are stored in assets/icons/symptoms/ and loaded by SvgSymptomIcon component.
  *
- * Design principles:
- * - Each symptom has one primary icon (no duplicates)
- * - Icons feel like one family (consistent stroke, size, style)
- * - Symbols are intuitive and calm (no harsh/medical imagery)
- * - Fallback to generic category icon only if specific icon not defined
+ * This system:
+ * - Replaces generic fallback icons (!, ?, -) with meaningful SVG illustrations
+ * - Provides category-level fallback icons if a specific icon is missing
+ * - Supports common aliases for symptom names
+ * - Maintains consistent styling across all symptom/mood UI
+ *
+ * Icon categories:
+ * - Pain:       10+ pain-related symptoms (cramps, headache, backache, etc.)
+ * - Cervical:   7 cervical mucus variations (sticky, creamy, egg-white, etc.)
+ * - Digestive:  7 digestive symptoms (gas, constipation, hunger, etc.)
+ * - Physical:   6 physical symptoms (bloating, fatigue, nausea, etc.)
+ * - Skin:       4 skin symptoms (acne, oily, dry, rash)
+ * - Mood:       13+ mood states (happy, sad, anxious, etc.)
+ * - Other:      4 misc symptoms (fever, medication, spotting, etc.)
+ *
+ * Generated from: icon pack/vela_symptom_icon_pack/symptom-icon-map.ts
+ * Last updated: 2026-04-16 (SVG icon pack integration)
  */
-
-import type { VelaIconName } from '../components/shared/VelaIcon'
 
 // ─── SYMPTOM ICON MAP ───────────────────────────────────────────────────────
 /**
- * Maps symptom key → icon name
- * Icons are assigned from VelaIcon registry (Feather, Ionicons, MaterialCommunityIcons)
+ * Primary symptom key → SVG icon name mapping
+ * Each symptom maps to a specific SVG file in assets/icons/symptoms/
+ * 
+ * Format: symptom_key: 'category_symptom_name'
+ * Example: cramps: 'pain_cramps' → loads assets/icons/symptoms/pain_cramps.svg
  */
-export const SYMPTOM_ICON_MAP: Record<string, VelaIconName> = {
-  // ┌─ PAIN CATEGORY ────────────────────────────────────────────────────────┐
-  cramps:               'cramps',              // lightning-bolt (sharp, intense)
-  abdominal_cramps:     'zap',                 // zap (acute pain)
-  headache:             'headache',            // head-snowflake (cold/pressure feeling)
-  migraine:             'head',                // head (more severe than headache)
-  backache:             'activity',            // activity (back motion/strain)
-  low_back_pain:        'minus',               // minus (lower specific area)
-  breast_pain:          'heart',               // heart (breast tissue)
-  tender_breasts:       'heart',               // heart (same category)
-  breast_sensitivity:   'alert',               // alert (heightened sensitivity)
-  pelvic_pain:          'zap',                 // zap (acute pelvic pain)
-  neck_ache:            'plus',                // plus (localized neck area)
-  shoulder_ache:        'minus',               // minus (shoulder region)
-  ovulation_pain:       'star',                // star (mid-cycle marker)
-  body_aches:           'activity',            // activity (systemic/full-body)
-  muscle_pain:          'activity',            // activity (muscular)
-  
-  // ┌─ PHYSICAL CATEGORY ────────────────────────────────────────────────────┐
-  bloating:             'bloating',            // circle-outline (distended)
-  fatigue:              'fatigue',             // sleep (tired/rest-need)
-  nausea:               'nausea',              // emoticon-sick-outline (queasiness)
-  dizziness:            'activity',            // activity (motion/balance)
-  chills:               'snowflake',           // snowflake (cold feeling)
-  hot_flashes:          'zap',                 // zap (sudden heat)
-  fever:                'thermometer',         // thermometer (elevated temp)
-  insomnia:             'moon',                // moon (nighttime/sleep issues)
-  night_sweats:         'water',               // water (perspiration)
-  spotting:             'drop',                // water (light fluid)
-  illness:              'alert',               // alert (general sickness)
-  influenza:            'alert',               // alert (viral illness)
-  weight_gain:          'arrow-up',            // arrow-up (increasing)
-  itchiness:            'itchy',               // hand-open (scratching motion)
-  rashes:               'alert',               // alert (skin concern)
-  
-  // ┌─ DIGESTIVE CATEGORY ───────────────────────────────────────────────────┐
-  appetite_up:          'heart-filled',        // heart-filled (craving/desire)
-  cravings:             'heart-filled',        // heart-filled (intense appetite)
-  hunger:               'star-filled',         // star-filled (prominent appetite)
-  appetite_down:        'minus',               // minus (reduced appetite)
-  gas:                  'wind',                // wind (gas/bloating sensation)
-  constipation:         'alert',               // alert (GI concern)
-  diarrhea:             'alert',               // alert (GI concern)
-  dyspepsia:            'alert',               // alert (digestive distress)
-  
-  // ┌─ SKIN CATEGORY ────────────────────────────────────────────────────────┐
-  acne:                 'acne',                // face-woman-shimmer-outline (facial skin)
-  oily_skin:            'sparkles',            // sparkles (sheen/luster)
-  dry_skin:             'leaf',                // leaf (parched/dull)
-  
+export const SYMPTOM_ICON_MAP: Record<string, string> = {
   // ┌─ CERVICAL CATEGORY ────────────────────────────────────────────────────┐
-  cervical_mucus:       'drop',                // water (fluid)
-  cervical_sticky:      'droplet',             // droplet (thick, clingy)
-  cervical_creamy:      'cloud',               // cloud (opaque, creamy texture)
-  cervical_watery:      'water',               // water (liquid/runny)
-  cervical_eggwhite:    'egg',                 // egg (clear, stretchy, egg-like)
-  cervical_cottage:     'circle-outline',      // circle-outline (curdled appearance)
-  cervical_green:       'leaf',                // leaf (green tint)
-  cervical_bloodstained:'drop',                // water with blood (mixed)
-  cervical_dryness:     'minus',               // minus (absence/minimal)
-  cervical_irritation:  'alert',               // alert (inflammation/concern)
-  cervical_foul:        'alert',               // alert (odor/infection concern)
-  cervical_firmness:    'shield',              // shield (firmness/resistance)
-  cervical_opening:     'unlock',              // unlock (open state)
-  
+  // Cervical mucus variations with semantic icons
+  cervical_firmness:     'pain_ovulation_pain',  // Firmness → ovulation pain icon
+  cervical_opening:      'pain_pelvic_pain',     // Opening → pelvic pain icon
+  cervical_mucus:        'cervical_sticky',      // Default cervical
+  sticky:                'cervical_sticky',      // Sticky mucus
+  creamy:                'cervical_creamy',      // Creamy mucus
+  egg_white:             'cervical_egg_white',   // Egg-white mucus
+  cottage_cheese:        'cervical_cottage_cheese', // Cottage cheese (yeast)
+  foul_smelling:         'cervical_foul_smelling',  // Foul odor (infection)
+  irritation:            'cervical_irritation',  // Cervical irritation
+  dry:                   'cervical_dry',         // Cervical dryness
+
+  // ┌─ DIGESTIVE CATEGORY ───────────────────────────────────────────────────┐
+  // GI tract and appetite symptoms
+  constipation:          'digestive_constipation',
+  diarrhea:              'digestive_diarrhea',
+  cravings:              'digestive_cravings',
+  low_appetite:          'digestive_low_appetite',
+  gas:                   'digestive_gas',
+  hunger:                'digestive_hunger',
+  dyspepsia:             'digestive_dyspepsia',
+
+  // ┌─ PAIN CATEGORY ────────────────────────────────────────────────────────┐
+  // Various pain symptoms with distinct icons
+  backache:              'pain_backache',
+  breast_pain:           'pain_breast_pain',
+  cramps:                'pain_cramps',
+  headache:              'pain_headache',
+  migraines:             'pain_migraines',
+  migraine:              'pain_migraines',    // Alias for migraines
+  neck_aches:            'pain_neck_aches',
+  ovulation_pain:        'pain_ovulation_pain',
+  pelvic_pain:           'pain_pelvic_pain',
+  breast_sensitivity:    'pain_breast_sensitivity',
+  body_aches:            'pain_body_aches',
+  low_back_pain:         'pain_backache',     // Alias for backache
+
+  // ┌─ PHYSICAL CATEGORY ────────────────────────────────────────────────────┐
+  // Body state symptoms
+  bloating:              'physical_bloating',
+  fatigue:               'physical_fatigue',
+  insomnia:              'physical_insomnia',
+  nausea:                'physical_nausea',
+  dizziness:             'physical_dizziness',
+  vaginal_discharge:     'physical_discharge',
+  discharge:             'physical_discharge',  // Alias
+
+  // ┌─ SKIN CATEGORY ────────────────────────────────────────────────────────┐
+  // Dermatological symptoms
+  acne:                  'skin_acne',
+  oily_skin:             'skin_oily_skin',
+  dry_skin:              'skin_dry_skin',
+  rash:                  'skin_rash',
+
+  // ┌─ MOOD CATEGORY ────────────────────────────────────────────────────────┐
+  // Emotional states
+  anxious:               'mood_anxious',
+  calm:                  'mood_calm',
+  confident:             'mood_confident',
+  emotional:             'mood_emotional',
+  energetic:             'mood_energetic',
+  exhausted:             'mood_exhausted',
+  happy:                 'mood_happy',
+  in_love:               'mood_in_love',
+  irritable:             'mood_irritable',
+  relaxed:               'mood_relaxed',
+  sad:                   'mood_sad',
+  stressed:              'mood_stressed',
+  tired:                 'mood_tired',
+
   // ┌─ OTHER CATEGORY ───────────────────────────────────────────────────────┐
-  pms:                  'calendar',            // calendar (time-based symptom)
-  flow:                 'drop',                // water (menstrual flow)
+  // Miscellaneous symptoms
+  fever:                 'other_fever',
+  medication:            'other_medication',
+  spotting:              'other_spotting',
+  pregnancy_test:        'other_test',
 }
 
-// ─── MOOD ICON MAP ──────────────────────────────────────────────────────────
+// ─── SYMPTOM ALIASES ────────────────────────────────────────────────────────
 /**
- * Maps mood key → icon name
- * Uses emoji-style icons where possible for expressiveness
+ * Common alternate spellings and formats that resolve to canonical keys
+ * This allows symptom keys to be normalized before icon lookup
+ * 
+ * Example: 'egg white' → 'egg_white' → 'cervical_egg_white' icon
  */
-export const MOOD_ICON_MAP: Record<string, VelaIconName> = {
-  happy:            'mood-happy',           // happy face outline
-  sad:              'mood-sad',             // sad face outline
-  calm:             'moon',                 // peaceful/restful
-  anxious:          'mood-anxious',         // confused/worried face
-  energetic:        'mood-energy',          // lightning/zap energy
-  exhausted:        'fatigue',              // sleep (tired)
-  emotional:        'heart',                // heart (feelings)
-  confident:        'star-filled',          // star (self-assurance)
-  
-  angry:            'alert',                // warning/alert state
-  frustrated:       'alert',                // alert/concern
-  focused:          'target',               // target/focus
-  excited:          'star',                 // sparkly/upbeat
-  
-  // Extended moods with icon fallbacks mapped from actual ALL_MOODS
-  ashamed:          'alert',                // concern/uncomfortable
-  embarrassed:      'alert',                // self-conscious
-  blue:             'moon',                 // down/low mood
-  depressed:        'moon',                 // low energy/mood
-  disappointed:     'minus',                // let-down feeling
-  bored:            'circle-outline',       // stagnation/emptiness
-  
-  // Positive moods
-  angelic:          'star-filled',          // blissful/pure
-  flirtatious:      'heart',                // playful affection
-  frisky:           'heart-filled',         // playful desire
-  grateful:         'heart',                // appreciative
-  hopeful:          'star',                 // looking forward
-  in_love:          'heart-filled',         // romantic love
-  inspired:         'sparkles',             // creative/motivated
-  jealous:          'alert',                // concerned/upset
-  jubilant:         'star-filled',          // celebrating
-  mischievous:      'activity',             // playful curious
-  playful:          'heart-filled',         // fun/light
-  proud:            'shield',               // confident/dignified
-  romantic:         'heart',                // affectionate
-  satisfied:        'check',                // contentment/fulfillment
-  surprised:        'alert',                // shock/wonder
-  
-  // Serious/difficult moods
-  assertive:        'shield',               // strong/protective
-  bashful:          'alert',                // shy/embarrassed
-  cranky:           'alert',                // irritable
-  distrustful:      'shield-check',         // questioning/cautious
-  dynamic:          'activity',             // vibrant/active
-  forgetful:        'search',               // looking for something
-  furious:          'alert',                // intensely angry
-  impatient:        'alert',                // restless/irritated
-  indifferent:      'minus',                // neutral/unaffected
-  irritable:        'alert',                // easily annoyed
-  lonely:           'moon',                 // isolated
-  miserable:        'moon',                 // deeply sad
-  morose:           'moon',                 // gloomy
-  panicky:          'alert',                // fearful
-  sleepy:           'moon',                 // tired/drowsy
-  stressed:         'alert',                // tense/worried
-  stunned:          'alert',                // shocked
-  tense:            'alert',                // wound up
-  tired:            'moon',                 // fatigued
-  tormented:        'alert',                // troubled/distressed
-  worried:          'alert',                // concerned
-  
-  // Other moods
-  homey:            'home',                 // comfortable/domestic
-  ill:              'alert',                // sick/unwell
-  industrious:      'activity',             // productive/busy
-  normal:           'circle-outline',       // baseline/unremarkable
-  nesting:          'home',                 // nurturing/organizing
-  neutral:          'minus',                // no strong feeling
-  peaceful:         'moon',                 // tranquil/serene
-  relaxed:          'moon',                 // at ease
-  secretive:        'shield',               // private/guarded
-  sensitive:        'heart',                // emotionally aware
-  smug:             'shield',               // self-satisfied
-  suspicious:       'shield-check',         // distrusting (if exists)
+export const SYMPTOM_ICON_ALIASES: Record<string, string> = {
+  'egg-white':           'egg_white',
+  'egg white':           'egg_white',
+  'cottage-cheese':      'cottage_cheese',
+  'cottage cheese':      'cottage_cheese',
+  'foul-smelling':       'foul_smelling',
+  'foul smelling':       'foul_smelling',
+  'low appetite':        'low_appetite',
+  'breast pain':         'breast_pain',
+  'neck aches':          'neck_aches',
+  'ovulation pain':      'ovulation_pain',
+  'pelvic pain':         'pelvic_pain',
+  'body aches':          'body_aches',
+  'breast sensitivity':  'breast_sensitivity',
+  'cervical firmness':   'cervical_firmness',
+  'cervical opening':    'cervical_opening',
+  'cervical mucus':      'cervical_mucus',
+  'in love':             'in_love',
+  'dry skin':            'dry_skin',
+  'oily skin':           'oily_skin',
+  'vaginal discharge':   'vaginal_discharge',
+  'pregnancy test':      'pregnancy_test',
 }
 
 // ─── CATEGORY FALLBACK ICONS ────────────────────────────────────────────────
 /**
- * Fallback icons if a symptom doesn't have a specific mapping
- * Use these when a symptom entry is missing
+ * Default icons used when a symptom doesn't have a specific mapping
+ * Each category gets its own representative fallback icon
+ * 
+ * Priority:
+ * 1. Specific symptom icon (if exists)
+ * 2. Category fallback icon (if category provided)
+ * 3. Ultimate fallback: 'other_medication'
  */
-export const SYMPTOM_CATEGORY_ICONS: Record<string, VelaIconName> = {
-  pain:              'alert',                // pain/alert
-  physical:          'activity',             // body/physical activity
-  digestive:         'alert',                // GI concern
-  skin:              'alert',                // skin concern
-  cervical:          'drop',                 // fluid/cervical mucus
-  other:             'info',                 // info/other
+export const CATEGORY_FALLBACK_ICON_MAP: Record<string, string> = {
+  cervical:    'cervical_sticky',      // Sticky mucus as default cervical icon
+  digestive:   'digestive_hunger',     // Hunger as default digestive icon
+  pain:        'pain_cramps',          // Cramps as default pain icon
+  physical:    'physical_bloating',    // Bloating as default physical icon
+  skin:        'skin_acne',            // Acne as default skin icon
+  mood:        'mood_happy',           // Happy as default mood icon
+  other:       'other_medication',     // Medication as fallback
 }
 
-export const MOOD_CATEGORY_FALLBACK: VelaIconName = 'mood-happy'
-
 // ─── HELPER FUNCTIONS ───────────────────────────────────────────────────────
+
 /**
- * Get icon for a symptom, with fallback to category icon
+ * Normalize a symptom key by resolving aliases and formatting
+ * 
+ * Examples:
+ *   'Egg-White' → 'egg_white'
+ *   'low appetite' → 'low_appetite'
+ *   'cramps' → 'cramps'
  */
-export function getSymptomIcon(symptomKey: string, category?: string): VelaIconName {
-  // Try specific symptom mapping first
-  if (symptomKey in SYMPTOM_ICON_MAP) {
-    return SYMPTOM_ICON_MAP[symptomKey]
+export function normalizeSymptomKey(input: string): string {
+  const trimmed = input.trim().toLowerCase()
+  
+  // Check aliases first (they take precedence)
+  if (SYMPTOM_ICON_ALIASES[trimmed]) {
+    return SYMPTOM_ICON_ALIASES[trimmed]
   }
   
-  // Fall back to category icon
-  if (category && category in SYMPTOM_CATEGORY_ICONS) {
-    return SYMPTOM_CATEGORY_ICONS[category]
+  // Convert spaces and dashes to underscores
+  return trimmed.replace(/[\s-]+/g, '_')
+}
+
+/**
+ * Resolve the SVG icon name for a given symptom key
+ * 
+ * Priority:
+ * 1. Direct mapping in SYMPTOM_ICON_MAP
+ * 2. Category fallback (if category provided)
+ * 3. Ultimate fallback: 'other_medication'
+ * 
+ * @param symptomKey - The symptom key (e.g., 'cramps', 'egg white')
+ * @param category - Optional category (pain, cervical, digestive, etc.)
+ * @returns The SVG icon name (e.g., 'pain_cramps')
+ */
+export function resolveSymptomIcon(symptomKey: string, category?: string): string {
+  const normalized = normalizeSymptomKey(symptomKey)
+  
+  // Try direct mapping first
+  if (SYMPTOM_ICON_MAP[normalized]) {
+    return SYMPTOM_ICON_MAP[normalized]
+  }
+  
+  // Try category fallback
+  if (category && CATEGORY_FALLBACK_ICON_MAP[category.toLowerCase()]) {
+    return CATEGORY_FALLBACK_ICON_MAP[category.toLowerCase()]
   }
   
   // Ultimate fallback
-  return 'info'
+  return 'other_medication'
 }
 
 /**
- * Get icon for a mood
+ * Get the icon name for a symptom (alias for resolveSymptomIcon)
+ * @deprecated Use resolveSymptomIcon instead
  */
-export function getMoodIcon(moodKey: string): VelaIconName {
-  return MOOD_ICON_MAP[moodKey] || MOOD_CATEGORY_FALLBACK
+export function getSymptomIcon(symptomKey: string, category?: string): string {
+  return resolveSymptomIcon(symptomKey, category)
 }
 
-// ─── AUDIT SUMMARY ──────────────────────────────────────────────────────────
 /**
- * SYMPTOM MAPPING COVERAGE:
- * 
- * PAIN (15 symptoms)
- * ✓ cramps, headache, migraine, backache, breast pain, tender breasts, breast sensitivity,
- *   pelvic pain, neck ache, shoulder ache, ovulation pain, body aches, muscle pain,
- *   abdominal cramps, low back pain
- * 
- * PHYSICAL (14 symptoms)
- * ✓ bloating, fatigue, nausea, dizziness, chills, hot flashes, fever, insomnia, night sweats,
- *   spotting, illness, influenza, weight gain, itchiness, rashes
- * 
- * DIGESTIVE (8 symptoms)
- * ✓ appetite up/cravings, hunger, appetite down, gas, constipation, diarrhea, dyspepsia
- * 
- * SKIN (3 symptoms)
- * ✓ acne, oily skin, dry skin
- * 
- * CERVICAL (13 symptoms)
- * ✓ cervical mucus, sticky, creamy, watery, egg-white, cottage cheese, green, bloodstained,
- *   dryness, irritation, foul-smelling, firmness, opening
- * 
- * OTHER (2 symptoms)
- * ✓ PMS, flow
- * 
- * TOTAL: 55 symptoms with unique icons
- * DUPLICATES ELIMINATED: All symptoms now have distinct visual representation
- * ICON FAMILY: Consistent use of Feather, Ionicons, MaterialCommunityIcons
- * 
- * ---
- * 
- * MOOD MAPPING:
- * 17 common moods with primary icons
- * Extended moods supported with intelligent fallbacks
+ * Get the icon name for a mood
+ * Falls back to 'mood_happy' if not found
  */
+export function getMoodIcon(moodKey: string): string {
+  const normalized = normalizeSymptomKey(moodKey)
+  
+  // Check if it's in the symptom map (moods are included there)
+  if (SYMPTOM_ICON_MAP[normalized]) {
+    return SYMPTOM_ICON_MAP[normalized]
+  }
+  
+  // Ultimate mood fallback
+  return 'mood_happy'
+}
+
+/**
+ * Check if a given icon name exists in the SVG icon pack
+ */
+export function isSvgSymptomIcon(iconName: string): boolean {
+  return Object.values(SYMPTOM_ICON_MAP).includes(iconName) ||
+         Object.values(CATEGORY_FALLBACK_ICON_MAP).includes(iconName)
+}

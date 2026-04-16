@@ -5,6 +5,7 @@ import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { useMoods } from '../../hooks/useMoods'
 import { VelaIcon } from '../shared/VelaIcon'
+import { getMoodIcon } from '../../constants/symptomIconMap'
 
 export interface JournalData {
   moods:       string[]  // Mood keys selected in this log entry
@@ -17,7 +18,7 @@ interface JournalTabProps {
   onChange: (data: JournalData) => void
 }
 
-// ─── Mood emoji chip ──────────────────────────────────────────────────────────
+// ─── Mood chip with SVG icon ──────────────────────────────────────────────────
 function MoodChip({
   emoji, label, moodKey, selected, onPress,
 }: {
@@ -28,20 +29,22 @@ function MoodChip({
   onPress: () => void
 }) {
   const Colors = useColors()
+  const iconName = getMoodIcon(moodKey)
+  
   return (
     <StyledPressable
       onPress={onPress}
       backgroundColor={selected ? Colors.primaryFaint : Colors.surfaceAlt}
       borderRadius={20}
-      paddingHorizontal={12}
-      paddingVertical={9}
+      paddingHorizontal={8}
+      paddingVertical={4}
       borderWidth={selected ? 2 : 1.5}
       borderColor={selected ? Colors.primary : Colors.border}
       flexDirection="row"
       alignItems="center"
       gap={6}
     >
-      <StyledText fontSize={18}>{emoji}</StyledText>
+      <VelaIcon name={iconName} size={16} color={selected ? Colors.primary : Colors.textSecondary} />
       <StyledText fontSize={13} fontWeight={selected ? '700' : '400'}
         color={selected ? Colors.primaryDark : Colors.textSecondary}>
         {label}
@@ -121,7 +124,7 @@ export function JournalTab({ data, onChange }: JournalTabProps) {
             </StyledPressable>
           ) : (
             <>
-              <Stack flexDirection="row" flexWrap="wrap" gap={12}>
+              <Stack alignItems='flex-start' justifyContent='flex-start' flexDirection="row" flexWrap="wrap" gap={6}>
                 {visibleMoods.map(m => (
                   <MoodChip
                     key={m.key}

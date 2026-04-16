@@ -1,19 +1,18 @@
 /**
  * VelaIcon — single import point for all icons in the app.
  *
- * Uses @expo/vector-icons (bundled with Expo SDK 52, zero native config).
- * We mix three families:
- *   Feather       – clean, thin-stroke, perfect for UI chrome
- *   Ionicons      – filled variants for active tab states
- *   MaterialCommunityIcons – specialty icons (flower, water-drop, etc.)
+ * Supports both:
+ * - Vector icons: @expo/vector-icons (Feather, Ionicons, MaterialCommunityIcons)
+ * - SVG icons: Custom symptom/mood SVGs from assets/icons/symptoms/
  *
  * Usage:
- *   <VelaIcon name="calendar" size={22} color={Colors.primary} />
- *   <VelaIcon name="drop"     size={18} color={Colors.dayPeriod} />
+ *   <VelaIcon name="calendar" size={22} color={Colors.primary} />           // Vector icon
+ *   <VelaIcon name="pain_cramps" size={24} color={Colors.primary} />        // SVG icon
  */
 
 import React from 'react'
 import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { SvgSymptomIcon, isSvgSymptomIcon } from './SvgSymptomIcon'
 
 // ─── Icon catalogue ──────────────────────────────────────────────────────────
 // All icon names used anywhere in Vela, mapped to their family + glyph.
@@ -151,6 +150,11 @@ export type VelaIconName = keyof typeof ICON_MAP
 
 // ─── Component ───────────────────────────────────────────────────────────────
 export function VelaIcon({ name, size = 20, color = '#2D1B24', style }: VelaIconProps) {
+  // Check if this is an SVG symptom icon first
+  if (typeof name === 'string' && isSvgSymptomIcon(name)) {
+    return <SvgSymptomIcon name={name} size={size} color={color} />
+  }
+
   const def = ICON_MAP[name]
 
   if (!def) {

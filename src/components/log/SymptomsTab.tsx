@@ -61,8 +61,6 @@ function SymptomChip({
   )
 }
 
-
-
 // ─── Main component ───────────────────────────────────────────────────────────
 export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
   const Colors                      = useColors()
@@ -183,6 +181,9 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
             <Collapse
               key={cat}
               variant="card"
+              collapse ={true}
+              bodyDivider
+              bodyStyle={{ borderColor: 'transparent', paddingTop: 8 }}
               title={categoryLabel}
               subtitle={hasSelected ? `${items.filter(s => selected.includes(s.key)).length} selected` : undefined}
             >
