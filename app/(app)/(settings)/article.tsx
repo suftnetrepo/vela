@@ -95,8 +95,17 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function ArticleScreen() {
   const Colors = useColors();
-  const params = useLocalSearchParams<{ id: string }>();
+  const params = useLocalSearchParams<{ id: string; from?: string }>();
   const article = ARTICLE_CONTENT[params.id ?? ""];
+
+  const handleBackPress = () => {
+    if (params.from === 'home') {
+      router.push('/(app)')
+    } else {
+      // Default to articles hub
+      router.push('/(app)/(settings)/articles')
+    }
+  }
 
   if (!article) {
     return (
@@ -113,7 +122,7 @@ export default function ArticleScreen() {
             color: theme.colors.pink[500],
           }}
           showBackArrow
-          onBackPress={() => router.back()}
+          onBackPress={handleBackPress}
           backgroundColor={Colors.background}
           titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
         />
@@ -142,7 +151,7 @@ export default function ArticleScreen() {
           color: theme.colors.pink[500],
         }}
         showBackArrow
-        onBackPress={() => router.back()}
+        onBackPress={handleBackPress}
         backgroundColor={Colors.background}
         titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
       />

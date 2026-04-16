@@ -261,7 +261,7 @@ export default function ArticlesScreen() {
             onPress={() =>
               router.push({
                 pathname: "/(app)/(settings)/article",
-                params: { id: article.id },
+                params: { id: article.id, from: 'articles' },
               })
             }
           />
