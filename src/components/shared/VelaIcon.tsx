@@ -152,7 +152,13 @@ export type VelaIconName = keyof typeof ICON_MAP
 export function VelaIcon({ name, size = 20, color = '#2D1B24', style }: VelaIconProps) {
   // Check if this is an SVG symptom icon first
   if (typeof name === 'string' && isSvgSymptomIcon(name)) {
-    return <SvgSymptomIcon name={name} size={size} color={color} />
+    try {
+      return <SvgSymptomIcon name={name} size={size} color={color} />
+    } catch (error) {
+      // Fallback to vector icon if SVG rendering fails
+      console.warn(`Failed to render SVG icon: ${name}`, error)
+      return <Feather name="circle" size={size} color={color} style={style} />
+    }
   }
 
   const def = ICON_MAP[name]

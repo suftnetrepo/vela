@@ -1,84 +1,84 @@
 /**
- * SvgSymptomIcon — Renderer for SVG-based symptom and mood icons
+ * SvgSymptomIcon — Fallback to vector icons from VelaIcon
  * 
- * References SVG files from assets/icons/symptoms/ directory.
- * Works with Expo by requiring SVG files directly.
+ * For now, we use the vector icon system as SVG rendering in Expo
+ * requires additional build configuration. This maintains full functionality
+ * while we set up SVG asset processing.
  * 
- * Usage:
- *   <SvgSymptomIcon name="pain_cramps" size={24} color="#7A5667" />
- *   <SvgSymptomIcon name="cervical_sticky" size={20} color={Colors.primary} />
+ * The SVG files are available in assets/icons/symptoms/ for future use.
  */
 
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
+import { Feather, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
 
-// SVG files are stored in assets/icons/symptoms/
-// Map names to their asset sources
-const SVG_ICON_MAP: Record<string, any> = {
-  // Pain
-  pain_cramps: require('../../../assets/icons/symptoms/pain_cramps.svg'),
-  pain_backache: require('../../../assets/icons/symptoms/pain_backache.svg'),
-  pain_breast_pain: require('../../../assets/icons/symptoms/pain_breast_pain.svg'),
-  pain_headache: require('../../../assets/icons/symptoms/pain_headache.svg'),
-  pain_migraines: require('../../../assets/icons/symptoms/pain_migraines.svg'),
-  pain_neck_aches: require('../../../assets/icons/symptoms/pain_neck_aches.svg'),
-  pain_ovulation_pain: require('../../../assets/icons/symptoms/pain_ovulation_pain.svg'),
-  pain_pelvic_pain: require('../../../assets/icons/symptoms/pain_pelvic_pain.svg'),
-  pain_breast_sensitivity: require('../../../assets/icons/symptoms/pain_breast_sensitivity.svg'),
-  pain_body_aches: require('../../../assets/icons/symptoms/pain_body_aches.svg'),
+// Map SVG icon names to vector icon equivalents
+// This provides a bridge between SVG naming and vector icons
+const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> = {
+  // Pain icons
+  pain_cramps: { family: 'mci', glyph: 'lightning-bolt' },
+  pain_backache: { family: 'feather', glyph: 'activity' },
+  pain_breast_pain: { family: 'feather', glyph: 'heart' },
+  pain_headache: { family: 'mci', glyph: 'head-snowflake' },
+  pain_migraines: { family: 'mci', glyph: 'head' },
+  pain_neck_aches: { family: 'feather', glyph: 'activity' },
+  pain_ovulation_pain: { family: 'feather', glyph: 'star' },
+  pain_pelvic_pain: { family: 'feather', glyph: 'zap' },
+  pain_breast_sensitivity: { family: 'feather', glyph: 'alert-circle' },
+  pain_body_aches: { family: 'feather', glyph: 'activity' },
 
-  // Cervical
-  cervical_sticky: require('../../../assets/icons/symptoms/cervical_sticky.svg'),
-  cervical_creamy: require('../../../assets/icons/symptoms/cervical_creamy.svg'),
-  cervical_egg_white: require('../../../assets/icons/symptoms/cervical_egg_white.svg'),
-  cervical_cottage_cheese: require('../../../assets/icons/symptoms/cervical_cottage_cheese.svg'),
-  cervical_foul_smelling: require('../../../assets/icons/symptoms/cervical_foul_smelling.svg'),
-  cervical_irritation: require('../../../assets/icons/symptoms/cervical_irritation.svg'),
-  cervical_dry: require('../../../assets/icons/symptoms/cervical_dry.svg'),
+  // Cervical icons
+  cervical_sticky: { family: 'mci', glyph: 'water-opacity' },
+  cervical_creamy: { family: 'feather', glyph: 'cloud' },
+  cervical_egg_white: { family: 'mci', glyph: 'egg' },
+  cervical_cottage_cheese: { family: 'feather', glyph: 'circle' },
+  cervical_foul_smelling: { family: 'feather', glyph: 'alert-circle' },
+  cervical_irritation: { family: 'feather', glyph: 'alert-circle' },
+  cervical_dry: { family: 'feather', glyph: 'minus' },
 
-  // Digestive
-  digestive_constipation: require('../../../assets/icons/symptoms/digestive_constipation.svg'),
-  digestive_diarrhea: require('../../../assets/icons/symptoms/digestive_diarrhea.svg'),
-  digestive_cravings: require('../../../assets/icons/symptoms/digestive_cravings.svg'),
-  digestive_low_appetite: require('../../../assets/icons/symptoms/digestive_low_appetite.svg'),
-  digestive_gas: require('../../../assets/icons/symptoms/digestive_gas.svg'),
-  digestive_hunger: require('../../../assets/icons/symptoms/digestive_hunger.svg'),
-  digestive_dyspepsia: require('../../../assets/icons/symptoms/digestive_dyspepsia.svg'),
+  // Digestive icons
+  digestive_constipation: { family: 'feather', glyph: 'alert-circle' },
+  digestive_diarrhea: { family: 'feather', glyph: 'alert-circle' },
+  digestive_cravings: { family: 'feather', glyph: 'heart' },
+  digestive_low_appetite: { family: 'feather', glyph: 'minus' },
+  digestive_gas: { family: 'mci', glyph: 'wind-power' },
+  digestive_hunger: { family: 'feather', glyph: 'star' },
+  digestive_dyspepsia: { family: 'feather', glyph: 'alert-circle' },
 
-  // Physical
-  physical_bloating: require('../../../assets/icons/symptoms/physical_bloating.svg'),
-  physical_fatigue: require('../../../assets/icons/symptoms/physical_fatigue.svg'),
-  physical_insomnia: require('../../../assets/icons/symptoms/physical_insomnia.svg'),
-  physical_nausea: require('../../../assets/icons/symptoms/physical_nausea.svg'),
-  physical_dizziness: require('../../../assets/icons/symptoms/physical_dizziness.svg'),
-  physical_discharge: require('../../../assets/icons/symptoms/physical_discharge.svg'),
+  // Physical icons
+  physical_bloating: { family: 'mci', glyph: 'circle-outline' },
+  physical_fatigue: { family: 'mci', glyph: 'sleep' },
+  physical_insomnia: { family: 'feather', glyph: 'moon' },
+  physical_nausea: { family: 'mci', glyph: 'emoticon-sick-outline' },
+  physical_dizziness: { family: 'feather', glyph: 'activity' },
+  physical_discharge: { family: 'mci', glyph: 'water-opacity' },
 
-  // Skin
-  skin_acne: require('../../../assets/icons/symptoms/skin_acne.svg'),
-  skin_oily_skin: require('../../../assets/icons/symptoms/skin_oily_skin.svg'),
-  skin_dry_skin: require('../../../assets/icons/symptoms/skin_dry_skin.svg'),
-  skin_rash: require('../../../assets/icons/symptoms/skin_rash.svg'),
+  // Skin icons
+  skin_acne: { family: 'mci', glyph: 'face-woman-shimmer-outline' },
+  skin_oily_skin: { family: 'ionicons', glyph: 'sparkles' },
+  skin_dry_skin: { family: 'mci', glyph: 'leaf' },
+  skin_rash: { family: 'feather', glyph: 'alert-circle' },
 
-  // Mood
-  mood_anxious: require('../../../assets/icons/symptoms/mood_anxious.svg'),
-  mood_calm: require('../../../assets/icons/symptoms/mood_calm.svg'),
-  mood_confident: require('../../../assets/icons/symptoms/mood_confident.svg'),
-  mood_emotional: require('../../../assets/icons/symptoms/mood_emotional.svg'),
-  mood_energetic: require('../../../assets/icons/symptoms/mood_energetic.svg'),
-  mood_exhausted: require('../../../assets/icons/symptoms/mood_exhausted.svg'),
-  mood_happy: require('../../../assets/icons/symptoms/mood_happy.svg'),
-  mood_in_love: require('../../../assets/icons/symptoms/mood_in_love.svg'),
-  mood_irritable: require('../../../assets/icons/symptoms/mood_irritable.svg'),
-  mood_relaxed: require('../../../assets/icons/symptoms/mood_relaxed.svg'),
-  mood_sad: require('../../../assets/icons/symptoms/mood_sad.svg'),
-  mood_stressed: require('../../../assets/icons/symptoms/mood_stressed.svg'),
-  mood_tired: require('../../../assets/icons/symptoms/mood_tired.svg'),
+  // Mood icons
+  mood_anxious: { family: 'mci', glyph: 'emoticon-confused-outline' },
+  mood_calm: { family: 'feather', glyph: 'moon' },
+  mood_confident: { family: 'ionicons', glyph: 'star' },
+  mood_emotional: { family: 'feather', glyph: 'heart' },
+  mood_energetic: { family: 'feather', glyph: 'zap' },
+  mood_exhausted: { family: 'mci', glyph: 'sleep' },
+  mood_happy: { family: 'ionicons', glyph: 'happy-outline' },
+  mood_in_love: { family: 'ionicons', glyph: 'heart' },
+  mood_irritable: { family: 'feather', glyph: 'alert-circle' },
+  mood_relaxed: { family: 'feather', glyph: 'moon' },
+  mood_sad: { family: 'ionicons', glyph: 'sad-outline' },
+  mood_stressed: { family: 'feather', glyph: 'alert-circle' },
+  mood_tired: { family: 'mci', glyph: 'sleep' },
 
-  // Other
-  other_fever: require('../../../assets/icons/symptoms/other_fever.svg'),
-  other_medication: require('../../../assets/icons/symptoms/other_medication.svg'),
-  other_spotting: require('../../../assets/icons/symptoms/other_spotting.svg'),
-  other_test: require('../../../assets/icons/symptoms/other_test.svg'),
+  // Other icons
+  other_fever: { family: 'feather', glyph: 'thermometer' },
+  other_medication: { family: 'mci', glyph: 'pill' },
+  other_spotting: { family: 'mci', glyph: 'water' },
+  other_test: { family: 'feather', glyph: 'check-circle' },
 }
 
 interface SvgSymptomIconProps {
@@ -88,35 +88,35 @@ interface SvgSymptomIconProps {
 }
 
 /**
- * Renders an SVG symptom/mood icon
- * Note: Color customization is limited with SVG/Image approach in React Native.
- * For color override, use VelaIcon with vector-icon fallback instead.
+ * Renders a symptom/mood icon using vector icons as a bridge
+ * 
+ * NOTE: This currently uses vector icons instead of SVG files.
+ * The SVG files are available in assets/icons/symptoms/ for future optimization.
+ * To fully migrate to SVG rendering, Expo's asset transformer would need to be configured
+ * to handle SVG files as text data URLs.
  */
-export function SvgSymptomIcon({ name, size, color }: SvgSymptomIconProps) {
-  const source = SVG_ICON_MAP[name]
+export function SvgSymptomIcon({ name, size, color = '#2D1B24' }: SvgSymptomIconProps) {
+  const iconDef = SVG_TO_VECTOR_ICON_MAP[name]
   
-  if (!source) {
+  if (!iconDef) {
     return <View style={{ width: size, height: size, backgroundColor: 'transparent' }} />
   }
 
-  return (
-    <Image
-      source={source}
-      style={[styles.icon, { width: size, height: size }]}
-      resizeMode="contain"
-    />
-  )
+  switch (iconDef.family) {
+    case 'feather':
+      return <Feather name={iconDef.glyph as any} size={size} color={color} />
+    case 'mci':
+      return <MaterialCommunityIcons name={iconDef.glyph as any} size={size} color={color} />
+    case 'ionicons':
+      return <Ionicons name={iconDef.glyph as any} size={size} color={color} />
+    default:
+      return <View style={{ width: size, height: size, backgroundColor: 'transparent' }} />
+  }
 }
 
 /**
- * Check if an icon name is a valid SVG symptom icon
+ * Check if an icon name is a valid SVG/vector icon
  */
 export function isSvgSymptomIcon(name: string): boolean {
-  return name in SVG_ICON_MAP
+  return name in SVG_TO_VECTOR_ICON_MAP
 }
-
-const styles = StyleSheet.create({
-  icon: {
-    resizeMode: 'contain',
-  },
-})
