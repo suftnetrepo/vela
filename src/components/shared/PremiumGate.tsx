@@ -69,7 +69,7 @@ export function PremiumGate({ children, feature, description, compact = false }:
         flexDirection="row" alignItems="center" gap={8}
         shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 4 }}
         shadowOpacity={0.3} shadowRadius={12} elevation={5}>
-        <VelaIcon name="premium" size={16} color={Colors.textInverse} />
+        <VelaIcon name="crown" size={16} color={Colors.textInverse} />
         <StyledText fontSize={15} fontWeight="700" color={Colors.textInverse}>
           Unlock Premium
         </StyledText>

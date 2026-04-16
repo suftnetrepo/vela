@@ -27,14 +27,14 @@ interface IconDef {
 
 const ICON_MAP: Record<string, IconDef> = {
   // ── Navigation tabs ─────────────────────────────────────────────────────
-  'tab-home':          { family: 'feather',  glyph: 'home' },
-  'tab-home-active':   { family: 'ionicons', glyph: 'home' },
-  'tab-log':           { family: 'feather',  glyph: 'edit-3' },
-  'tab-log-active':    { family: 'ionicons', glyph: 'create' },
-  'tab-insights':      { family: 'feather',  glyph: 'bar-chart-2' },
-  'tab-insights-active':{ family: 'ionicons', glyph: 'bar-chart' },
-  'tab-settings':      { family: 'feather',  glyph: 'settings' },
-  'tab-settings-active':{ family: 'ionicons', glyph: 'settings' },
+  'tab-home':          { family: 'mci',      glyph: 'home' },
+  'tab-home-active':   { family: 'mci',      glyph: 'home' },
+  'tab-log':           { family: 'mci',      glyph: 'pencil' },
+  'tab-log-active':    { family: 'mci',      glyph: 'pencil' },
+  'tab-insights':      { family: 'mci',      glyph: 'chart-box' },
+  'tab-insights-active':{ family: 'mci',      glyph: 'chart-box' },
+  'tab-settings':      { family: 'mci',      glyph: 'cog' },
+  'tab-settings-active':{ family: 'mci',      glyph: 'cog' },
 
   // ── Calendar / cycle ────────────────────────────────────────────────────
   'calendar':          { family: 'feather',  glyph: 'calendar' },
@@ -63,8 +63,8 @@ const ICON_MAP: Record<string, IconDef> = {
   'notes':             { family: 'feather',  glyph: 'file-text' },
   'thermometer':       { family: 'feather',  glyph: 'thermometer' },
   'weight':            { family: 'mci',      glyph: 'scale-bathroom' },
-  'heart':             { family: 'feather',  glyph: 'heart' },
-  'heart-filled':      { family: 'ionicons', glyph: 'heart' },
+  'heart':             { family: 'mci',      glyph: 'heart-outline' },
+  'heart-filled':      { family: 'mci',      glyph: 'heart' },
   'activity':          { family: 'feather',  glyph: 'activity' },
 
   // ── Moods ───────────────────────────────────────────────────────────────

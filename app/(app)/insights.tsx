@@ -692,7 +692,7 @@ export default function InsightsScreen() {
                   <StyledText
                     fontSize={14}
                     fontWeight={theme.fontWeight.semiBold}
-                    color={theme.colors.gray[600]}
+                    color={Colors.textPrimary}
                   >
                     {group.month}
                   </StyledText>
@@ -715,8 +715,8 @@ export default function InsightsScreen() {
                       dot: Colors.primary,
                       line: Colors.border,
                       dotBorder: Colors.surface,
-                      endTimeText: theme.colors.gray[400],
-                      timeText: theme.colors.rose[400],
+                      endTimeText: Colors.textTertiary,
+                      timeText: Colors.textTertiary,
                     }}
                     renderItem={(item: TimelineItem) => {
                       const entry = item.meta as HistoryEntry;

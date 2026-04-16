@@ -4,7 +4,8 @@ import * as DocumentPicker from 'expo-document-picker'
 import * as FileSystem from 'expo-file-system'
 import { Stack, StyledText, StyledPressable, StyledTextInput } from 'fluent-styles'
 import { toastService, loaderService, dialogueService } from 'fluent-styles'
-import { useColors } from '../constants'
+import { useColors } from '../../hooks/useColors'
+import { VelaIcon } from './VelaIcon'
 import {
   decodeVelaData,
   payloadToCycles,
@@ -12,13 +13,13 @@ import {
   payloadToSymptomLogs,
   payloadToSettings,
   getPayloadSummary,
-} from '../services/velaDataService'
-import { cycleService } from '../services/cycle.service'
-import { logService } from '../services/log.service'
-import { settingsService } from '../services/settings.service'
-import { useAppStore } from '../stores'
-import { db } from '../db/client'
-import { dailyLogs as dailyLogsTable, symptomLogs as symptomLogsTable } from '../db/schema'
+} from '../../services/velaDataService'
+import { cycleService } from '../../services/cycle.service'
+import { logService } from '../../services/log.service'
+import { settingsService } from '../../services/settings.service'
+import { useRecordsStore } from '../../stores/records.store'
+import { db } from '../../db/client'
+import { dailyLogs as dailyLogsTable, symptomLogs as symptomLogsTable } from '../../db/schema'
 import { eq } from 'drizzle-orm'
 
 interface ImportDataContentProps {
@@ -27,7 +28,7 @@ interface ImportDataContentProps {
 
 export function ImportDataContent({ onDone }: ImportDataContentProps) {
   const Colors = useColors()
-  const { invalidateData } = useAppStore()
+  const { invalidateData } = useRecordsStore()
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
   const [summary, setSummary] = useState<{ cycles: number; logs: number; symptoms: number; dateRange?: string } | null>(null)
@@ -72,7 +73,7 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
         if (payload.cy && payload.cy.length > 0) {
           const cycles = payloadToCycles(payload)
           for (const cycle of cycles) {
-            await cycleService.create(cycle)
+            await cycleService.startNewCycle(new Date(cycle.startDate))
           }
         }
 
@@ -156,13 +157,13 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24 }}
     >
-      <StyledText fontSize={13} color={Colors.textMuted} textAlign="center" marginBottom={20}>
+      <StyledText fontSize={13} color={Colors.textTertiary} textAlign="center" marginBottom={20}>
         Paste an export code from another device or pick the .json file you exported
       </StyledText>
 
-      {/* Paste code input */}
-      <Stack gap={8} marginBottom={16}>
-        <StyledText fontSize={12} fontWeight="700" color={Colors.textMuted} letterSpacing={0.5}>
+      {/* Paste code section */}
+      <Stack gap={12} marginBottom={20}>
+        <StyledText fontSize={12} fontWeight="700" color={Colors.textTertiary} letterSpacing={0.5}>
           PASTE CODE
         </StyledText>
         <StyledTextInput
@@ -180,9 +181,12 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
           numberOfLines={4}
         />
         {error ? (
-          <StyledText fontSize={12} color={Colors.error} fontWeight="600">
-            ⚠️ {error}
-          </StyledText>
+          <Stack horizontal alignItems="center" gap={8}>
+            <VelaIcon name="alert-circle" size={14} color={Colors.error} />
+            <StyledText fontSize={12} color={Colors.error} fontWeight="600" flex={1}>
+              {error}
+            </StyledText>
+          </Stack>
         ) : null}
       </Stack>
 
@@ -192,7 +196,7 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
           paddingHorizontal={14}
           paddingVertical={12}
           borderRadius={12}
-          backgroundColor={Colors.bgInput}
+          backgroundColor={Colors.surface}
           marginBottom={16}
         >
           <Stack gap={4}>
@@ -200,14 +204,20 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
               Ready to import:
             </StyledText>
             {summary.cycles > 0 && (
-              <StyledText fontSize={12} color={Colors.textSecondary}>
-                📊 {summary.cycles} cycle{summary.cycles !== 1 ? 's' : ''}
-              </StyledText>
+              <Stack horizontal alignItems="center" gap={8}>
+                <VelaIcon name="cycle" size={14} color={Colors.primary} />
+                <StyledText fontSize={12} color={Colors.textPrimary}>
+                  {summary.cycles} cycle{summary.cycles !== 1 ? 's' : ''}
+                </StyledText>
+              </Stack>
             )}
             {summary.logs > 0 && (
-              <StyledText fontSize={12} color={Colors.textSecondary}>
-                📝 {summary.logs} log{summary.logs !== 1 ? 's' : ''} ({summary.symptoms} symptoms)
-              </StyledText>
+              <Stack horizontal alignItems="center" gap={8}>
+                <VelaIcon name="activity" size={14} color={Colors.primary} />
+                <StyledText fontSize={12} color={Colors.textPrimary}>
+                  {summary.logs} log{summary.logs !== 1 ? 's' : ''} ({summary.symptoms} symptoms)
+                </StyledText>
+              </Stack>
             )}
             {summary.dateRange && (
               <StyledText fontSize={12} color={Colors.textSecondary}>
@@ -221,7 +231,7 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
       {/* Buttons */}
       <Stack gap={10}>
         <StyledPressable
-          horizontal
+          flexDirection="row"
           alignItems="center"
           justifyContent="center"
           gap={10}
@@ -231,7 +241,7 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
           onPress={handleImportCode}
           disabled={!code.trim()}
         >
-          <StyledText fontSize={16}>📥</StyledText>
+          <VelaIcon name="upload" size={18} color="#fff" />
           <StyledText fontSize={15} fontWeight="700" color="#fff">
             Import from code
           </StyledText>
@@ -240,25 +250,25 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
         {/* Divider */}
         <Stack horizontal alignItems="center" gap={10} marginVertical={4}>
           <Stack flex={1} height={1} backgroundColor={Colors.border} />
-          <StyledText fontSize={12} color={Colors.textMuted}>
+          <StyledText fontSize={12} color={Colors.textTertiary}>
             or
           </StyledText>
           <Stack flex={1} height={1} backgroundColor={Colors.border} />
         </Stack>
 
         <StyledPressable
-          horizontal
+          flexDirection="row"
           alignItems="center"
           justifyContent="center"
           gap={10}
           paddingVertical={14}
           borderRadius={14}
-          backgroundColor={Colors.bgMuted}
+          backgroundColor={Colors.surfaceAlt}
           borderWidth={1}
           borderColor={Colors.border}
           onPress={handlePickFile}
         >
-          <StyledText fontSize={16}>📂</StyledText>
+          <VelaIcon name="file" size={18} color={Colors.primary} />
           <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>
             Pick .json file
           </StyledText>
@@ -271,11 +281,14 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
         paddingHorizontal={14}
         paddingVertical={12}
         borderRadius={12}
-        backgroundColor={Colors.bgInput}
+        backgroundColor={Colors.surface}
       >
-        <StyledText fontSize={12} color={Colors.textMuted} lineHeight={18}>
-          💡 <StyledText fontWeight="600">Privacy</StyledText>: Only your cycle, logs, and settings are imported. Personal data like PIN and biometric settings are kept separate.
-        </StyledText>
+        <Stack horizontal gap={8} alignItems="flex-start">
+          <VelaIcon name="info" size={16} color={Colors.primary} style={{ marginTop: 2 }} />
+          <StyledText fontSize={12} color={Colors.textPrimary} lineHeight={18} flex={1}>
+            <StyledText fontWeight="600">Privacy</StyledText>: Only your cycle, logs, and settings are imported. Personal data like PIN and biometric settings are kept separate.
+          </StyledText>
+        </Stack>
       </Stack>
     </ScrollView>
   )

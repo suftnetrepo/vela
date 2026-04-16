@@ -7,11 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "vela",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#FFFBFC"
-    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.vela.cycle",

@@ -194,7 +194,7 @@ export default function PremiumScreen() {
             flexDirection="row" justifyContent="center" gap={10}
             shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 4 }}
             shadowOpacity={0.35} shadowRadius={12} elevation={6}>
-            <VelaIcon name="premium" size={18} color={Colors.textInverse} />
+            <VelaIcon name="crown" size={18} color={Colors.textInverse} />
             <StyledText fontSize={17} fontWeight="800" color={Colors.textInverse}>
               {selected === 'YEARLY'   ? '🎉 Start Free Trial' :
                selected === 'LIFETIME' ? '⚡ Buy Lifetime'    :

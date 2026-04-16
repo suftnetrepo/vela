@@ -36,7 +36,7 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   cervical_creamy: { family: 'feather', glyph: 'cloud' },
   cervical_egg_white: { family: 'feather', glyph: 'circle' },
   cervical_cottage_cheese: { family: 'feather', glyph: 'package' },
-  cervical_foul_smelling: { family: 'feather', glyph: 'alert' },
+  cervical_foul_smelling: { family: 'mci', glyph: 'biohazard' },
   cervical_irritation: { family: 'feather', glyph: 'alert-circle' },
   cervical_dry: { family: 'feather', glyph: 'minus' },
   cervical_watery: { family: 'mci', glyph: 'water' },

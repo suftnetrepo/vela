@@ -54,13 +54,13 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
       <Stack flexDirection="row" paddingHorizontal={20} gap={12} paddingBottom={20}>
 
         {/* Period length tile — pink */}
-        <Stack flex={1} backgroundColor="#FFF1F2" borderRadius={20} padding={18} gap={10}
+        <Stack flex={1} backgroundColor={Colors.surfaceAlt} borderRadius={20} padding={18} gap={10}
           position="relative" overflow="hidden">
           <Stack gap={4}>
             <StyledText fontSize={28} fontWeight="800" color={Colors.textPrimary}>
               {prediction.averagePeriodLength} days
             </StyledText>
-            <StyledText fontSize={13} color={Colors.textSecondary}>
+            <StyledText fontSize={13} color={Colors.textPrimary}>
               Avg. period length
             </StyledText>
           </Stack>
@@ -76,13 +76,13 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
         </Stack>
 
         {/* Cycle length tile — lavender */}
-        <Stack flex={1} backgroundColor="#EEF2FF" borderRadius={20} padding={18} gap={10}
+        <Stack flex={1} backgroundColor={Colors.surfaceAlt} borderRadius={20} padding={18} gap={10}
           position="relative" overflow="hidden">
           <Stack gap={4}>
             <StyledText fontSize={28} fontWeight="800" color={Colors.textPrimary}>
               {prediction.averageCycleLength} days
             </StyledText>
-            <StyledText fontSize={13} color={Colors.textSecondary}>
+            <StyledText fontSize={13} color={Colors.textPrimary}>
               Avg. cycle length
             </StyledText>
           </Stack>

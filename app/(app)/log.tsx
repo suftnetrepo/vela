@@ -200,9 +200,9 @@ export default function LogScreen() {
         marginHorizontal={16}
         shapeProps={{
           size: 48,
-          backgroundColor: theme.colors.pink[50],
+          backgroundColor: Colors.surface,
         }}
-        backArrowProps={{ color: theme.colors.pink[500] }}
+        backArrowProps={{ color: Colors.primary }}
         showBackArrow
         onBackPress={() => router.back()}
         backgroundColor={Colors.background}

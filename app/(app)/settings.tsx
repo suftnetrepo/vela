@@ -1,13 +1,16 @@
 import React from 'react'
 import {
   Stack, StyledText, StyledScrollView, StyledPage,
-  StyledHeader, StyledPressable, StyledDivider,
+  StyledHeader, StyledPressable, StyledDivider, actionSheetService,
+  theme,
 } from 'fluent-styles'
 import { router } from 'expo-router'
 import { useColors } from '../../src/hooks/useColors'
 import { useSettings } from '../../src/hooks/useSettings'
 import { VelaIcon } from '../../src/components/shared/VelaIcon'
 import { PrivacyBadge } from '../../src/components/shared/PrivacyBadge'
+import { ExportDataContent } from '../../src/components/shared/ExportDataContent'
+import { ImportDataContent } from '../../src/components/shared/ImportDataContent'
 import type { VelaIconName } from '../../src/components/shared/VelaIcon'
 
 function MenuRow({
@@ -146,6 +149,14 @@ export default function SettingsScreen() {
         <Section title="SECURITY">
           <MenuRow icon="lock" label="PIN & Biometrics" subtitle="App lock & biometric unlock"
             onPress={() => router.push('/(app)/(settings)/security')} />
+        </Section>
+
+        <Section title="DATA">
+          <MenuRow icon="download" label="Export Data" subtitle="Backup or share your cycle data"
+            onPress={() => actionSheetService.present(<ExportDataContent />, { theme : 'light' })} />
+          <StyledDivider borderBottomColor={Colors.border} marginHorizontal={16} />
+          <MenuRow icon="upload" label="Import Data" subtitle="Restore from backup code or file"
+            onPress={() => actionSheetService.present(<ImportDataContent onDone={() => {}} />, { theme : 'light' })} />
         </Section>
 
         <Section title="LEARN">

@@ -130,7 +130,7 @@ export const LavenderTheme: ThemeColors = {
   dayDefaultText:   '#1E1830',
   dayMuted:         '#F9F9FF',
   tabActive:        '#9B8EC4',
-  tabInactive:      '#9E96BC',
+  tabInactive:      '#C4B8D8',
   tabBackground:    '#FFFFFF',
 }
 
@@ -173,7 +173,7 @@ export const SageTheme: ThemeColors = {
   dayDefaultText:   '#1A2E24',
   dayMuted:         '#F5FAF7',
   tabActive:        '#7BAF8E',
-  tabInactive:      '#8AAE98',
+  tabInactive:      '#B8D4C8',
   tabBackground:    '#FFFFFF',
 }
 

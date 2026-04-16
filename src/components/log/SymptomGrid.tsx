@@ -80,7 +80,7 @@ export function SymptomGrid({ selected, onChange }: SymptomGridProps) {
           if (items.length === 0) return null
           return (
             <Stack key={cat} gap={8}>
-              <StyledText fontSize={12} fontWeight="600" color={Colors.textTertiary} letterSpacing={0.5}>
+              <StyledText fontSize={12} fontWeight="600" color={Colors.textPrimary} letterSpacing={0.5}>
                 {cat.toUpperCase()}
               </StyledText>
               <Stack horizontal gap={8} flexWrap="wrap">

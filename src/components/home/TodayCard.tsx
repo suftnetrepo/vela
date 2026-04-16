@@ -106,7 +106,7 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
             alignItems="center" justifyContent="center"
             shadowColor={phaseColor} shadowOffset={{ width: 0, height: 2 }}
             shadowOpacity={0.20} shadowRadius={6} elevation={3}>
-            <StyledText fontSize={18} fontWeight="800" color={theme.colors.red[200]}>
+            <StyledText fontSize={18} fontWeight="800" color={Colors.dayMuted}>
               {prediction.currentCycleDay}
             </StyledText>
           </Stack>
