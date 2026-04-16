@@ -65,7 +65,8 @@ export function CycleInfoRow({ prediction }: CycleInfoRowProps) {
 
   const handleArticlesHubNavigation = () => {
     router.push({
-      pathname: '/(app)/(settings)/articles'
+      pathname: '/(app)/(settings)/articles',
+      params: { from: 'home' }
     })
   }
 

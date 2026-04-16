@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Stack,
   StyledText,
@@ -8,7 +8,7 @@ import {
   StyledPressable,
   theme,
 } from "fluent-styles";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 import { useColors } from "../../../src/hooks/useColors";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
@@ -200,6 +200,15 @@ function ArticleCard({
 
 export default function ArticlesScreen() {
   const Colors = useColors();
+  const params = useLocalSearchParams<{ from?: string }>();
+  
+  const handleBackPress = useCallback(() => {
+    if (params.from === 'home') {
+      router.push('/(app)/home')
+    } else {
+      router.push("/(app)/settings")
+    }
+  }, [params.from])
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
@@ -215,7 +224,7 @@ export default function ArticlesScreen() {
           color: theme.colors.pink[500],
         }}
         showBackArrow
-        onBackPress={() => router.push("/(app)/settings")}
+        onBackPress={handleBackPress}
         backgroundColor={Colors.background}
         titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
       />
