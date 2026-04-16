@@ -412,7 +412,7 @@ export default function InsightsScreen() {
           <>
             <PremiumGate
               feature="Cycle Trends"
-              description="AI-powered cycle analytics and trends"
+              description="Advanced analytics of your cycle patterns"
             >
               {prediction ? (
                 <CycleTrendsCard

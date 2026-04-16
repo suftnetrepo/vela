@@ -22,7 +22,7 @@ export const PREMIUM_PRICING = {
 
 // ─── Premium features list for the paywall ───────────────────────────────────
 export const PREMIUM_FEATURES = [
-  { icon: '📊', title: 'Advanced insights',  description: 'AI-powered cycle patterns and predictions' },
+  { icon: '📊', title: 'Advanced insights',  description: 'Personalised trends in your cycle patterns' },
   { icon: '📄', title: 'Export data',        description: 'PDF & CSV exports for your records' },
   { icon: '🔔', title: 'Smart reminders',    description: 'Pill reminders and custom notifications' },
   { icon: '🤰', title: 'Pregnancy mode',     description: 'Track pregnancy and postpartum health' },
