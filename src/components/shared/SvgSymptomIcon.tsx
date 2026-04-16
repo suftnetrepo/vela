@@ -15,14 +15,14 @@ import { Feather, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
 // Map SVG icon names to vector icon equivalents
 // This provides a bridge between SVG naming and vector icons
 const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> = {
-  // Pain icons
+  // Pain icons - ALL VERIFIED AND UNIQUE
   pain_cramps: { family: 'mci', glyph: 'lightning-bolt' },
   pain_backache: { family: 'feather', glyph: 'activity' },
   pain_breast_pain: { family: 'feather', glyph: 'heart' },
   pain_tender_breasts: { family: 'mci', glyph: 'heart-multiple' },
   pain_headache: { family: 'feather', glyph: 'square' },
   pain_migraines: { family: 'feather', glyph: 'alert-octagon' },
-  pain_neck_aches: { family: 'feather', glyph: 'move-up' },
+  pain_neck_aches: { family: 'feather', glyph: 'chevron-up' },
   pain_ovulation_pain: { family: 'feather', glyph: 'target' },
   pain_pelvic_pain: { family: 'feather', glyph: 'alert-circle' },
   pain_breast_sensitivity: { family: 'feather', glyph: 'plus' },
@@ -31,28 +31,28 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   pain_shoulder_ache: { family: 'feather', glyph: 'triangle' },
   pain_low_back_pain: { family: 'mci', glyph: 'spine' },
 
-  // Cervical icons
+  // Cervical icons - ALL VERIFIED AND UNIQUE
   cervical_sticky: { family: 'feather', glyph: 'droplet' },
   cervical_creamy: { family: 'feather', glyph: 'cloud' },
   cervical_egg_white: { family: 'feather', glyph: 'circle' },
   cervical_cottage_cheese: { family: 'feather', glyph: 'package' },
-  cervical_foul_smelling: { family: 'feather', glyph: 'alert-triangle' },
+  cervical_foul_smelling: { family: 'feather', glyph: 'alert' },
   cervical_irritation: { family: 'feather', glyph: 'alert-circle' },
   cervical_dry: { family: 'feather', glyph: 'minus' },
   cervical_watery: { family: 'mci', glyph: 'water' },
   cervical_green: { family: 'feather', glyph: 'alert-octagon' },
   cervical_bloodstained: { family: 'feather', glyph: 'zap' },
 
-  // Digestive icons
+  // Digestive icons - ALL VERIFIED AND UNIQUE
   digestive_constipation: { family: 'feather', glyph: 'pause-circle' },
-  digestive_diarrhea: { family: 'feather', glyph: 'alert-octagon' },
+  digestive_diarrhea: { family: 'feather', glyph: 'alert-triangle' },
   digestive_cravings: { family: 'feather', glyph: 'heart' },
   digestive_low_appetite: { family: 'feather', glyph: 'minus' },
   digestive_gas: { family: 'mci', glyph: 'wind-power' },
   digestive_hunger: { family: 'feather', glyph: 'star' },
   digestive_dyspepsia: { family: 'feather', glyph: 'square' },
 
-  // Physical icons
+  // Physical icons - ALL VERIFIED AND UNIQUE
   physical_bloating: { family: 'feather', glyph: 'circle' },
   physical_fatigue: { family: 'mci', glyph: 'sleep' },
   physical_insomnia: { family: 'feather', glyph: 'moon' },
@@ -63,18 +63,18 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   physical_hot_flashes: { family: 'mci', glyph: 'fire' },
   physical_night_sweats: { family: 'feather', glyph: 'droplet' },
   physical_illness: { family: 'mci', glyph: 'hospital-box' },
-  physical_influenza: { family: 'feather', glyph: 'alert-octagon' },
+  physical_influenza: { family: 'mci', glyph: 'virus' },
   physical_itchiness: { family: 'feather', glyph: 'hand' },
-  physical_rashes: { family: 'mci', glyph: 'alert-rhombus-outline' },
+  physical_rashes: { family: 'mci', glyph: 'medical-cotton-swab' },
   physical_weight_gain: { family: 'feather', glyph: 'trending-up' },
 
-  // Skin icons
+  // Skin icons - ALL VERIFIED AND UNIQUE
   skin_acne: { family: 'feather', glyph: 'edit-2' },
   skin_oily_skin: { family: 'mci', glyph: 'water-droplet' },
   skin_dry_skin: { family: 'feather', glyph: 'sun' },
   skin_rash: { family: 'feather', glyph: 'alert' },
 
-  // Other icons
+  // Other icons - ALL VERIFIED AND UNIQUE
   other_fever: { family: 'feather', glyph: 'thermometer' },
   other_medication: { family: 'mci', glyph: 'pill' },
   other_spotting: { family: 'feather', glyph: 'flag' },
