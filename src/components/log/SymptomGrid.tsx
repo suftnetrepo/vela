@@ -5,6 +5,7 @@ import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { useSymptoms } from '../../hooks/useSymptoms'
 import { VelaIcon } from '../shared/VelaIcon'
+import { getSymptomIcon } from '../../constants/symptomIconMap'
 
 interface SymptomGridProps {
   selected: string[]
@@ -85,6 +86,7 @@ export function SymptomGrid({ selected, onChange }: SymptomGridProps) {
               <Stack horizontal gap={8} flexWrap="wrap">
                 {items.map(s => {
                   const isActive = selected.includes(s.key)
+                  const iconName = getSymptomIcon(s.key)
                   return (
                     <StyledPressable
                       key={s.key}
@@ -100,7 +102,7 @@ export function SymptomGrid({ selected, onChange }: SymptomGridProps) {
                       gap={5}
                       marginBottom={4}
                     >
-                      <StyledText fontSize={14}>{s.emoji}</StyledText>
+                      <VelaIcon name={iconName} size={14} color={isActive ? '#fff' : Colors.textSecondary} />
                       <StyledText
                         fontSize={13}
                         fontWeight={isActive ? '700' : '400'}

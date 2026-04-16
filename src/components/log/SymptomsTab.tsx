@@ -5,35 +5,7 @@ import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { useSymptoms } from '../../hooks/useSymptoms'
 import { VelaIcon } from '../shared/VelaIcon'
-import type { VelaIconName } from '../shared/VelaIcon'
-
-// Mapping of symptom keys to icon names - used for display
-const SYMPTOM_ICON_MAP: Record<string, VelaIconName> = {
-  cramps: 'cramps',
-  abdominal_cramps: 'cramps',
-  headache: 'headache',
-  migraine: 'headache',
-  backache: 'activity',
-  low_back_pain: 'activity',
-  breast_pain: 'heart',
-  tender_breasts: 'heart',
-  breast_sensitivity: 'heart',
-  pelvic_pain: 'activity',
-  bloating: 'bloating',
-  fatigue: 'fatigue',
-  nausea: 'nausea',
-  dizziness: 'activity',
-  acne: 'acne',
-  oily_skin: 'sun',
-  dry_skin: 'sun',
-  constipation: 'activity',
-  diarrhea: 'activity',
-  appetite_up: 'heart',
-  appetite_down: 'sun',
-  insomnia: 'moon',
-  hot_flashes: 'zap',
-  cervical_mucus: 'activity',
-}
+import { getSymptomIcon } from '../../constants/symptomIconMap'
 
 // Category display labels with proper casing
 const CATEGORY_LABELS: Record<string, string> = {
@@ -61,7 +33,7 @@ function SymptomChip({
   onPress: () => void
 }) {
   const Colors = useColors()
-  const icon = SYMPTOM_ICON_MAP[symptomKey] || 'activity'
+  const icon = getSymptomIcon(symptomKey)
   
   return (
     <StyledPressable onPress={onPress} alignItems="center" gap={6} width={72}>

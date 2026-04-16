@@ -103,6 +103,7 @@ const ICON_MAP: Record<string, IconDef> = {
   'help':              { family: 'feather',  glyph: 'help-circle' },
   'arrow-left':        { family: 'feather',  glyph: 'arrow-left' },
   'arrow-right':       { family: 'feather',  glyph: 'arrow-right' },
+  'arrow-up':          { family: 'feather',  glyph: 'arrow-up' },
   'close':             { family: 'feather',  glyph: 'x' },
   'more':              { family: 'feather',  glyph: 'more-horizontal' },
   'search':            { family: 'feather',  glyph: 'search' },
@@ -111,6 +112,14 @@ const ICON_MAP: Record<string, IconDef> = {
   'upload':            { family: 'feather',  glyph: 'upload' },
   'refresh':           { family: 'feather',  glyph: 'refresh-cw' },
   'copy':              { family: 'feather',  glyph: 'copy' },
+  'alert':             { family: 'feather',  glyph: 'alert-circle' },
+  'target':            { family: 'feather',  glyph: 'target' },
+  'cloud':             { family: 'feather',  glyph: 'cloud' },
+  'snowflake':         { family: 'feather',  glyph: 'cloud-snow' },
+  'droplet':           { family: 'mci',      glyph: 'water-opacity' },
+  'water':             { family: 'mci',      glyph: 'water' },
+  'wind':              { family: 'mci',      glyph: 'wind-power' },
+  'egg':               { family: 'mci',      glyph: 'egg' },
 
   // ── Premium ─────────────────────────────────────────────────────────────
   'premium':           { family: 'ionicons', glyph: 'sparkles' },
