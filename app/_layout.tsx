@@ -40,24 +40,13 @@ export default function RootLayout() {
   useEffect(() => {
     async function boot() {
       try {
-        console.log('\n═══════════════════════════════════════════════════════════════')
-        console.log('[⚡ VELA BOOT] Starting app initialization')
-        console.log('═══════════════════════════════════════════════════════════════\n')
-
-        console.log('[⚡ VELA BOOT] → Initializing database...')
         await initDatabase()
-        
-        console.log('[⚡ VELA BOOT] → Running seed logic...')
         await seedDatabase()
 
-        console.log('[⚡ VELA BOOT] → Hydrating settings from database...')
         const all = await settingsService.getAll()
         
         const onboardingComplete = Boolean(all[SETTINGS_KEYS.ONBOARDING_COMPLETE])
         const pinSkipped = Boolean(all[SETTINGS_KEYS.PIN_SKIPPED])
-        
-        console.log(`[⚡ VELA BOOT] ✓ Hydrated: onboarding_complete=${onboardingComplete}`)
-        console.log(`[⚡ VELA BOOT] ✓ Hydrated: pin_skipped=${pinSkipped}`)
         
         hydrateSettings({
           theme: (all[SETTINGS_KEYS.THEME] as ThemeName) ?? 'rose',
@@ -69,25 +58,20 @@ export default function RootLayout() {
           avgPeriodLength: Number(all[SETTINGS_KEYS.AVG_PERIOD_LENGTH] ?? 5),
         })
 
-        console.log('[⚡ VELA BOOT] → Checking PIN state...')
         const hasPin = await securityService.hasPin()
-        console.log(`[⚡ VELA BOOT] ✓ PIN exists: ${hasPin}`)
         
         setHasPin(hasPin)
         if (hasPin) {
-          console.log('[⚡ VELA BOOT] → Setting app to LOCKED state')
           setLocked(true)
         }
 
         // ⚠️ CRITICAL: Mark boot as ready ONLY after ALL hydration and state setup is complete
         // This prevents router from making decisions before persisted state is loaded
-        console.log('[⚡ VELA BOOT] → MARKING BOOT READY (router can now run)')
         setBootReady(true)
-        console.log('[⚡ VELA BOOT] ✓ READY: Passing to router\n')
         
         setAppReady(true)
       } catch (err) {
-        console.error('[⚡ VELA BOOT] ✗ ERROR:', err)
+        console.error('[Vela] Boot error:', err)
         setAppReady(true)
         // Still mark boot ready even on error to prevent infinite wait
         setBootReady(true)

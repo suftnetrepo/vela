@@ -12,7 +12,6 @@ import { loaderService, toastService } from 'fluent-styles'
 interface FeatureDef { icon: VelaIconName; title: string; desc: string }
 
 const FEATURES: FeatureDef[] = [
-  { icon: 'partner',  title: 'Partner sharing',   desc: 'Share your cycle with a partner via invite code' },
   { icon: 'pill',     title: 'Pill reminders',     desc: 'Daily contraception reminders with custom times' },
   { icon: 'baby',     title: 'Pregnancy mode',     desc: 'Track your pregnancy week by week' },
   { icon: 'report',   title: 'Detailed reports',   desc: 'Export your cycle data as PDF or CSV' },

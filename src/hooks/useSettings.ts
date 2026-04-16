@@ -28,17 +28,13 @@ export function useSettings() {
   }, [store])
 
   const completeOnboarding = useCallback(async () => {
-    console.log('[📝 SETTINGS] Setting onboarding_complete=true')
     await settingsService.set(SETTINGS_KEYS.ONBOARDING_COMPLETE, true)
     store.setOnboardingComplete(true)
-    console.log('[📝 SETTINGS] ✓ Onboarding marked complete')
   }, [store])
 
   const skipPin = useCallback(async () => {
-    console.log('[📝 SETTINGS] Setting pin_skipped=true')
     await settingsService.set(SETTINGS_KEYS.PIN_SKIPPED, true)
     store.setPinSkipped(true)
-    console.log('[📝 SETTINGS] ✓ PIN skip persisted')
   }, [store])
 
   return {

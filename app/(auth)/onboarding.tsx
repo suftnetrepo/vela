@@ -254,36 +254,22 @@ export default function OnboardingScreen() {
   const totalSteps = steps.length
 
   const handleFinish = async () => {
-    console.log('\n[📝 ONBOARDING] Completing onboarding...')
-    console.log(`[📝 ONBOARDING] → Cycle: ${cycleLength}d, Period: ${periodLength}d, Last period: ${lastPeriodDaysAgo}d ago`)
-    
     const id = loaderService.show({ label: 'Setting up Vela…', variant: 'dots' })
 
     try {
-      console.log('[📝 ONBOARDING] → Persisting cycle length...')
       await settings.setCycleLength(cycleLength)
-      console.log('[📝 ONBOARDING] ✓ Cycle length saved')
-      
-      console.log('[📝 ONBOARDING] → Persisting period length...')
       await settings.setPeriodLength(periodLength)
-      console.log('[📝 ONBOARDING] ✓ Period length saved')
 
       const lastPeriodStart = subDays(new Date(), lastPeriodDaysAgo)
-      console.log('[📝 ONBOARDING] → Creating first cycle...')
       await cycleService.startNewCycle(lastPeriodStart)
-      console.log('[📝 ONBOARDING] ✓ First cycle created')
 
-      console.log('[📝 ONBOARDING] → Marking onboarding as complete...')
       await settings.completeOnboarding()
-      console.log('[📝 ONBOARDING] ✓ onboarding_complete=true in database')
       
       loaderService.hide(id)
-      console.log('[📝 ONBOARDING] ✓ SUCCESS: All data persisted → Going to PIN setup\n')
 
       router.replace('/(auth)/pin-setup')
     } catch (err) {
       loaderService.hide(id)
-      console.log('[📝 ONBOARDING] ✗ ERROR during persistence:', err)
       toastService.error('Setup failed', 'Please try again.')
     }
   }

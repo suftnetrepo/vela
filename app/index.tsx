@@ -15,16 +15,10 @@ export default function Index() {
     // ⚠️ CRITICAL: Block routing until boot is completely ready
     // This prevents race conditions where router runs before hydration completes
     if (!bootReady) {
-      console.log('[🧭 VELA ROUTER] ⏳ WAITING: Boot not ready yet, delaying routing decision')
       return
     }
 
     if (!rootNavState?.key) return
-
-    console.log('\n═══════════════════════════════════════════════════════════════')
-    console.log('[🧭 VELA ROUTER] Making routing decision...')
-    console.log(`[🧭 VELA ROUTER] onboardingComplete=${onboardingComplete}, hasPin=${hasPin}, pinSkipped=${pinSkipped}, isLocked=${isLocked}`)
-    console.log('═══════════════════════════════════════════════════════════════\n')
 
     // ROUTING LOGIC (guaranteed to have hydrated state due to bootReady guard):
     // 1. Onboarding not complete → welcome
@@ -34,22 +28,18 @@ export default function Index() {
 
     if (!onboardingComplete) {
       // First-time users: send to welcome
-      console.log('[🧭 VELA ROUTER] → DECISION: New user (onboarding incomplete) → WELCOME\n')
       router.replace('/(auth)/welcome')
     } else if (!hasPin && !pinSkipped) {
       // Onboarding done, but PIN setup not yet done or skipped
       // Send to PIN setup for first time
-      console.log('[🧭 VELA ROUTER] → DECISION: Onboarding complete, PIN not handled → PIN SETUP\n')
       router.replace('/(auth)/pin-setup')
     } else if (isLocked && hasPin) {
       // Onboarding done, PIN exists and app is locked
       // Send to lock screen
-      console.log('[🧭 VELA ROUTER] → DECISION: Onboarding complete, PIN exists, app locked → LOCK SCREEN\n')
       router.replace('/(lock)/lock-screen')
     } else {
       // All setup done: onboarding complete AND (PIN skipped OR no PIN requirement OR already unlocked)
       // Send to main app
-      console.log('[🧭 VELA ROUTER] → DECISION: All setup complete → HOME\n')
       router.replace('/(app)/home')
     }
   }, [rootNavState?.key, isLocked, hasPin, onboardingComplete, pinSkipped, bootReady])

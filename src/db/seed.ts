@@ -7,10 +7,6 @@ const dateStr = (d: Date) => format(d, 'yyyy-MM-dd')
 
 export async function seedDatabase(): Promise<void> {
   try {
-    console.log('\n═══════════════════════════════════════════════════════════════')
-    console.log('[🌱 VELA BOOT] Starting seed check')
-    console.log('═══════════════════════════════════════════════════════════════\n')
-
     // CRITICAL: Only seed if the database is completely empty.
     // This preserves user's persisted onboarding state, cycle data, and settings.
     //
@@ -24,12 +20,8 @@ export async function seedDatabase(): Promise<void> {
     // Check if already seeded
     const existing = await db.select().from(cycles).limit(1)
     if (existing.length > 0) {
-      console.log('[🌱 VELA BOOT] ✓ Database already seeded (preserving user state)')
-      console.log('[🌱 VELA BOOT] ✓ No forced reset on this boot\n')
       return
     }
-
-    console.log('[🌱 VELA BOOT] → Database empty, initializing first-boot data')
 
     const today = new Date()
 
@@ -64,7 +56,7 @@ export async function seedDatabase(): Promise<void> {
       })
     }
     
-    console.log('[🌱 VELA BOOT] ✓ Cycles: Seeded 7 completed + 1 active')
+    // Cycles seeded
 
     // Active cycle (started ~12 days ago, still ongoing)
     const activeCycleStart = subDays(today, 12)
@@ -81,7 +73,7 @@ export async function seedDatabase(): Promise<void> {
       })
       .returning()
     
-    console.log('[🌱 VELA BOOT] ✓ Logs: Seeded sample daily logs and symptoms')
+    // Daily logs seeded
 
     // ─── DEFAULT SETTINGS ────────────────────────────────────────────
     // Only seed default settings if the table is completely empty.
@@ -109,11 +101,7 @@ export async function seedDatabase(): Promise<void> {
         await db.insert(settings).values({ ...s, updatedAt: now() }).onConflictDoNothing()
       }
 
-      console.log('[🌱 VELA BOOT] ✓ Settings: Seeded defaults (onboarding_complete=FALSE)')
-    } else {
-      console.log('[🌱 VELA BOOT] ✓ Settings: Table exists, preserving user settings')
     }
-    console.log('[🌱 VELA BOOT] ✓ SUCCESS: First-boot data initialized\n')
     
   } catch (err) {
     console.error('[Vela Seed] Error:', err)
