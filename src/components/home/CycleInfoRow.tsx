@@ -64,7 +64,9 @@ export function CycleInfoRow({ prediction }: CycleInfoRowProps) {
   }
 
   const handleArticlesHubNavigation = () => {
-    router.push('/(app)/(settings)/articles')
+    router.push({
+      pathname: '/(app)/(settings)/articles'
+    })
   }
 
   // Fallback values when no prediction
