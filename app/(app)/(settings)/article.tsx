@@ -143,6 +143,7 @@ export default function ArticleScreen() {
         title=""
         titleAlignment="center"
         marginHorizontal={16}
+        marginBottom={8}
         shapeProps={{
           size: 48,
           backgroundColor: theme.colors.pink[50],

@@ -2,6 +2,7 @@ import React from 'react'
 import {
   Stack, StyledText, StyledScrollView, StyledPage,
  StyledPressable,
+ StyledSeperator,
   theme,
 } from 'fluent-styles'
 import { router } from 'expo-router'
@@ -124,10 +125,7 @@ export default function HomeScreen() {
           />
         </Stack>
 
-        {/* 2. Cycle info row */}
-        <CycleInfoRow prediction={prediction} />
-
-        {/* 3. Calendar */}
+        {/* 2. Calendar */}
         <Stack paddingHorizontal={20} paddingBottom={16}>
           <Stack
             backgroundColor={Colors.surface}
@@ -158,6 +156,11 @@ export default function HomeScreen() {
             />
           </Stack>
         )}
+        <StyledSeperator leftLabel='Everyday tips for you  >' leftLabelProps={{
+          color: theme.colors.gray[400]
+        }} marginHorizontal={24} marginBottom={4} />
+         {/* 4. Cycle info row */}
+        <CycleInfoRow prediction={prediction} />
       </StyledScrollView>
     </StyledPage>
   )
