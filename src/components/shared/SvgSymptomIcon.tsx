@@ -37,10 +37,10 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   cervical_egg_white: { family: 'feather', glyph: 'droplet' },
   cervical_cottage_cheese: { family: 'feather', glyph: 'package' },
   cervical_foul_smelling: { family: 'feather', glyph: 'alert-triangle' },
-  cervical_irritation: { family: 'mci', glyph: 'alert-triangle' },
+  cervical_irritation: { family: 'feather', glyph: 'alert-octagon' },
   cervical_dry: { family: 'feather', glyph: 'minus' },
-  cervical_watery: { family: 'mci', glyph: 'water-opacity' },
-  cervical_green: { family: 'feather', glyph: 'alert-circle' },
+  cervical_watery: { family: 'feather', glyph: 'droplets' },
+  cervical_green: { family: 'mci', glyph: 'alert-circle' },
   cervical_bloodstained: { family: 'mci', glyph: 'water' },
 
   // Digestive icons
