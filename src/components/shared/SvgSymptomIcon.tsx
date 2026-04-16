@@ -17,36 +17,36 @@ import { Feather, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
 const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> = {
   // Pain icons
   pain_cramps: { family: 'mci', glyph: 'lightning-bolt' },
-  pain_backache: { family: 'mci', glyph: 'spine' },
-  pain_breast_pain: { family: 'mci', glyph: 'breast-feeding' },
-  pain_headache: { family: 'mci', glyph: 'head-snowflake' },
-  pain_migraines: { family: 'mci', glyph: 'head' },
+  pain_backache: { family: 'feather', glyph: 'activity' },
+  pain_breast_pain: { family: 'feather', glyph: 'heart' },
+  pain_headache: { family: 'feather', glyph: 'square' },
+  pain_migraines: { family: 'feather', glyph: 'alert-circle' },
   pain_neck_aches: { family: 'feather', glyph: 'move-up' },
   pain_ovulation_pain: { family: 'feather', glyph: 'target' },
   pain_pelvic_pain: { family: 'feather', glyph: 'zap' },
-  pain_breast_sensitivity: { family: 'feather', glyph: 'alert-circle' },
+  pain_breast_sensitivity: { family: 'feather', glyph: 'plus' },
   pain_body_aches: { family: 'mci', glyph: 'arm-flex' },
 
   // Cervical icons
   cervical_sticky: { family: 'mci', glyph: 'water-opacity' },
   cervical_creamy: { family: 'feather', glyph: 'cloud' },
-  cervical_egg_white: { family: 'mci', glyph: 'egg' },
-  cervical_cottage_cheese: { family: 'feather', glyph: 'layers' },
+  cervical_egg_white: { family: 'feather', glyph: 'droplet' },
+  cervical_cottage_cheese: { family: 'feather', glyph: 'package' },
   cervical_foul_smelling: { family: 'feather', glyph: 'alert-octagon' },
   cervical_irritation: { family: 'feather', glyph: 'alert-triangle' },
-  cervical_dry: { family: 'feather', glyph: 'slash' },
+  cervical_dry: { family: 'feather', glyph: 'minus' },
 
   // Digestive icons
-  digestive_constipation: { family: 'mci', glyph: 'stop-circle' },
+  digestive_constipation: { family: 'feather', glyph: 'square' },
   digestive_diarrhea: { family: 'feather', glyph: 'alert-octagon' },
   digestive_cravings: { family: 'feather', glyph: 'heart' },
-  digestive_low_appetite: { family: 'mci', glyph: 'fork-knife' },
+  digestive_low_appetite: { family: 'feather', glyph: 'minus' },
   digestive_gas: { family: 'mci', glyph: 'wind-power' },
-  digestive_hunger: { family: 'mci', glyph: 'silverware-fork-knife' },
-  digestive_dyspepsia: { family: 'mci', glyph: 'stomach' },
+  digestive_hunger: { family: 'feather', glyph: 'star' },
+  digestive_dyspepsia: { family: 'feather', glyph: 'square' },
 
   // Physical icons
-  physical_bloating: { family: 'mci', glyph: 'circle-expand' },
+  physical_bloating: { family: 'feather', glyph: 'circle' },
   physical_fatigue: { family: 'mci', glyph: 'sleep' },
   physical_insomnia: { family: 'feather', glyph: 'moon' },
   physical_nausea: { family: 'mci', glyph: 'emoticon-sick-outline' },
@@ -54,10 +54,10 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   physical_discharge: { family: 'mci', glyph: 'water-opacity' },
 
   // Skin icons
-  skin_acne: { family: 'mci', glyph: 'face-woman-shimmer-outline' },
+  skin_acne: { family: 'feather', glyph: 'alert-circle' },
   skin_oily_skin: { family: 'mci', glyph: 'water-droplet' },
-  skin_dry_skin: { family: 'mci', glyph: 'leaf' },
-  skin_rash: { family: 'mci', glyph: 'asterisk-circle-outline' },
+  skin_dry_skin: { family: 'feather', glyph: 'leaf' },
+  skin_rash: { family: 'feather', glyph: 'alert-triangle' },
 
   // Other icons
   other_fever: { family: 'feather', glyph: 'thermometer' },
