@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Stack,
   StyledText,
@@ -98,14 +98,14 @@ export default function ArticleScreen() {
   const params = useLocalSearchParams<{ id: string; from?: string }>();
   const article = ARTICLE_CONTENT[params.id ?? ""];
 
-  const handleBackPress = () => {
+  const handleBackPress = useCallback(() => {
     if (params.from === 'home') {
       router.push('/(app)')
     } else {
       // Default to articles hub
       router.push('/(app)/(settings)/articles')
     }
-  }
+  }, [params.from])
 
   if (!article) {
     return (
