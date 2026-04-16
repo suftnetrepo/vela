@@ -37,6 +37,18 @@ export const SYMPTOM_ICON_MAP: Record<string, string> = {
   cervical_firmness:     'pain_ovulation_pain',  // Firmness → ovulation pain icon
   cervical_opening:      'pain_pelvic_pain',     // Opening → pelvic pain icon
   cervical_mucus:        'cervical_sticky',      // Default cervical
+  cervical_sticky:       'cervical_sticky',      // Sticky mucus
+  cervical_creamy:       'cervical_creamy',      // Creamy mucus
+  cervical_eggwhite:     'cervical_egg_white',   // Egg-white mucus
+  cervical_watery:       'physical_discharge',   // Watery mucus
+  cervical_cottage:      'cervical_cottage_cheese', // Cottage cheese (yeast)
+  cervical_green:        'other_medication',     // Green mucus (infection)
+  cervical_bloodstained: 'other_spotting',       // Blood-stained mucus
+  cervical_foul:         'cervical_foul_smelling',  // Foul odor (infection)
+  cervical_irritation:   'cervical_irritation',  // Cervical irritation
+  cervical_dryness:      'cervical_dry',         // Cervical dryness
+  
+  // Aliases for cervical mucus
   sticky:                'cervical_sticky',      // Sticky mucus
   creamy:                'cervical_creamy',      // Creamy mucus
   egg_white:             'cervical_egg_white',   // Egg-white mucus
@@ -49,36 +61,53 @@ export const SYMPTOM_ICON_MAP: Record<string, string> = {
   // GI tract and appetite symptoms
   constipation:          'digestive_constipation',
   diarrhea:              'digestive_diarrhea',
-  cravings:              'digestive_cravings',
-  low_appetite:          'digestive_low_appetite',
+  appetite_up:           'digestive_cravings',   // Cravings (appetite increase)
+  appetite_down:         'digestive_low_appetite', // Low appetite
+  cravings:              'digestive_cravings',   // Alias
+  low_appetite:          'digestive_low_appetite', // Alias
   gas:                   'digestive_gas',
   hunger:                'digestive_hunger',
   dyspepsia:             'digestive_dyspepsia',
 
   // ┌─ PAIN CATEGORY ────────────────────────────────────────────────────────┐
   // Various pain symptoms with distinct icons
+  abdominal_cramps:      'pain_cramps',          // Abdominal cramps → same as regular cramps
   backache:              'pain_backache',
   breast_pain:           'pain_breast_pain',
   cramps:                'pain_cramps',
   headache:              'pain_headache',
-  migraines:             'pain_migraines',
-  migraine:              'pain_migraines',    // Alias for migraines
-  neck_aches:            'pain_neck_aches',
+  migraine:              'pain_migraines',
+  migraines:             'pain_migraines',       // Alias for migraines
+  neck_ache:             'pain_neck_aches',      // Neck ache
+  neck_aches:            'pain_neck_aches',      // Alias for neck_aches
   ovulation_pain:        'pain_ovulation_pain',
   pelvic_pain:           'pain_pelvic_pain',
+  shoulder_ache:         'pain_shoulder_ache',   // New: shoulder pain
+  tender_breasts:        'pain_breast_pain',     // Tender breasts → same as breast pain
   breast_sensitivity:    'pain_breast_sensitivity',
   body_aches:            'pain_body_aches',
-  low_back_pain:         'pain_backache',     // Alias for backache
+  muscle_pain:           'pain_body_aches',      // Muscle pain → similar to body aches
+  low_back_pain:         'pain_backache',        // Alias for backache
 
   // ┌─ PHYSICAL CATEGORY ────────────────────────────────────────────────────┐
   // Body state symptoms
   bloating:              'physical_bloating',
+  chills:                'physical_chills',      // New: chills
+  dizziness:             'physical_dizziness',
   fatigue:               'physical_fatigue',
+  hot_flashes:           'physical_hot_flashes', // New: hot flashes
   insomnia:              'physical_insomnia',
   nausea:                'physical_nausea',
-  dizziness:             'physical_dizziness',
+  spotting:              'other_spotting',       // Spotting (light bleeding)
+  night_sweats:          'physical_night_sweats', // New: night sweats
+  illness:               'physical_illness',     // New: illness
+  influenza:             'physical_influenza',   // New: influenza/flu
+  fever:                 'other_fever',          // Fever (can be symptom or other)
+  itchiness:             'physical_itchiness',   // New: itchiness
+  rashes:                'physical_rashes',      // New: rashes (physical not skin)
+  weight_gain:           'physical_weight_gain', // New: weight gain
   vaginal_discharge:     'physical_discharge',
-  discharge:             'physical_discharge',  // Alias
+  discharge:             'physical_discharge',   // Alias
 
   // ┌─ SKIN CATEGORY ────────────────────────────────────────────────────────┐
   // Dermatological symptoms
@@ -105,9 +134,9 @@ export const SYMPTOM_ICON_MAP: Record<string, string> = {
 
   // ┌─ OTHER CATEGORY ───────────────────────────────────────────────────────┐
   // Miscellaneous symptoms
-  fever:                 'other_fever',
+  pms:                   'other_pms',            // New: PMS
+  flow:                  'other_flow',           // New: Flow/bleeding
   medication:            'other_medication',
-  spotting:              'other_spotting',
   pregnancy_test:        'other_test',
 }
 

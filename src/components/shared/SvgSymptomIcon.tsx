@@ -26,6 +26,7 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   pain_pelvic_pain: { family: 'feather', glyph: 'zap' },
   pain_breast_sensitivity: { family: 'feather', glyph: 'plus' },
   pain_body_aches: { family: 'mci', glyph: 'arm-flex' },
+  pain_shoulder_ache: { family: 'feather', glyph: 'triangle' },
 
   // Cervical icons
   cervical_sticky: { family: 'mci', glyph: 'water-opacity' },
@@ -35,6 +36,9 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   cervical_foul_smelling: { family: 'feather', glyph: 'alert-octagon' },
   cervical_irritation: { family: 'feather', glyph: 'alert-triangle' },
   cervical_dry: { family: 'feather', glyph: 'minus' },
+  cervical_watery: { family: 'mci', glyph: 'water-opacity' },
+  cervical_green: { family: 'feather', glyph: 'alert-circle' },
+  cervical_bloodstained: { family: 'mci', glyph: 'water' },
 
   // Digestive icons
   digestive_constipation: { family: 'feather', glyph: 'square' },
@@ -52,6 +56,14 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   physical_nausea: { family: 'mci', glyph: 'emoticon-sick-outline' },
   physical_dizziness: { family: 'feather', glyph: 'wind' },
   physical_discharge: { family: 'mci', glyph: 'water-opacity' },
+  physical_chills: { family: 'feather', glyph: 'thermometer' },
+  physical_hot_flashes: { family: 'feather', glyph: 'zap' },
+  physical_night_sweats: { family: 'feather', glyph: 'droplet' },
+  physical_illness: { family: 'feather', glyph: 'alert-circle' },
+  physical_influenza: { family: 'feather', glyph: 'alert-circle' },
+  physical_itchiness: { family: 'feather', glyph: 'hand' },
+  physical_rashes: { family: 'feather', glyph: 'square' },
+  physical_weight_gain: { family: 'feather', glyph: 'trending-up' },
 
   // Skin icons
   skin_acne: { family: 'feather', glyph: 'alert-circle' },
@@ -64,6 +76,8 @@ const SVG_TO_VECTOR_ICON_MAP: Record<string, { family: string; glyph: string }> 
   other_medication: { family: 'mci', glyph: 'pill' },
   other_spotting: { family: 'mci', glyph: 'water' },
   other_test: { family: 'feather', glyph: 'check-circle' },
+  other_pms: { family: 'feather', glyph: 'calendar' },
+  other_flow: { family: 'feather', glyph: 'droplet' },
 }
 
 interface SvgSymptomIconProps {
