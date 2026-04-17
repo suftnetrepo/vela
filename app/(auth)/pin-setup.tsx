@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Stack, StyledText, StyledPressable, StyledPage } from 'fluent-styles'
-import { Text } from '../../src/components/text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../src/hooks/useColors'
 import { useSettings } from '../../src/hooks/useSettings'
@@ -84,9 +84,9 @@ export default function PinSetupScreen() {
           paddingHorizontal={24}
           onPress={handleSkip}
         >
-          <StyledText fontSize={14} color={Colors.textTertiary}>
+          <Text fontSize={14} color={Colors.textTertiary}>
             Skip for now
-          </StyledText>
+          </Text>
         </StyledPressable>
       </Stack>
     </StyledPage>

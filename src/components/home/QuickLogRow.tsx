@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
 import type { VelaIconName } from '../shared/VelaIcon'
@@ -62,14 +62,14 @@ export function QuickLogRow({
             >
               <VelaIcon name={item.icon} size={16} color={Colors.primary} />
             </Stack>
-            <StyledText
+            <Text
               fontSize={12}
               fontWeight="600"
               color={Colors.textSecondary}
               textAlign="center"
             >
               {item.label}
-            </StyledText>
+            </Text>
           </StyledPressable>
         ))}
       </Stack>

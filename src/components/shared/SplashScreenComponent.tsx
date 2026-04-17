@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { Stack, StyledText } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { BrandHeader } from './BrandHeader'
 
@@ -50,7 +50,7 @@ export function SplashScreenComponent({
       {/* Optional subtitle for context */}
       {subtitle && (
         <Stack marginTop={32}>
-          <StyledText
+          <Text
             fontSize={14}
             color={Colors.textTertiary}
             textAlign="center"
@@ -58,7 +58,7 @@ export function SplashScreenComponent({
             fontWeight="400"
           >
             {subtitle}
-          </StyledText>
+          </Text>
         </Stack>
       )}
 

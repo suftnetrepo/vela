@@ -1,7 +1,7 @@
 import React from 'react'
 import { Dimensions } from 'react-native'
 import { Stack, StyledText } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
 import type { Cycle } from '../../db/schema'
@@ -32,9 +32,9 @@ export function CycleLengthChart({ cycles }: CycleLengthChartProps) {
           alignItems="center" justifyContent="center">
           <VelaIcon name="tab-insights" size={26} color={Colors.primary} />
         </Stack>
-        <StyledText fontSize={14} color={Colors.textSecondary} textAlign="center">
+        <Text fontSize={14} color={Colors.textSecondary} textAlign="center">
           Track at least 2 cycles to see your length chart.
-        </StyledText>
+        </Text>
       </Stack>
     )
   }
@@ -56,14 +56,14 @@ export function CycleLengthChart({ cycles }: CycleLengthChartProps) {
       shadowOpacity={0.06} shadowRadius={10} elevation={2}>
 
       <Stack horizontal alignItems="center" justifyContent="space-between">
-        <StyledText fontSize={17} fontWeight="700" color={Colors.textPrimary}>
+        <Text fontSize={17} fontWeight="700" color={Colors.textPrimary}>
           Cycle Length
-        </StyledText>
+        </Text>
         <Stack backgroundColor={Colors.primaryFaint} borderRadius={10}
           paddingHorizontal={10} paddingVertical={4}>
-          <StyledText fontSize={12} color={Colors.primaryDark} fontWeight="600">
+          <Text fontSize={12} color={Colors.primaryDark} fontWeight="600">
             avg {avg} days
-          </StyledText>
+          </Text>
         </Stack>
       </Stack>
 
@@ -78,10 +78,10 @@ export function CycleLengthChart({ cycles }: CycleLengthChartProps) {
               <Stack key={c.id ?? i} width={slotW} alignItems="center"
                 justifyContent="flex-end" height={CHART_H}>
                 {isLast && (
-                  <StyledText fontSize={11} fontWeight="700"
+                  <Text fontSize={11} fontWeight="700"
                     color={Colors.primary} marginBottom={3}>
                     {len}d
-                  </StyledText>
+                  </Text>
                 )}
                 <Stack width={barW} height={barH} borderRadius={BAR_RADIUS}
                   backgroundColor={isLast ? Colors.primary : Colors.border} />
@@ -93,12 +93,12 @@ export function CycleLengthChart({ cycles }: CycleLengthChartProps) {
         <Stack horizontal marginTop={4}>
           {completed.map((c, i) => (
             <Stack key={i} width={slotW} alignItems="center">
-              <StyledText
+              <Text
                 fontSize={9}
                 color={i === lastIdx ? Colors.primaryDark : Colors.textTertiary}
                 fontWeight={i === lastIdx ? '700' : '400'}>
                 {format(parseISO(c.startDate), 'MMM')}
-              </StyledText>
+              </Text>
             </Stack>
           ))}
         </Stack>
@@ -112,10 +112,10 @@ export function CycleLengthChart({ cycles }: CycleLengthChartProps) {
         ].map(s => (
           <Stack key={s.label} flex={1} backgroundColor={Colors.surfaceAlt}
             borderRadius={12} padding={10} alignItems="center" gap={3}>
-            <StyledText fontSize={15} fontWeight="800" color={s.color}>{s.value}</StyledText>
-            <StyledText fontSize={10} color={Colors.textTertiary} fontWeight="600">
+            <Text fontSize={15} fontWeight="800" color={s.color}>{s.value}</Text>
+            <Text fontSize={10} color={Colors.textTertiary} fontWeight="600">
               {s.label.toUpperCase()}
-            </StyledText>
+            </Text>
           </Stack>
         ))}
       </Stack>

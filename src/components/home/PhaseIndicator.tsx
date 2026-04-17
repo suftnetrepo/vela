@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import type { CyclePhase } from '../../algorithm/prediction'
 import { phaseName } from '../../algorithm/prediction'
@@ -20,12 +20,12 @@ export function PhaseIndicator({ phase, cycleDay, cycleLength }: PhaseIndicatorP
   return (
     <Stack gap={8}>
       <Stack horizontal alignItems="center" justifyContent="space-between">
-        <StyledText fontSize={13} fontWeight="600" color={Colors.textSecondary}>
+        <Text fontSize={13} fontWeight="600" color={Colors.textSecondary}>
           {phaseName(phase)}
-        </StyledText>
-        <StyledText fontSize={12} color={Colors.textTertiary}>
+        </Text>
+        <Text fontSize={12} color={Colors.textTertiary}>
           Day {cycleDay} / {cycleLength}
-        </StyledText>
+        </Text>
       </Stack>
       <Stack height={6} backgroundColor={Colors.border} borderRadius={3} overflow="hidden">
         <Stack

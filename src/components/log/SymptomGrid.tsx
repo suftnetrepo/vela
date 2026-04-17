@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { useSymptoms } from '../../hooks/useSymptoms'
@@ -39,7 +39,7 @@ export function SymptomGrid({ selected, onChange }: SymptomGridProps) {
     return (
       <Stack gap={16} alignItems="center" justifyContent="center" paddingVertical={24}>
         <ActivityIndicator size="small" color={Colors.primary} />
-        <StyledText fontSize={13} color={Colors.textSecondary}>Loading symptoms…</StyledText>
+        <Text fontSize={13} color={Colors.textSecondary}>Loading symptoms…</Text>
       </Stack>
     )
   }
@@ -51,7 +51,7 @@ export function SymptomGrid({ selected, onChange }: SymptomGridProps) {
       <Stack horizontal alignItems="center" justifyContent="space-between" gap={8}>
         <Stack horizontal alignItems="center" gap={8} flex={1}>
           <VelaIcon name="activity" size={17} color={Colors.primary} />
-          <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>Symptoms</StyledText>
+          <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>Symptoms</Text>
         </Stack>
         <StyledPressable
           onPress={() => router.push('/(app)/(settings)/symptoms')}
@@ -60,7 +60,7 @@ export function SymptomGrid({ selected, onChange }: SymptomGridProps) {
           borderRadius={8}
           backgroundColor={Colors.primaryFaint}
         >
-          <StyledText fontSize={12} fontWeight="600" color={Colors.primary}>Manage</StyledText>
+          <Text fontSize={12} fontWeight="600" color={Colors.primary}>Manage</Text>
         </StyledPressable>
       </Stack>
 
@@ -68,12 +68,12 @@ export function SymptomGrid({ selected, onChange }: SymptomGridProps) {
         <Stack gap={12} alignItems="center" paddingVertical={20} paddingHorizontal={16}
           backgroundColor={Colors.surfaceAlt} borderRadius={12}>
           <VelaIcon name="activity" size={24} color={Colors.textTertiary} />
-          <StyledText fontSize={13} fontWeight="600" color={Colors.textSecondary} textAlign="center">
+          <Text fontSize={13} fontWeight="600" color={Colors.textSecondary} textAlign="center">
             No symptoms enabled
-          </StyledText>
-          <StyledText fontSize={12} color={Colors.textTertiary} textAlign="center">
+          </Text>
+          <Text fontSize={12} color={Colors.textTertiary} textAlign="center">
             Tap "Manage" to add symptoms to your tracker.
-          </StyledText>
+          </Text>
         </Stack>
       ) : (
         CATEGORIES.map(cat => {
@@ -81,9 +81,9 @@ export function SymptomGrid({ selected, onChange }: SymptomGridProps) {
           if (items.length === 0) return null
           return (
             <Stack key={cat} gap={8}>
-              <StyledText fontSize={12} fontWeight="600" color={Colors.textPrimary} letterSpacing={0.5}>
+              <Text fontSize={12} fontWeight="600" color={Colors.textPrimary} letterSpacing={0.5}>
                 {cat.toUpperCase()}
-              </StyledText>
+              </Text>
               <Stack horizontal gap={8} flexWrap="wrap">
                 {items.map(s => {
                   const isActive = selected.includes(s.key)
@@ -104,13 +104,13 @@ export function SymptomGrid({ selected, onChange }: SymptomGridProps) {
                       marginBottom={4}
                     >
                       <VelaIcon name={iconName} size={14} color={isActive ? '#fff' : Colors.textSecondary} />
-                      <StyledText
+                      <Text
                         fontSize={13}
                         fontWeight={isActive ? '700' : '400'}
                         color={isActive ? '#fff' : Colors.textSecondary}
                       >
                         {s.label}
-                      </StyledText>
+                      </Text>
                     </StyledPressable>
                   )
                 })}

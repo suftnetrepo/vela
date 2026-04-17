@@ -11,6 +11,7 @@ import {
   theme,
 } from "fluent-styles";
 import { router } from "expo-router";
+import { Text } from "@/components/text";
 import { useColors } from "../../../src/hooks/useColors";
 import { useBiometric } from "../../../src/hooks/useBiometric";
 import { securityService } from "../../../src/services/security.service";
@@ -166,14 +167,14 @@ export default function SecurityScreen() {
           elevation={1}
         >
           <Stack paddingHorizontal={16} paddingTop={14} paddingBottom={4}>
-            <StyledText
+            <Text
               fontSize={12}
               fontWeight="700"
               color={Colors.textTertiary}
               letterSpacing={0.5}
             >
               PIN LOCK
-            </StyledText>
+            </Text>
           </Stack>
 
           <StyledPressable
@@ -195,18 +196,18 @@ export default function SecurityScreen() {
               <VelaIcon name="key" size={18} color={Colors.primary} />
             </Stack>
             <Stack flex={1} gap={2}>
-              <StyledText
+              <Text
                 fontSize={15}
                 fontWeight="600"
                 color={Colors.textPrimary}
               >
                 {hasPin ? "Change PIN" : "Set up PIN"}
-              </StyledText>
-              <StyledText fontSize={12} color={Colors.textTertiary}>
+              </Text>
+              <Text fontSize={12} color={Colors.textTertiary}>
                 {hasPin
                   ? "4-digit PIN is active"
                   : "No PIN set — data is unprotected"}
-              </StyledText>
+              </Text>
             </Stack>
             <VelaIcon
               name="chevron-right"
@@ -239,14 +240,14 @@ export default function SecurityScreen() {
                 >
                   <VelaIcon name="trash" size={18} color={Colors.error} />
                 </Stack>
-                <StyledText
+                <Text
                   fontSize={15}
                   fontWeight="600"
                   color={Colors.error}
                   flex={1}
                 >
                   Remove PIN
-                </StyledText>
+                </Text>
               </StyledPressable>
             </>
           )}
@@ -265,14 +266,14 @@ export default function SecurityScreen() {
             elevation={1}
           >
             <Stack paddingHorizontal={16} paddingTop={14} paddingBottom={4}>
-              <StyledText
+              <Text
                 fontSize={12}
                 fontWeight="700"
                 color={Colors.textTertiary}
                 letterSpacing={0.5}
               >
                 BIOMETRIC
-              </StyledText>
+              </Text>
             </Stack>
             <Stack
               horizontal
@@ -296,16 +297,16 @@ export default function SecurityScreen() {
                 />
               </Stack>
               <Stack flex={1} gap={2}>
-                <StyledText
+                <Text
                   fontSize={15}
                   fontWeight="600"
                   color={Colors.textPrimary}
                 >
                   {biometric.type === "face" ? "Face ID" : "Fingerprint"}
-                </StyledText>
-                <StyledText fontSize={12} color={Colors.textTertiary}>
+                </Text>
+                <Text fontSize={12} color={Colors.textTertiary}>
                   Unlock Vela with biometrics
-                </StyledText>
+                </Text>
               </Stack>
               <Switch
                 value={biometric.enabled}
@@ -318,9 +319,9 @@ export default function SecurityScreen() {
             </Stack>
             {!hasPin && (
               <Stack paddingHorizontal={16} paddingBottom={12}>
-                <StyledText fontSize={12} color={Colors.textTertiary}>
+                <Text fontSize={12} color={Colors.textTertiary}>
                   Set up a PIN first to enable biometrics.
-                </StyledText>
+                </Text>
               </Stack>
             )}
           </Stack>
@@ -334,22 +335,22 @@ export default function SecurityScreen() {
         >
           <Stack horizontal alignItems="center" gap={8}>
             <VelaIcon name="shield-check" size={15} color={Colors.success} />
-            <StyledText
+            <Text
               fontSize={13}
               fontWeight="600"
               color={Colors.textPrimary}
             >
               Your data is local
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText
+          <Text
             fontSize={12}
             color={Colors.textSecondary}
             lineHeight={18}
           >
             Even without a PIN, your data never leaves your phone. Vela has no
             internet access.
-          </StyledText>
+          </Text>
         </Stack>
       </StyledScrollView>
     </StyledPage>

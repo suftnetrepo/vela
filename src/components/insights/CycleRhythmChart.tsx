@@ -12,7 +12,7 @@
 import React from 'react'
 import { Dimensions } from 'react-native'
 import { Stack, StyledText } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import Svg, {
   Path, Circle, Line, Text as SvgText,
   Defs, LinearGradient, Stop,
@@ -71,9 +71,9 @@ export function CycleRhythmChart({ cycles }: Props) {
         alignItems="center" gap={10}
         shadowColor="#000" shadowOffset={{ width: 0, height: 2 }}
         shadowOpacity={0.06} shadowRadius={10} elevation={2}>
-        <StyledText fontSize={14} color={Colors.textSecondary} textAlign="center">
+        <Text fontSize={14} color={Colors.textSecondary} textAlign="center">
           Log at least 2 complete cycles to see your rhythm chart.
-        </StyledText>
+        </Text>
       </Stack>
     )
   }
@@ -113,12 +113,12 @@ export function CycleRhythmChart({ cycles }: Props) {
 
       {/* Header */}
       <Stack padding={20} paddingBottom={4} gap={2}>
-        <StyledText fontSize={17} fontWeight="700" color={Colors.textPrimary}>
+        <Text fontSize={17} fontWeight="700" color={Colors.textPrimary}>
           Cycle rhythm
-        </StyledText>
-        <StyledText fontSize={13} color={Colors.textSecondary}>
+        </Text>
+        <Text fontSize={13} color={Colors.textSecondary}>
           Average of the last {completed.length} cycles
-        </StyledText>
+        </Text>
       </Stack>
 
       {/* Chart */}
@@ -229,7 +229,7 @@ export function CycleRhythmChart({ cycles }: Props) {
             <Stack width={10} height={10} borderRadius={5}
               backgroundColor="transparent"
               borderWidth={2} borderColor={color} />
-            <StyledText fontSize={12} color={Colors.textSecondary}>{label}</StyledText>
+            <Text fontSize={12} color={Colors.textSecondary}>{label}</Text>
           </Stack>
         ))}
       </Stack>

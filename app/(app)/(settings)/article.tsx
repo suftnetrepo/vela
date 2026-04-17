@@ -7,6 +7,7 @@ import {
   StyledHeader,
   theme,
 } from "fluent-styles";
+import { Text } from "@/components/text";
 import { router, useLocalSearchParams } from "expo-router";
 import { useColors } from "../../../src/hooks/useColors";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
@@ -127,9 +128,9 @@ export default function ArticleScreen() {
           titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
         />
         <Stack flex={1} alignItems="center" justifyContent="center">
-          <StyledText color={Colors.textSecondary}>
+          <Text color={Colors.textSecondary}>
             Article not found.
-          </StyledText>
+          </Text>
         </Stack>
       </StyledPage>
     );
@@ -175,30 +176,30 @@ export default function ArticleScreen() {
               paddingHorizontal={10}
               paddingVertical={5}
             >
-              <StyledText fontSize={11} fontWeight="700" color={accentColor}>
+              <Text fontSize={11} fontWeight="700" color={accentColor}>
                 {article.category.toUpperCase()}
-              </StyledText>
+              </Text>
             </Stack>
-            <StyledText fontSize={12} color={Colors.textTertiary}>
+            <Text fontSize={12} color={Colors.textTertiary}>
               {article.readTime}
-            </StyledText>
+            </Text>
           </Stack>
 
-          <StyledText
+          <Text
             fontSize={24}
             fontWeight="800"
             color={Colors.textPrimary}
             lineHeight={32}
           >
             {article.title}
-          </StyledText>
-          <StyledText
+          </Text>
+          <Text
             fontSize={15}
             color={Colors.textSecondary}
             lineHeight={23}
           >
             {article.subtitle}
-          </StyledText>
+          </Text>
 
           {/* Divider */}
           <Stack height={2} backgroundColor={Colors.border} borderRadius={1} />
@@ -213,7 +214,7 @@ export default function ArticleScreen() {
                 {parts.map((part, j) => {
                   const isHeading = j === 0 && parts.length > 1;
                   return (
-                    <StyledText
+                    <Text
                       key={j}
                       fontSize={isHeading ? 16 : 15}
                       fontWeight={isHeading ? "700" : "400"}
@@ -223,7 +224,7 @@ export default function ArticleScreen() {
                       lineHeight={isHeading ? 22 : 24}
                     >
                       {part}
-                    </StyledText>
+                    </Text>
                   );
                 })}
               </Stack>
@@ -241,15 +242,15 @@ export default function ArticleScreen() {
         >
           <Stack horizontal alignItems="center" gap={6}>
             <VelaIcon name="info" size={14} color={Colors.warning} />
-            <StyledText
+            <Text
               fontSize={13}
               fontWeight="600"
               color={Colors.textPrimary}
             >
               For information only
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText
+          <Text
             fontSize={12}
             color={Colors.textSecondary}
             lineHeight={18}
@@ -257,7 +258,7 @@ export default function ArticleScreen() {
             This article is for general education only and is not medical
             advice. Always consult a qualified healthcare provider for personal
             medical questions.
-          </StyledText>
+          </Text>
         </Stack>
       </StyledScrollView>
     </StyledPage>

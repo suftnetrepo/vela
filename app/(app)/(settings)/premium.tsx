@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Stack, StyledText, StyledScrollView, StyledPage, StyledPressable, StyledDivider, theme } from 'fluent-styles'
-import { Text } from '../../../src/components/text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../../src/hooks/useColors'
 import { usePremium } from '../../../src/hooks/usePremium'
@@ -56,14 +56,14 @@ export default function PremiumScreen() {
             alignItems="center" justifyContent="center" borderWidth={2} borderColor={Colors.border}>
             <VelaIcon name="check-circle" size={44} color={Colors.primary} />
           </Stack>
-          <StyledText fontSize={22} fontWeight="800" color={Colors.textPrimary} textAlign="center">
+          <Text fontSize={22} fontWeight="800" color={Colors.textPrimary} textAlign="center">
             You're Premium!
-          </StyledText>
-          <StyledText fontSize={15} color={Colors.textSecondary} textAlign="center">
+          </Text>
+          <Text fontSize={15} color={Colors.textSecondary} textAlign="center">
             {premium.plan === 'lifetime'
               ? 'Lifetime access — all features forever.'
               : `Your ${premium.plan} subscription is active.`}
-          </StyledText>
+          </Text>
         </Stack>
       </StyledPage>
     )
@@ -95,18 +95,18 @@ export default function PremiumScreen() {
             alignItems="center" justifyContent="center" borderWidth={2} borderColor={Colors.border}>
             <VelaIcon name="crown" size={44} color={Colors.primary} />
           </Stack>
-          <StyledText fontSize={28} fontWeight="800" color={Colors.textPrimary} textAlign="center">
+          <Text fontSize={28} fontWeight="800" color={Colors.textPrimary} textAlign="center">
             Vela Premium
-          </StyledText>
-          <StyledText fontSize={15} color={Colors.textSecondary} textAlign="center" lineHeight={22}>
+          </Text>
+          <Text fontSize={15} color={Colors.textSecondary} textAlign="center" lineHeight={22}>
             Unlock advanced insights, exports, themes, and more. Support independent, privacy-first development.
-          </StyledText>
+          </Text>
           <Stack backgroundColor={Colors.successLight} borderRadius={20}
             paddingHorizontal={16} paddingVertical={8} horizontal alignItems="center" gap={6}>
             <VelaIcon name="gift" size={14} color={Colors.success} />
-            <StyledText fontSize={13} fontWeight="700" color={Colors.success}>
+            <Text fontSize={13} fontWeight="700" color={Colors.success}>
               7-day free trial
-            </StyledText>
+            </Text>
           </Stack>
         </Stack>
 
@@ -121,8 +121,8 @@ export default function PremiumScreen() {
                 <VelaIcon name={FEATURE_MAPPING[i] || 'gift'} size={20} color={Colors.primary} />
               </Stack>
               <Stack flex={1} gap={2}>
-                <StyledText fontSize={14} fontWeight="700" color={Colors.textPrimary}>{f.title}</StyledText>
-                <StyledText fontSize={12} color={Colors.textSecondary}>{f.description}</StyledText>
+                <Text fontSize={14} fontWeight="700" color={Colors.textPrimary}>{f.title}</Text>
+                <Text fontSize={12} color={Colors.textSecondary}>{f.description}</Text>
               </Stack>
             </Stack>
           ))}
@@ -148,39 +148,39 @@ export default function PremiumScreen() {
                 </Stack>
                 <Stack flex={1} gap={2}>
                   <Stack horizontal alignItems="center" gap={8} flexWrap="wrap">
-                    <StyledText fontSize={16} fontWeight="700" color={Colors.textPrimary}>{p.label}</StyledText>
+                    <Text fontSize={16} fontWeight="700" color={Colors.textPrimary}>{p.label}</Text>
                     {'saving' in p && (
                       <Stack backgroundColor={Colors.primary} borderRadius={8}
                         paddingHorizontal={8} paddingVertical={3}>
-                        <StyledText fontSize={10} fontWeight="800" color={Colors.textInverse}>{(p as any).saving}</StyledText>
+                        <Text fontSize={10} fontWeight="800" color={Colors.textInverse}>{(p as any).saving}</Text>
                       </Stack>
                     )}
                     {isBestValue && (
                       <Stack backgroundColor="#F59E0B" borderRadius={8}
                         paddingHorizontal={8} paddingVertical={3}>
-                        <StyledText fontSize={10} fontWeight="800" color="#fff">BEST VALUE</StyledText>
+                        <Text fontSize={10} fontWeight="800" color="#fff">BEST VALUE</Text>
                       </Stack>
                     )}
                   </Stack>
                   {'trial' in p && (
-                    <StyledText fontSize={12} color={Colors.primary} fontWeight="600">
+                    <Text fontSize={12} color={Colors.primary} fontWeight="600">
                       {(p as any).trial}
-                    </StyledText>
+                    </Text>
                   )}
                   {key === 'LIFETIME' && (
-                    <StyledText fontSize={12} color={Colors.textTertiary}>
+                    <Text fontSize={12} color={Colors.textTertiary}>
                       Pay once, use forever
-                    </StyledText>
+                    </Text>
                   )}
                   {key === 'MONTHLY' && (
-                    <StyledText fontSize={12} color={Colors.textTertiary}>
+                    <Text fontSize={12} color={Colors.textTertiary}>
                       Billed monthly, cancel anytime
-                    </StyledText>
+                    </Text>
                   )}
                 </Stack>
-                <StyledText fontSize={16} fontWeight="800" color={isSelected ? Colors.primaryDark : Colors.textPrimary}>
+                <Text fontSize={16} fontWeight="800" color={isSelected ? Colors.primaryDark : Colors.textPrimary}>
                   {p.price}
-                </StyledText>
+                </Text>
               </StyledPressable>
             )
           })}
@@ -194,21 +194,21 @@ export default function PremiumScreen() {
             shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 4 }}
             shadowOpacity={0.35} shadowRadius={12} elevation={6}>
             <VelaIcon name="crown" size={18} color={Colors.textInverse} />
-            <StyledText fontSize={17} fontWeight="800" color={Colors.textInverse}>
+            <Text fontSize={17} fontWeight="800" color={Colors.textInverse}>
               {selected === 'YEARLY'   ? '🎉 Start Free Trial' :
                selected === 'LIFETIME' ? '⚡ Buy Lifetime'    :
                '🚀 Start Monthly'}
-            </StyledText>
+            </Text>
           </StyledPressable>
           <StyledPressable onPress={premium.restore}>
-            <StyledText fontSize={12} color={Colors.primary} textAlign="center">
+            <Text fontSize={12} color={Colors.primary} textAlign="center">
               Restore purchases
-            </StyledText>
+            </Text>
           </StyledPressable>
           <StyledDivider borderBottomColor={Colors.border} />
-          <StyledText fontSize={11} color={Colors.textTertiary} textAlign="center" lineHeight={16}>
+          <Text fontSize={11} color={Colors.textTertiary} textAlign="center" lineHeight={16}>
             Subscriptions renew automatically. Cancel anytime. Payment charged to your Apple ID at confirmation.
-          </StyledText>
+          </Text>
         </Stack>
       </StyledScrollView>
     </StyledPage>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
 
@@ -16,9 +16,9 @@ export function QuickLogButton({ onPress }: QuickLogButtonProps) {
       shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 4 }}
       shadowOpacity={0.3} shadowRadius={12} elevation={5}>
       <VelaIcon name="edit" size={18} color={Colors.textInverse} />
-      <StyledText fontSize={15} fontWeight="700" color={Colors.textInverse}>
+      <Text fontSize={15} fontWeight="700" color={Colors.textInverse}>
         Log today
-      </StyledText>
+      </Text>
     </StyledPressable>
   )
 }

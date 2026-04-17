@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from './VelaIcon'
 import { APP_CONFIG } from '../../constants/config'
@@ -45,14 +45,14 @@ export function PinPad({ title, subtitle, onComplete, error, loading }: PinPadPr
     <Stack alignItems="center" gap={36} flex={1} justifyContent="center">
       {/* Title */}
       <Stack alignItems="center" gap={8}>
-        <StyledText fontSize={24} fontWeight="800" color={Colors.textPrimary}>
+        <Text fontSize={24} fontWeight="800" color={Colors.textPrimary}>
           {title}
-        </StyledText>
+        </Text>
         {subtitle ? (
-          <StyledText fontSize={14} color={Colors.textSecondary} textAlign="center"
+          <Text fontSize={14} color={Colors.textSecondary} textAlign="center"
             paddingHorizontal={32}>
             {subtitle}
-          </StyledText>
+          </Text>
         ) : null}
       </Stack>
 
@@ -73,10 +73,10 @@ export function PinPad({ title, subtitle, onComplete, error, loading }: PinPadPr
 
       {/* Error */}
       {error ? (
-        <StyledText fontSize={13} color={Colors.error} textAlign="center"
+        <Text fontSize={13} color={Colors.error} textAlign="center"
           paddingHorizontal={32}>
           {error}
-        </StyledText>
+        </Text>
       ) : null}
 
       {/* Keypad */}
@@ -101,13 +101,13 @@ export function PinPad({ title, subtitle, onComplete, error, loading }: PinPadPr
                   {isBackspace ? (
                     <VelaIcon name="close" size={22} color={Colors.textPrimary} />
                   ) : (
-                    <StyledText
+                    <Text
                       fontSize={26}
                       fontWeight="500"
                       color={isEmpty ? 'transparent' : Colors.textPrimary}
                     >
                       {key}
-                    </StyledText>
+                    </Text>
                   )}
                 </StyledPressable>
               )

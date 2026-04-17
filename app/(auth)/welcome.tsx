@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Dimensions } from 'react-native'
 import { Stack, StyledText, StyledPressable, StyledPage } from 'fluent-styles'
-import { Text } from '../../src/components/text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../src/hooks/useColors'
 import { PrivacyBadge } from '../../src/components/shared/PrivacyBadge'

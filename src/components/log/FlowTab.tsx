@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
 
@@ -58,14 +58,14 @@ function SelectTile({
       >
         {icon}
       </Stack>
-      <StyledText
+      <Text
         fontSize={12}
         fontWeight={selected ? '700' : '500'}
         color={selected ? Colors.primaryDark : Colors.textSecondary}
         textAlign="center"
       >
         {label}
-      </StyledText>
+      </Text>
     </StyledPressable>
   )
 }
@@ -85,9 +85,9 @@ function LogSection({ title, children }: { title: string; children: React.ReactN
       shadowRadius={8}
       elevation={1}
     >
-      <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+      <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
         {title}
-      </StyledText>
+      </Text>
       {children}
     </Stack>
   )

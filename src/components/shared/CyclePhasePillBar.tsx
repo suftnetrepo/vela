@@ -16,7 +16,7 @@
 import React from 'react'
 import { Dimensions } from 'react-native'
 import { Stack, StyledText } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import type { CyclePrediction } from '../../algorithm/prediction'
 
@@ -95,15 +95,15 @@ export function CyclePhasePillBar({
     <Stack gap={6}>
       {showLabel && (
         <Stack flexDirection="row" justifyContent="space-between">
-          <StyledText fontSize={11} color={Colors.textTertiary} fontWeight="600">
+          <Text fontSize={11} color={Colors.textTertiary} fontWeight="600">
             Day 1
-          </StyledText>
-          <StyledText fontSize={11} color={Colors.primary} fontWeight="700">
+          </Text>
+          <Text fontSize={11} color={Colors.primary} fontWeight="700">
             Day {currentDay}
-          </StyledText>
-          <StyledText fontSize={11} color={Colors.textTertiary} fontWeight="600">
+          </Text>
+          <Text fontSize={11} color={Colors.textTertiary} fontWeight="600">
             Day {cycle}
-          </StyledText>
+          </Text>
         </Stack>
       )}
       <Stack flexDirection="row" gap={gap} alignItems="center">

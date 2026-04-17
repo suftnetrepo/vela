@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
 import type { VelaIconName } from '../shared/VelaIcon'
@@ -32,9 +32,9 @@ export function CycleStatsCard({ prediction, cycles }: CycleStatsCardProps) {
     <Stack backgroundColor={Colors.surface} borderRadius={20} padding={20}
       shadowColor="#000" shadowOffset={{ width: 0, height: 2 }} shadowOpacity={0.06}
       shadowRadius={10} elevation={2}>
-      <StyledText fontSize={17} fontWeight="700" color={Colors.textPrimary} marginBottom={16}>
+      <Text fontSize={17} fontWeight="700" color={Colors.textPrimary} marginBottom={16}>
         Cycle Stats
-      </StyledText>
+      </Text>
       <Stack horizontal flexWrap="wrap" gap={0}>
         {stats.map((stat, i) => (
           <Stack key={stat.label} width="50%" paddingBottom={12}
@@ -45,13 +45,13 @@ export function CycleStatsCard({ prediction, cycles }: CycleStatsCardProps) {
                   alignItems="center" justifyContent="center">
                   <VelaIcon name={stat.icon} size={15} color={stat.color} />
                 </Stack>
-                <StyledText fontSize={10} color={Colors.textTertiary} fontWeight="700" letterSpacing={0.3}>
+                <Text fontSize={10} color={Colors.textTertiary} fontWeight="700" letterSpacing={0.3}>
                   {stat.label.toUpperCase()}
-                </StyledText>
+                </Text>
               </Stack>
-              <StyledText fontSize={18} fontWeight="800" color={Colors.textPrimary}>
+              <Text fontSize={18} fontWeight="800" color={Colors.textPrimary}>
                 {stat.value}
-              </StyledText>
+              </Text>
             </Stack>
           </Stack>
         ))}

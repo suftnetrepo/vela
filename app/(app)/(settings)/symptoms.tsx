@@ -11,6 +11,7 @@ import {
   theme
 } from 'fluent-styles'
 import { router } from 'expo-router'
+import { Text } from '@/components/text'
 import { useColors } from '../../../src/hooks/useColors'
 import { useRecordsStore } from '../../../src/stores/records.store'
 import { setSymptomVisible, resetSymptomsToDefault } from '../../../src/hooks/useSymptoms'
@@ -47,16 +48,16 @@ function SectionHeader({ label, count }: { label: string; count: number }) {
       paddingTop={20}
       paddingBottom={12}
     >
-      <StyledText fontSize={11} fontWeight="700" color={Colors.textTertiary} letterSpacing={0.6}>
+      <Text fontSize={11} fontWeight="700" color={Colors.textTertiary} letterSpacing={0.6}>
         {label}
-      </StyledText>
+      </Text>
       <Stack
         backgroundColor={Colors.primaryFaint}
         borderRadius={8}
         paddingHorizontal={6}
         paddingVertical={2}
       >
-        <StyledText fontSize={9} fontWeight="700" color={Colors.primary}>{count}</StyledText>
+        <Text fontSize={9} fontWeight="700" color={Colors.primary}>{count}</Text>
       </Stack>
     </Stack>
   )
@@ -74,7 +75,7 @@ function TickBox({ checked, color }: { checked: boolean; color: string }) {
         alignItems="center"
         justifyContent="center"
       >
-        <StyledText fontSize={12} color="#fff">✓</StyledText>
+        <Text fontSize={12} color="#fff">✓</Text>
       </Stack>
     )
   }
@@ -122,22 +123,22 @@ function SymptomRow({
         borderWidth={1}
         borderColor={Colors.border}
       >
-        <StyledText fontSize={20}>{symptom.emoji}</StyledText>
+        <Text fontSize={20}>{symptom.emoji}</Text>
       </Stack>
 
       {/* Label + default indicator */}
       <Stack flex={1} gap={2}>
-        <StyledText
+        <Text
           fontSize={14}
           fontWeight={checked ? '700' : '500'}
           color={Colors.textPrimary}
         >
           {symptom.label}
-        </StyledText>
+        </Text>
         {symptom.defaultVisible && (
-          <StyledText fontSize={10} color={Colors.textTertiary} fontWeight="500">
+          <Text fontSize={10} color={Colors.textTertiary} fontWeight="500">
             Recommended
-          </StyledText>
+          </Text>
         )}
       </Stack>
 
@@ -277,24 +278,24 @@ export default function SymptomsSettingsScreen() {
           borderColor={Colors.border}
         >
           <Stack flex={1} alignItems="center" gap={1}>
-            <StyledText fontSize={20} fontWeight="800" color={Colors.primary}>
+            <Text fontSize={20} fontWeight="800" color={Colors.primary}>
               {checkedCount}
-            </StyledText>
-            <StyledText fontSize={10} fontWeight="600" color={Colors.textTertiary}>Selected</StyledText>
+            </Text>
+            <Text fontSize={10} fontWeight="600" color={Colors.textTertiary}>Selected</Text>
           </Stack>
           <Stack width={1} backgroundColor={Colors.border} marginVertical={3} />
           <Stack flex={1} alignItems="center" gap={1}>
-            <StyledText fontSize={20} fontWeight="800" color={Colors.textSecondary}>
+            <Text fontSize={20} fontWeight="800" color={Colors.textSecondary}>
               {ALL_SYMPTOMS.length - checkedCount}
-            </StyledText>
-            <StyledText fontSize={10} fontWeight="600" color={Colors.textTertiary}>Hidden</StyledText>
+            </Text>
+            <Text fontSize={10} fontWeight="600" color={Colors.textTertiary}>Hidden</Text>
           </Stack>
           <Stack width={1} backgroundColor={Colors.border} marginVertical={3} />
           <Stack flex={1} alignItems="center" gap={1}>
-            <StyledText fontSize={20} fontWeight="800" color={Colors.textTertiary}>
+            <Text fontSize={20} fontWeight="800" color={Colors.textTertiary}>
               {ALL_SYMPTOMS.length}
-            </StyledText>
-            <StyledText fontSize={10} fontWeight="600" color={Colors.textTertiary}>Total</StyledText>
+            </Text>
+            <Text fontSize={10} fontWeight="600" color={Colors.textTertiary}>Total</Text>
           </Stack>
         </Stack>
       </Stack>
@@ -303,7 +304,7 @@ export default function SymptomsSettingsScreen() {
       {loading ? (
         <Stack flex={1} alignItems="center" justifyContent="center" gap={12}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <StyledText fontSize={14} color={Colors.textSecondary}>Loading symptoms…</StyledText>
+          <Text fontSize={14} color={Colors.textSecondary}>Loading symptoms…</Text>
         </Stack>
       ) : (
         <ScrollView
@@ -398,9 +399,9 @@ export default function SymptomsSettingsScreen() {
               borderColor={Colors.border}
             >
               <VelaIcon name="cycle" size={16} color={Colors.textSecondary} />
-              <StyledText fontSize={14} fontWeight="600" color={Colors.textSecondary}>
+              <Text fontSize={14} fontWeight="600" color={Colors.textSecondary}>
                 Reset to recommended
-              </StyledText>
+              </Text>
             </StyledPressable>
           </Stack>
 
@@ -418,12 +419,12 @@ export default function SymptomsSettingsScreen() {
             borderColor={Colors.border}
             marginBottom={12}
           >
-            <StyledText fontSize={16}>💡</StyledText>
-            <StyledText fontSize={12} color={Colors.textSecondary} flex={1} lineHeight={18}>
+            <Text fontSize={16}>💡</Text>
+            <Text fontSize={12} color={Colors.textSecondary} flex={1} lineHeight={18}>
               Changes apply immediately. Symptoms marked{' '}
-              <StyledText fontSize={12} fontWeight="700" color={Colors.primary}>Recommended</StyledText>
+              <Text fontSize={12} fontWeight="700" color={Colors.primary}>Recommended</Text>
               {' '}are pre-selected by Vela as the most useful for cycle tracking.
-            </StyledText>
+            </Text>
           </Stack>
         </ScrollView>
       )}

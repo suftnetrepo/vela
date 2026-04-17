@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Stack, StyledText, StyledPressable, StyledPage } from 'fluent-styles'
-import { Text } from '../../src/components/text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../src/hooks/useColors'
 import { PinPad } from '../../src/components/shared/PinPad'
@@ -72,7 +72,7 @@ export default function LockScreen() {
           alignItems="center" justifyContent="center" borderWidth={2} borderColor={Colors.border}>
           <VelaIcon name="flower" size={34} color={Colors.primary} />
         </Stack>
-        <StyledText fontSize={22} fontWeight="800" color={Colors.textPrimary}>Vela</StyledText>
+        <Text fontSize={22} fontWeight="800" color={Colors.textPrimary}>Vela</Text>
       </Stack>
 
       <Stack flex={1}>
@@ -95,9 +95,9 @@ export default function LockScreen() {
               size={22}
               color={Colors.primary}
             />
-            <StyledText fontSize={14} fontWeight="600" color={Colors.textSecondary}>
+            <Text fontSize={14} fontWeight="600" color={Colors.textSecondary}>
               Use {biometricType === 'face' ? 'Face ID' : 'Fingerprint'}
-            </StyledText>
+            </Text>
           </StyledPressable>
         </Stack>
       )}

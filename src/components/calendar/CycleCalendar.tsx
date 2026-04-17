@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { Dimensions } from 'react-native'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { buildCalendarMap } from '../../algorithm/prediction'
 import type { CyclePrediction, DayMeta } from '../../algorithm/prediction'
@@ -66,13 +66,13 @@ export function CycleCalendar({ prediction, cycles, onDayPress, loggedDates }: C
       {/* Header */}
       <Stack horizontal alignItems="center" justifyContent="space-between" paddingHorizontal={4} paddingBottom={16}>
         <StyledPressable onPress={goBack} padding={8} borderRadius={20}>
-          <StyledText fontSize={18} color={Colors.textSecondary}>‹</StyledText>
+          <Text fontSize={18} color={Colors.textSecondary}>‹</Text>
         </StyledPressable>
-        <StyledText fontSize={17} fontWeight="700" color={Colors.textPrimary}>
+        <Text fontSize={17} fontWeight="700" color={Colors.textPrimary}>
           {formatMonthYear(monthDate)}
-        </StyledText>
+        </Text>
         <StyledPressable onPress={goForward} padding={8} borderRadius={20}>
-          <StyledText fontSize={18} color={Colors.textSecondary}>›</StyledText>
+          <Text fontSize={18} color={Colors.textSecondary}>›</Text>
         </StyledPressable>
       </Stack>
 
@@ -80,9 +80,9 @@ export function CycleCalendar({ prediction, cycles, onDayPress, loggedDates }: C
       <Stack horizontal paddingBottom={8}>
         {DAY_LABELS.map(d => (
           <Stack key={d} flex={1} alignItems="center">
-            <StyledText fontSize={11} color={Colors.textTertiary} fontWeight="600">
+            <Text fontSize={11} color={Colors.textTertiary} fontWeight="600">
               {d}
-            </StyledText>
+            </Text>
           </Stack>
         ))}
       </Stack>
@@ -119,13 +119,13 @@ export function CycleCalendar({ prediction, cycles, onDayPress, loggedDates }: C
                   borderWidth={style.ring ? 2 : 0}
                   borderColor={style.ring ? Colors.dayToday : 'transparent'}
                 >
-                  <StyledText
+                  <Text
                     fontSize={13}
                     fontWeight={meta?.isToday ? '800' : '500'}
                     color={style.textColor}
                   >
                     {format(date, 'd')}
-                  </StyledText>
+                  </Text>
                   {/* Log dot */}
                   {hasLog && !meta?.isPeriod && (
                     <Stack
@@ -154,7 +154,7 @@ export function CycleCalendar({ prediction, cycles, onDayPress, loggedDates }: C
         ].map(({ color, label }) => (
           <Stack key={label} horizontal alignItems="center" gap={4}>
             <Stack width={10} height={10} borderRadius={5} backgroundColor={color} />
-            <StyledText fontSize={11} color={Colors.textTertiary}>{label}</StyledText>
+            <Text fontSize={11} color={Colors.textTertiary}>{label}</Text>
           </Stack>
         ))}
       </Stack>

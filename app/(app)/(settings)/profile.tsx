@@ -12,6 +12,7 @@ import {
   theme,
 } from "fluent-styles";
 import { router } from "expo-router";
+import { Text } from "@/components/text";
 import { useColors } from "../../../src/hooks/useColors";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
 import { useSettingsStore } from "../../../src/stores/settings.store";
@@ -68,17 +69,17 @@ function PrefRow({
         />
       </Stack>
       <Stack flex={1} gap={2}>
-        <StyledText
+        <Text
           fontSize={15}
           fontWeight="600"
           color={destructive ? Colors.error : Colors.textPrimary}
         >
           {label}
-        </StyledText>
+        </Text>
         {subtitle && (
-          <StyledText fontSize={12} color={Colors.textTertiary}>
+          <Text fontSize={12} color={Colors.textTertiary}>
             {subtitle}
-          </StyledText>
+          </Text>
         )}
       </Stack>
       {right !== undefined ? (
@@ -100,7 +101,7 @@ function SectionCard({
   const Colors = useColors();
   return (
     <Stack gap={0}>
-      <StyledText
+      <Text
         fontSize={12}
         fontWeight="700"
         color={Colors.textTertiary}
@@ -109,7 +110,7 @@ function SectionCard({
         paddingBottom={8}
       >
         {title}
-      </StyledText>
+      </Text>
       <Stack
         backgroundColor={Colors.surface}
         borderRadius={20}
@@ -235,16 +236,16 @@ export default function ProfileScreen() {
               <VelaIcon name="flower" size={30} color={Colors.primary} />
             </Stack>
             <Stack flex={1} gap={4}>
-              <StyledText
+              <Text
                 fontSize={18}
                 fontWeight="800"
                 color={Colors.textPrimary}
               >
                 My Profile
-              </StyledText>
-              <StyledText fontSize={13} color={Colors.textSecondary}>
+              </Text>
+              <Text fontSize={13} color={Colors.textSecondary}>
                 Offline · Local data only
-              </StyledText>
+              </Text>
               {isPremium ? (
                 <Stack
                   horizontal
@@ -257,13 +258,13 @@ export default function ProfileScreen() {
                   alignSelf="flex-start"
                 >
                   <VelaIcon name="crown" size={12} color={Colors.primary} />
-                  <StyledText
+                  <Text
                     fontSize={11}
                     fontWeight="700"
                     color={Colors.primaryDark}
                   >
                     Premium
-                  </StyledText>
+                  </Text>
                 </Stack>
               ) : (
                 <StyledPressable
@@ -278,13 +279,13 @@ export default function ProfileScreen() {
                   alignSelf="flex-start"
                 >
                   <VelaIcon name="crown" size={12} color={Colors.primary} />
-                  <StyledText
+                  <Text
                     fontSize={11}
                     fontWeight="700"
                     color={Colors.primaryDark}
                   >
                     Upgrade to Premium
-                  </StyledText>
+                  </Text>
                 </StyledPressable>
               )}
             </Stack>
@@ -312,13 +313,13 @@ export default function ProfileScreen() {
                 paddingHorizontal={12}
                 paddingVertical={6}
               >
-                <StyledText
+                <Text
                   fontSize={13}
                   fontWeight="700"
                   color={Colors.primaryDark}
                 >
                   {weightUnit.toUpperCase()}
-                </StyledText>
+                </Text>
               </StyledPressable>
             }
           />
@@ -347,13 +348,13 @@ export default function ProfileScreen() {
                 paddingHorizontal={12}
                 paddingVertical={6}
               >
-                <StyledText
+                <Text
                   fontSize={13}
                   fontWeight="700"
                   color={Colors.primaryDark}
                 >
                   {tempUnit === "celsius" ? "°C" : "°F"}
-                </StyledText>
+                </Text>
               </StyledPressable>
             }
           />
@@ -380,13 +381,13 @@ export default function ProfileScreen() {
                 paddingHorizontal={12}
                 paddingVertical={6}
               >
-                <StyledText
+                <Text
                   fontSize={13}
                   fontWeight="700"
                   color={Colors.primaryDark}
                 >
                   {firstDay === "monday" ? "Mon" : "Sun"}
-                </StyledText>
+                </Text>
               </StyledPressable>
             }
           />
@@ -546,12 +547,12 @@ export default function ProfileScreen() {
           >
             <VelaIcon name="flower" size={20} color={Colors.primary} />
           </Stack>
-          <StyledText fontSize={12} color={Colors.textTertiary}>
+          <Text fontSize={12} color={Colors.textTertiary}>
             Vela v1.0.0
-          </StyledText>
-          <StyledText fontSize={11} color={Colors.textTertiary}>
+          </Text>
+          <Text fontSize={11} color={Colors.textTertiary}>
             No internet · No tracking · Your data only
-          </StyledText>
+          </Text>
         </Stack>
       </StyledScrollView>
     </StyledPage>

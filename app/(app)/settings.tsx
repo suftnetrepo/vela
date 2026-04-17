@@ -5,6 +5,7 @@ import {
   theme,
 } from 'fluent-styles'
 import { router } from 'expo-router'
+import { Text } from '@/components/text'
 import { useColors } from '../../src/hooks/useColors'
 import { useSettings } from '../../src/hooks/useSettings'
 import { VelaIcon } from '../../src/components/shared/VelaIcon'
@@ -28,14 +29,14 @@ function MenuRow({
         <VelaIcon name={icon} size={19} color={destructive ? Colors.error : Colors.primary} />
       </Stack>
       <Stack flex={1} gap={2}>
-        <StyledText fontSize={15} fontWeight="600"
-          color={destructive ? Colors.error : Colors.textPrimary}>{label}</StyledText>
-        {subtitle && <StyledText fontSize={12} color={Colors.textTertiary}>{subtitle}</StyledText>}
+        <Text fontSize={15} fontWeight="600"
+          color={destructive ? Colors.error : Colors.textPrimary}>{label}</Text>
+        {subtitle && <Text fontSize={12} color={Colors.textTertiary}>{subtitle}</Text>}
       </Stack>
       {badge && (
         <Stack backgroundColor={Colors.primary} borderRadius={10}
           paddingHorizontal={8} paddingVertical={3} marginRight={6}>
-          <StyledText fontSize={10} fontWeight="700" color={Colors.textInverse}>{badge}</StyledText>
+          <Text fontSize={10} fontWeight="700" color={Colors.textInverse}>{badge}</Text>
         </Stack>
       )}
       {onPress && <VelaIcon name="chevron-right" size={16} color={Colors.textTertiary} />}
@@ -47,8 +48,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   const Colors = useColors()
   return (
     <Stack gap={8}>
-      <StyledText fontSize={12} fontWeight="700" color={Colors.textTertiary}
-        letterSpacing={0.6} paddingHorizontal={4}>{title}</StyledText>
+      <Text fontSize={12} fontWeight="700" color={Colors.textTertiary}
+        letterSpacing={0.6} paddingHorizontal={4}>{title}</Text>
       <Stack backgroundColor={Colors.surface} borderRadius={20} overflow="hidden"
         shadowColor="#000" shadowOffset={{ width: 0, height: 1 }}
         shadowOpacity={0.05} shadowRadius={8} elevation={1}>
@@ -84,16 +85,16 @@ export default function SettingsScreen() {
             <VelaIcon name="flower" size={28} color={Colors.primary} />
           </Stack>
           <Stack flex={1} gap={4}>
-            <StyledText fontSize={17} fontWeight="800" color={Colors.textPrimary}>My Account</StyledText>
-            <StyledText fontSize={13} color={Colors.textSecondary}>Preferences · Units · Privacy</StyledText>
+            <Text fontSize={17} fontWeight="800" color={Colors.textPrimary}>My Account</Text>
+            <Text fontSize={13} color={Colors.textSecondary}>Preferences · Units · Privacy</Text>
             {settings.isPremium ? (
               <Stack horizontal alignItems="center" gap={5} backgroundColor={Colors.primaryFaint}
                 borderRadius={8} paddingHorizontal={8} paddingVertical={3} alignSelf="flex-start">
                 <VelaIcon name="crown" size={11} color={Colors.primary} />
-                <StyledText fontSize={11} fontWeight="700" color={Colors.primaryDark}>Premium</StyledText>
+                <Text fontSize={11} fontWeight="700" color={Colors.primaryDark}>Premium</Text>
               </Stack>
             ) : (
-              <StyledText fontSize={12} color={Colors.textTertiary}>Free plan</StyledText>
+              <Text fontSize={12} color={Colors.textTertiary}>Free plan</Text>
             )}
           </Stack>
           <VelaIcon name="chevron-right" size={18} color={Colors.textTertiary} />
@@ -111,12 +112,12 @@ export default function SettingsScreen() {
               <VelaIcon name="crown" size={24} color={Colors.textInverse} />
             </Stack>
             <Stack flex={1} gap={3}>
-              <StyledText fontSize={16} fontWeight="800" color={Colors.textInverse}>Unlock Premium</StyledText>
-              <StyledText fontSize={12} color="rgba(255,255,255,0.8)">Partner sharing · Reports · All themes</StyledText>
+              <Text fontSize={16} fontWeight="800" color={Colors.textInverse}>Unlock Premium</Text>
+              <Text fontSize={12} color="rgba(255,255,255,0.8)">Partner sharing · Reports · All themes</Text>
             </Stack>
             <Stack backgroundColor="rgba(255,255,255,0.22)" borderRadius={12}
               paddingHorizontal={12} paddingVertical={6}>
-              <StyledText fontSize={11} fontWeight="700" color={Colors.textInverse}>Free trial</StyledText>
+              <Text fontSize={11} fontWeight="700" color={Colors.textInverse}>Free trial</Text>
             </Stack>
           </StyledPressable>
         )}
@@ -176,7 +177,7 @@ export default function SettingsScreen() {
 
         <PrivacyBadge />
         <Stack alignItems="center" paddingTop={4} gap={3}>
-          <StyledText fontSize={11} color={Colors.textTertiary}>Vela v1.0.0 · No internet · No analytics</StyledText>
+          <Text fontSize={11} color={Colors.textTertiary}>Vela v1.0.0 · No internet · No analytics</Text>
         </Stack>
       </StyledScrollView>
     </StyledPage>

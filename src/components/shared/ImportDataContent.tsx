@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native'
 import * as DocumentPicker from 'expo-document-picker'
 import * as FileSystem from 'expo-file-system'
 import { Stack, StyledText, StyledPressable, StyledTextInput } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { toastService, loaderService, dialogueService } from 'fluent-styles'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from './VelaIcon'
@@ -158,16 +158,16 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24 }}
     >
-      <StyledText fontSize={13} color={Colors.textTertiary} textAlign="center" marginBottom={20}>
+      <Text fontSize={13} color={Colors.textTertiary} textAlign="center" marginBottom={20}>
         Paste an export code from another device or pick the .json file you exported
-      </StyledText>
+      </Text>
 
       {/* Paste code section */}
       <Stack gap={12} marginBottom={20}>
-        <StyledText fontSize={12} fontWeight="700" color={Colors.textTertiary} letterSpacing={0.5}>
+        <Text fontSize={12} fontWeight="700" color={Colors.textTertiary} letterSpacing={0.5}>
           PASTE CODE
-        </StyledText>
-        <StyledTextInput
+        </Text>
+        <TextInput
           variant="filled"
           placeholder="Paste export code here…"
           value={code}
@@ -184,9 +184,9 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
         {error ? (
           <Stack horizontal alignItems="center" gap={8}>
             <VelaIcon name="alert-circle" size={14} color={Colors.error} />
-            <StyledText fontSize={12} color={Colors.error} fontWeight="600" flex={1}>
+            <Text fontSize={12} color={Colors.error} fontWeight="600" flex={1}>
               {error}
-            </StyledText>
+            </Text>
           </Stack>
         ) : null}
       </Stack>
@@ -201,29 +201,29 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
           marginBottom={16}
         >
           <Stack gap={4}>
-            <StyledText fontSize={13} fontWeight="600" color={Colors.textPrimary}>
+            <Text fontSize={13} fontWeight="600" color={Colors.textPrimary}>
               Ready to import:
-            </StyledText>
+            </Text>
             {summary.cycles > 0 && (
               <Stack horizontal alignItems="center" gap={8}>
                 <VelaIcon name="cycle" size={14} color={Colors.primary} />
-                <StyledText fontSize={12} color={Colors.textPrimary}>
+                <Text fontSize={12} color={Colors.textPrimary}>
                   {summary.cycles} cycle{summary.cycles !== 1 ? 's' : ''}
-                </StyledText>
+                </Text>
               </Stack>
             )}
             {summary.logs > 0 && (
               <Stack horizontal alignItems="center" gap={8}>
                 <VelaIcon name="activity" size={14} color={Colors.primary} />
-                <StyledText fontSize={12} color={Colors.textPrimary}>
+                <Text fontSize={12} color={Colors.textPrimary}>
                   {summary.logs} log{summary.logs !== 1 ? 's' : ''} ({summary.symptoms} symptoms)
-                </StyledText>
+                </Text>
               </Stack>
             )}
             {summary.dateRange && (
-              <StyledText fontSize={12} color={Colors.textSecondary}>
+              <Text fontSize={12} color={Colors.textSecondary}>
                 📅 {summary.dateRange}
-              </StyledText>
+              </Text>
             )}
           </Stack>
         </Stack>
@@ -243,17 +243,17 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
           disabled={!code.trim()}
         >
           <VelaIcon name="upload" size={18} color="#fff" />
-          <StyledText fontSize={15} fontWeight="700" color="#fff">
+          <Text fontSize={15} fontWeight="700" color="#fff">
             Import from code
-          </StyledText>
+          </Text>
         </StyledPressable>
 
         {/* Divider */}
         <Stack horizontal alignItems="center" gap={10} marginVertical={4}>
           <Stack flex={1} height={1} backgroundColor={Colors.border} />
-          <StyledText fontSize={12} color={Colors.textTertiary}>
+          <Text fontSize={12} color={Colors.textTertiary}>
             or
-          </StyledText>
+          </Text>
           <Stack flex={1} height={1} backgroundColor={Colors.border} />
         </Stack>
 
@@ -270,9 +270,9 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
           onPress={handlePickFile}
         >
           <VelaIcon name="file" size={18} color={Colors.primary} />
-          <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+          <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
             Pick .json file
-          </StyledText>
+          </Text>
         </StyledPressable>
       </Stack>
 
@@ -286,9 +286,9 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
       >
         <Stack horizontal gap={8} alignItems="flex-start">
           <VelaIcon name="info" size={16} color={Colors.primary} style={{ marginTop: 2 }} />
-          <StyledText fontSize={12} color={Colors.textPrimary} lineHeight={18} flex={1}>
-            <StyledText fontWeight="600">Privacy</StyledText>: Only your cycle, logs, and settings are imported. Personal data like PIN and biometric settings are kept separate.
-          </StyledText>
+          <Text fontSize={12} color={Colors.textPrimary} lineHeight={18} flex={1}>
+            <Text fontWeight="600">Privacy</Text>: Only your cycle, logs, and settings are imported. Personal data like PIN and biometric settings are kept separate.
+          </Text>
         </Stack>
       </Stack>
     </ScrollView>

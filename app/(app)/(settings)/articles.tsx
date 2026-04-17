@@ -8,6 +8,7 @@ import {
   theme,
 } from "fluent-styles";
 import { router, useLocalSearchParams } from "expo-router";
+import { Text } from "@/components/text";
 
 import { useColors } from "../../../src/hooks/useColors";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
@@ -163,34 +164,34 @@ function ArticleCard({
             paddingHorizontal={8}
             paddingVertical={3}
           >
-            <StyledText
+            <Text
               fontSize={10}
               fontWeight="700"
               color={iconColors[article.category] ?? Colors.primary}
             >
               {article.category.toUpperCase()}
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText fontSize={11} color={Colors.textTertiary}>
+          <Text fontSize={11} color={Colors.textTertiary}>
             {article.readTime}
-          </StyledText>
+          </Text>
         </Stack>
-        <StyledText
+        <Text
           fontSize={14}
           fontWeight="700"
           color={Colors.textPrimary}
           lineHeight={20}
         >
           {article.title}
-        </StyledText>
-        <StyledText
+        </Text>
+        <Text
           fontSize={12}
           color={Colors.textSecondary}
           lineHeight={17}
           numberOfLines={2}
         >
           {article.subtitle}
-        </StyledText>
+        </Text>
       </Stack>
       <VelaIcon name="chevron-right" size={16} color={Colors.textTertiary} />
     </StyledPressable>
@@ -244,22 +245,22 @@ export default function ArticlesScreen() {
         >
           <Stack horizontal alignItems="center" gap={10}>
             <VelaIcon name="phase-fertile" size={24} color={Colors.primary} />
-            <StyledText
+            <Text
               fontSize={16}
               fontWeight="800"
               color={Colors.textPrimary}
             >
               Understand your body
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText
+          <Text
             fontSize={13}
             color={Colors.textSecondary}
             lineHeight={20}
           >
             Evidence-based articles written to help you understand your cycle,
             fertility, and health. All content is stored offline.
-          </StyledText>
+          </Text>
         </Stack>
 
         {ARTICLES.map((article) => (

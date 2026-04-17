@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { FLOW_LEVELS } from '../../constants/moods'
 import { VelaIcon } from '../shared/VelaIcon'
@@ -17,7 +17,7 @@ export function FlowSelector({ value, onChange }: FlowSelectorProps) {
     <Stack gap={12}>
       <Stack horizontal alignItems="center" gap={8}>
         <VelaIcon name="drop" size={17} color={Colors.primary} />
-        <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>Flow</StyledText>
+        <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>Flow</Text>
       </Stack>
       <Stack horizontal gap={8} flexWrap="wrap">
         {FLOW_LEVELS.map(f => {
@@ -35,9 +35,9 @@ export function FlowSelector({ value, onChange }: FlowSelectorProps) {
               alignItems="center"
               gap={4}
             >
-              <StyledText fontSize={13} fontWeight="600" color={isActive ? Colors.textInverse : Colors.textSecondary}>
+              <Text fontSize={13} fontWeight="600" color={isActive ? Colors.textInverse : Colors.textSecondary}>
                 {f.label}
-              </StyledText>
+              </Text>
               {f.drops > 0 && (
                 <Stack horizontal gap={2}>
                   {Array.from({ length: f.drops }).map((_, i) => (

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledScrollView, StyledPage, theme } from 'fluent-styles'
-import { Text } from '../../../src/components/text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../../src/hooks/useColors'
 import { PremiumGate } from '../../../src/components/shared/PremiumGate'
@@ -59,12 +59,12 @@ export default function PregnancyScreen() {
               >
                 <VelaIcon name="baby" size={32} color={Colors.primary} />
               </Stack>
-              <StyledText fontSize={18} fontWeight="800" color={Colors.textPrimary} textAlign="center">
+              <Text fontSize={18} fontWeight="800" color={Colors.textPrimary} textAlign="center">
                 Pregnancy Tracking
-              </StyledText>
-              <StyledText fontSize={13} color={Colors.textSecondary} textAlign="center" lineHeight={20}>
+              </Text>
+              <Text fontSize={13} color={Colors.textSecondary} textAlign="center" lineHeight={20}>
                 Monitor your pregnancy journey with specialized health insights and tracking tools.
-              </StyledText>
+              </Text>
             </Stack>
 
             <Stack
@@ -79,12 +79,12 @@ export default function PregnancyScreen() {
               elevation={1}
             >
               <Stack gap={8}>
-                <StyledText fontSize={14} fontWeight="700" color={Colors.textPrimary}>
+                <Text fontSize={14} fontWeight="700" color={Colors.textPrimary}>
                   🤰 Coming Soon
-                </StyledText>
-                <StyledText fontSize={13} color={Colors.textSecondary} lineHeight={20}>
+                </Text>
+                <Text fontSize={13} color={Colors.textSecondary} lineHeight={20}>
                   Pregnancy Mode features are currently being developed. Check back soon for updates on pregnancy tracking, due date calculation, and postpartum support.
-                </StyledText>
+                </Text>
               </Stack>
             </Stack>
           </Stack>

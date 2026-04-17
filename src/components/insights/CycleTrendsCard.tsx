@@ -8,7 +8,7 @@
 
 import React from 'react'
 import { Stack, StyledText, StyledPressable, StyledCard, theme } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
 import { CyclePhasePillBar } from '../shared/CyclePhasePillBar'
@@ -37,12 +37,12 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
       <Stack flexDirection="row" alignItems="center" justifyContent="space-between"
         paddingHorizontal={20} paddingTop={20} paddingBottom={16}>
         <Stack gap={2}>
-          <StyledText fontSize={18} fontWeight="800" color={Colors.textPrimary}>
+          <Text fontSize={18} fontWeight="800" color={Colors.textPrimary}>
             Cycle trends
-          </StyledText>
-          <StyledText fontSize={13} color={Colors.textSecondary}>
+          </Text>
+          <Text fontSize={13} color={Colors.textSecondary}>
             Average of the last 7 cycles
-          </StyledText>
+          </Text>
         </Stack>
         {onPress && (
           <StyledPressable onPress={onPress} padding={4}>
@@ -58,12 +58,12 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
         <Stack flex={1} backgroundColor={Colors.surfaceAlt} borderRadius={20} padding={18} gap={10}
           position="relative" overflow="hidden">
           <Stack gap={4}>
-            <StyledText fontSize={28} fontWeight="800" color={Colors.textPrimary}>
+            <Text fontSize={28} fontWeight="800" color={Colors.textPrimary}>
               {prediction.averagePeriodLength} days
-            </StyledText>
-            <StyledText fontSize={13} color={Colors.textPrimary}>
+            </Text>
+            <Text fontSize={13} color={Colors.textPrimary}>
               Avg. period length
-            </StyledText>
+            </Text>
           </Stack>
           {/* Icon top-right */}
           <Stack position="absolute" top={14} right={14}
@@ -80,12 +80,12 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
         <Stack flex={1} backgroundColor={Colors.surfaceAlt} borderRadius={20} padding={18} gap={10}
           position="relative" overflow="hidden">
           <Stack gap={4}>
-            <StyledText fontSize={28} fontWeight="800" color={Colors.textPrimary}>
+            <Text fontSize={28} fontWeight="800" color={Colors.textPrimary}>
               {prediction.averageCycleLength} days
-            </StyledText>
-            <StyledText fontSize={13} color={Colors.textPrimary}>
+            </Text>
+            <Text fontSize={13} color={Colors.textPrimary}>
               Avg. cycle length
-            </StyledText>
+            </Text>
           </Stack>
           {/* Icon top-right */}
           <Stack position="absolute" top={14} right={14}
@@ -105,20 +105,20 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
       {/* Current cycle section */}
       <Stack padding={20} gap={10}>
         <Stack gap={2}>
-          <StyledText fontSize={16} fontWeight="700" color={Colors.textPrimary}>
+          <Text fontSize={16} fontWeight="700" color={Colors.textPrimary}>
             Current cycle
-          </StyledText>
+          </Text>
           <Stack flexDirection="row" alignItems="center" gap={8}>
-            <StyledText fontSize={14} color={Colors.textSecondary}>
+            <Text fontSize={14} color={Colors.textSecondary}>
               {currentDay} days
-            </StyledText>
+            </Text>
             {startedText && (
               <>
                 <Stack width={3} height={3} borderRadius={2}
                   backgroundColor={Colors.textTertiary} />
-                <StyledText fontSize={14} color={Colors.textSecondary}>
+                <Text fontSize={14} color={Colors.textSecondary}>
                   {startedText}
-                </StyledText>
+                </Text>
               </>
             )}
           </Stack>

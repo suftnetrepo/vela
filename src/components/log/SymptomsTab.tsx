@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { Stack, StyledText, StyledPressable, StyledTextInput, Collapse } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { useSymptoms } from '../../hooks/useSymptoms'
@@ -53,11 +53,11 @@ function SymptomChip({
         <VelaIcon name={icon} size={26}
           color={selected ? Colors.primary : Colors.textSecondary} />
       </Stack>
-      <StyledText fontSize={11} fontWeight={selected ? '700' : '400'}
+      <Text fontSize={11} fontWeight={selected ? '700' : '400'}
         color={selected ? Colors.primaryDark : Colors.textSecondary}
         textAlign="center" numberOfLines={2}>
         {label}
-      </StyledText>
+      </Text>
     </StyledPressable>
   )
 }
@@ -105,7 +105,7 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
     <Stack gap={12}>
 
       {/* ── Search ───────────────────────────────────────────────────────── */}
-      <StyledTextInput
+      <TextInput
         variant="filled"
         placeholder="Search symptoms…"
         value={search}
@@ -128,13 +128,13 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
           borderWidth={1}
           borderColor={Colors.border}
         >
-          <StyledText fontSize={13} fontWeight="600" color={Colors.primaryDark}>
+          <Text fontSize={13} fontWeight="600" color={Colors.primaryDark}>
             {totalSelected} item{totalSelected > 1 ? 's' : ''} selected
-          </StyledText>
+          </Text>
           <StyledPressable onPress={() => onChange([])}>
-            <StyledText fontSize={12} color={Colors.primary} fontWeight="600">
+            <Text fontSize={12} color={Colors.primary} fontWeight="600">
               Clear all
-            </StyledText>
+            </Text>
           </StyledPressable>
         </Stack>
       )}
@@ -143,23 +143,23 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
       {categoriesToShow.length === 0 && loading ? (
         <Stack alignItems="center" paddingVertical={32} gap={12}>
           <ActivityIndicator size="small" color={Colors.primary} />
-          <StyledText fontSize={13} color={Colors.textSecondary}>
+          <Text fontSize={13} color={Colors.textSecondary}>
             Loading symptoms…
-          </StyledText>
+          </Text>
         </Stack>
       ) : categoriesToShow.length === 0 && search.trim() ? (
         <Stack alignItems="center" paddingVertical={32} gap={10}>
           <VelaIcon name="search" size={28} color={Colors.textTertiary} />
-          <StyledText fontSize={14} color={Colors.textSecondary}>
+          <Text fontSize={14} color={Colors.textSecondary}>
             No symptoms match "{search}"
-          </StyledText>
+          </Text>
         </Stack>
       ) : categoriesToShow.length === 0 ? (
         <Stack alignItems="center" paddingVertical={32} gap={10}>
           <VelaIcon name="activity" size={28} color={Colors.textTertiary} />
-          <StyledText fontSize={14} color={Colors.textSecondary}>
+          <Text fontSize={14} color={Colors.textSecondary}>
             No symptoms enabled
-          </StyledText>
+          </Text>
           <StyledPressable
             onPress={() => router.push('/(app)/(settings)/symptoms')}
             paddingHorizontal={12}
@@ -167,9 +167,9 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
             borderRadius={8}
             backgroundColor={Colors.primaryFaint}
           >
-            <StyledText fontSize={12} fontWeight="600" color={Colors.primary}>
+            <Text fontSize={12} fontWeight="600" color={Colors.primary}>
               Manage symptoms
-            </StyledText>
+            </Text>
           </StyledPressable>
         </Stack>
       ) : (

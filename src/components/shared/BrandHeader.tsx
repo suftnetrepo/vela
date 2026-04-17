@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { Stack, StyledText } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { VelaIcon } from './VelaIcon'
 
 interface BrandHeaderProps {
@@ -50,14 +50,14 @@ export function BrandHeader({
         gap={horizontalGap}
       >
         <VelaIcon name="flower" size={iconSize} color={color} />
-        <StyledText
+        <Text
           fontSize={fontSize}
           fontWeight={fontWeight}
           color={color}
           letterSpacing={-0.4}
         >
           Vela
-        </StyledText>
+        </Text>
       </Stack>
     )
   }
@@ -66,14 +66,14 @@ export function BrandHeader({
   return (
     <Stack alignItems="center" gap={spacing}>
       <VelaIcon name="flower" size={iconSize} color={color} />
-      <StyledText
+      <Text
         fontSize={fontSize}
         fontWeight={fontWeight}
         color={color}
         letterSpacing={-0.4}
       >
         Vela
-      </StyledText>
+      </Text>
     </Stack>
   )
 }

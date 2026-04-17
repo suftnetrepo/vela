@@ -6,6 +6,7 @@ import {
   StyledSpacer,
 } from 'fluent-styles'
 import { router, useLocalSearchParams } from 'expo-router'
+import { Text } from '@/components/text'
 import { useColors } from '../../src/hooks/useColors'
 import { useDailyLog } from '../../src/hooks/useDailyLog'
 import { useCycles } from '../../src/hooks/useCycles'
@@ -294,9 +295,9 @@ export default function LogScreen() {
           elevation={5}
         >
           <VelaIcon name="check-circle" size={20} color={Colors.textInverse} />
-          <StyledText fontSize={17} fontWeight="800" color={Colors.textInverse}>
+          <Text fontSize={17} fontWeight="800" color={Colors.textInverse}>
             {saving ? 'Saving…' : 'Save'}
-          </StyledText>
+          </Text>
         </StyledPressable>
       </Stack>
     </StyledPage>

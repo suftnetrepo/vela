@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from './VelaIcon'
 
@@ -16,9 +16,9 @@ export function PrivacyBadge({ compact }: PrivacyBadgeProps) {
       <Stack horizontal alignItems="center" gap={6} backgroundColor={Colors.successLight}
         borderRadius={20} paddingHorizontal={12} paddingVertical={6}>
         <VelaIcon name="shield-check" size={13} color={Colors.success} />
-        <StyledText fontSize={11} color={Colors.success} fontWeight="600">
+        <Text fontSize={11} color={Colors.success} fontWeight="600">
           Stored on device only
-        </StyledText>
+        </Text>
       </Stack>
     )
   }
@@ -30,14 +30,14 @@ export function PrivacyBadge({ compact }: PrivacyBadgeProps) {
           alignItems="center" justifyContent="center">
           <VelaIcon name="shield-check" size={22} color={Colors.success} />
         </Stack>
-        <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+        <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
           Your data stays on your phone
-        </StyledText>
+        </Text>
       </Stack>
-      <StyledText fontSize={13} color={Colors.textSecondary} lineHeight={20}>
+      <Text fontSize={13} color={Colors.textSecondary} lineHeight={20}>
         Vela never connects to the internet. No accounts, no analytics, no data sharing — ever.
         Your cycle data belongs to you, and only you.
-      </StyledText>
+      </Text>
     </Stack>
   )
 }

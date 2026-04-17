@@ -9,6 +9,7 @@ import {
   Switch,
 } from "fluent-styles";
 import { router } from "expo-router";
+import { Text } from "@/components/text";
 import { useColors } from "../../../src/hooks/useColors";
 import { useSettings } from "../../../src/hooks/useSettings";
 import { settingsService } from "../../../src/services/settings.service";
@@ -79,13 +80,13 @@ export default function NotificationsScreen() {
       gap={12}
     >
       <Stack flex={1} gap={2}>
-        <StyledText fontSize={15} fontWeight="600" color={Colors.textPrimary}>
+        <Text fontSize={15} fontWeight="600" color={Colors.textPrimary}>
           {label}
-        </StyledText>
+        </Text>
         {subtitle && (
-          <StyledText fontSize={12} color={Colors.textTertiary}>
+          <Text fontSize={12} color={Colors.textTertiary}>
             {subtitle}
-          </StyledText>
+          </Text>
         )}
       </Stack>
       <Switch
@@ -156,14 +157,14 @@ export default function NotificationsScreen() {
               elevation={1}
             >
               <Stack paddingHorizontal={16} paddingTop={14} paddingBottom={4}>
-                <StyledText
+                <Text
                   fontSize={12}
                   fontWeight="700"
                   color={Colors.textTertiary}
                   letterSpacing={0.5}
                 >
                   REMINDERS
-                </StyledText>
+                </Text>
               </Stack>
               <NotifRow
                 label="Period reminder"
@@ -203,22 +204,22 @@ export default function NotificationsScreen() {
         >
           <Stack horizontal alignItems="center" gap={8}>
             <VelaIcon name="shield-check" size={15} color={Colors.info} />
-            <StyledText
+            <Text
               fontSize={13}
               fontWeight="600"
               color={Colors.textPrimary}
             >
               Fully private
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText
+          <Text
             fontSize={12}
             color={Colors.textSecondary}
             lineHeight={18}
           >
             Notifications are scheduled locally on your device. No data leaves
             your phone.
-          </StyledText>
+          </Text>
         </Stack>
       </StyledScrollView>
     </StyledPage>

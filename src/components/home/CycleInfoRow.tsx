@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Stack, StyledText, StyledScrollView, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
@@ -98,13 +98,13 @@ export function CycleInfoRow({ prediction }: CycleInfoRowProps) {
         >
           <Stack alignItems="center" gap={4}>
             <VelaIcon name="cycle" size={20} color={Colors.primary} />
-            <StyledText fontSize={18} fontWeight="800" color={Colors.textPrimary}>
+            <Text fontSize={18} fontWeight="800" color={Colors.textPrimary}>
               {dayDisplay}
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText fontSize={11} fontWeight="600" color={Colors.textSecondary}>
+          <Text fontSize={11} fontWeight="600" color={Colors.textSecondary}>
             Day of cycle
-          </StyledText>
+          </Text>
         </StyledPressable>
 
         {/* Card 2: Current phase */}
@@ -122,13 +122,13 @@ export function CycleInfoRow({ prediction }: CycleInfoRowProps) {
         >
           <Stack alignItems="center" gap={4}>
             <VelaIcon name={phaseIcon as any} size={20} color={Colors.primary} />
-            <StyledText fontSize={13} fontWeight="600" color={Colors.textPrimary} textAlign="center">
+            <Text fontSize={13} fontWeight="600" color={Colors.textPrimary} textAlign="center">
               {phaseInfo.display.split(' ')[0]}
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText fontSize={10} fontWeight="600" color={Colors.textSecondary} textAlign="center">
+          <Text fontSize={10} fontWeight="600" color={Colors.textSecondary} textAlign="center">
             {phaseInfo.display.split(' ').slice(1).join(' ')}
-          </StyledText>
+          </Text>
         </StyledPressable>
 
         {/* Card 3: Pregnancy chance */}
@@ -146,13 +146,13 @@ export function CycleInfoRow({ prediction }: CycleInfoRowProps) {
         >
           <Stack alignItems="center" gap={4}>
             <VelaIcon name={pregnancyChance === 'High' ? 'heart' : 'activity'} size={20} color={Colors.primary} />
-            <StyledText fontSize={16} fontWeight="700" color={Colors.textPrimary}>
+            <Text fontSize={16} fontWeight="700" color={Colors.textPrimary}>
               {pregnancyChance}
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText fontSize={10} fontWeight="600" color={Colors.textSecondary} textAlign="center">
+          <Text fontSize={10} fontWeight="600" color={Colors.textSecondary} textAlign="center">
             Based on cycle{'\n'}phase
-          </StyledText>
+          </Text>
         </StyledPressable>
 
         {/* Card 4: Learn */}
@@ -170,13 +170,13 @@ export function CycleInfoRow({ prediction }: CycleInfoRowProps) {
         >
           <Stack alignItems="center" gap={4}>
             <VelaIcon name="help" size={20} color={Colors.primary} />
-            <StyledText fontSize={16} fontWeight="800" color={Colors.textPrimary}>
+            <Text fontSize={16} fontWeight="800" color={Colors.textPrimary}>
               Learn
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText fontSize={10} fontWeight="600" color={Colors.textSecondary}>
+          <Text fontSize={10} fontWeight="600" color={Colors.textSecondary}>
             Articles & tips
-          </StyledText>
+          </Text>
         </StyledPressable>
       </StyledScrollView>
     </Stack>

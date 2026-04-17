@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { Stack, StyledText, StyledPressable, StyledPage, StyledSlider } from 'fluent-styles'
-import { Text } from '../../src/components/text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../src/hooks/useColors'
 import { useSettings } from '../../src/hooks/useSettings'
@@ -56,14 +56,14 @@ function SliderStep({
             <VelaIcon name={icon} size={22} color={Colors.primary} />
           </Stack>
 
-          <StyledText fontSize={22} fontWeight="800" color={Colors.textPrimary} flex={1}>
+          <Text fontSize={22} fontWeight="800" color={Colors.textPrimary} flex={1}>
             {title}
-          </StyledText>
+          </Text>
         </Stack>
 
-        <StyledText fontSize={15} color={Colors.textSecondary} lineHeight={22}>
+        <Text fontSize={15} color={Colors.textSecondary} lineHeight={22}>
           {subtitle}
-        </StyledText>
+        </Text>
       </Stack>
 
       <Stack
@@ -73,12 +73,12 @@ function SliderStep({
         alignItems="center"
         gap={4}
       >
-        <StyledText fontSize={52} fontWeight="800" color={Colors.primary}>
+        <Text fontSize={52} fontWeight="800" color={Colors.primary}>
           {value}
-        </StyledText>
-        <StyledText fontSize={15} color={Colors.textSecondary}>
+        </Text>
+        <Text fontSize={15} color={Colors.textSecondary}>
           {displayLabel}
-        </StyledText>
+        </Text>
       </Stack>
 
       <StyledSlider
@@ -100,12 +100,12 @@ function SliderStep({
       />
 
       <Stack horizontal justifyContent="space-between">
-        <StyledText fontSize={12} color={Colors.textTertiary}>
+        <Text fontSize={12} color={Colors.textTertiary}>
           {minLabel}
-        </StyledText>
-        <StyledText fontSize={12} color={Colors.textTertiary}>
+        </Text>
+        <Text fontSize={12} color={Colors.textTertiary}>
           {maxLabel}
-        </StyledText>
+        </Text>
       </Stack>
     </Stack>
   )
@@ -141,14 +141,14 @@ function LastPeriodStep({ value, onChange }: LastPeriodStepProps) {
             <VelaIcon name="cycle" size={22} color={Colors.primary} />
           </Stack>
 
-          <StyledText fontSize={22} fontWeight="800" color={Colors.textPrimary} flex={1}>
+          <Text fontSize={22} fontWeight="800" color={Colors.textPrimary} flex={1}>
             When did your last period start?
-          </StyledText>
+          </Text>
         </Stack>
 
-        <StyledText fontSize={15} color={Colors.textSecondary} lineHeight={22}>
+        <Text fontSize={15} color={Colors.textSecondary} lineHeight={22}>
           This helps Vela calculate where you are in your cycle right now.
-        </StyledText>
+        </Text>
       </Stack>
 
       <Stack
@@ -159,9 +159,9 @@ function LastPeriodStep({ value, onChange }: LastPeriodStepProps) {
         justifyContent="center"
         gap={4}
       >
-        <StyledText fontSize={40} fontWeight="800" color={Colors.primary}>
+        <Text fontSize={40} fontWeight="800" color={Colors.primary}>
           {label}
-        </StyledText>
+        </Text>
       </Stack>
 
       <StyledSlider
@@ -200,14 +200,14 @@ function PinStep({ Colors }: { Colors: any }) {
           <VelaIcon name="shield" size={22} color={Colors.primary} />
         </Stack>
 
-        <StyledText fontSize={22} fontWeight="800" color={Colors.textPrimary} flex={1}>
+        <Text fontSize={22} fontWeight="800" color={Colors.textPrimary} flex={1}>
           Protect your data
-        </StyledText>
+        </Text>
       </Stack>
 
-      <StyledText fontSize={15} color={Colors.textSecondary} lineHeight={22}>
+      <Text fontSize={15} color={Colors.textSecondary} lineHeight={22}>
         Set up a PIN to keep your cycle data private. You can also enable Face ID or fingerprint in Settings.
-      </StyledText>
+      </Text>
 
       <Stack backgroundColor={Colors.primaryFaint} borderRadius={20} padding={20} gap={16}>
         {[
@@ -227,16 +227,16 @@ function PinStep({ Colors }: { Colors: any }) {
               <VelaIcon name={item.icon} size={17} color={Colors.primary} />
             </Stack>
 
-            <StyledText fontSize={14} fontWeight="600" color={Colors.textPrimary}>
+            <Text fontSize={14} fontWeight="600" color={Colors.textPrimary}>
               {item.label}
-            </StyledText>
+            </Text>
           </Stack>
         ))}
       </Stack>
 
-      <StyledText fontSize={13} color={Colors.textTertiary}>
+      <Text fontSize={13} color={Colors.textTertiary}>
         You can set this up in Settings at any time.
-      </StyledText>
+      </Text>
     </Stack>
   )
 }
@@ -306,9 +306,9 @@ export default function OnboardingScreen() {
           ))}
         </Stack>
 
-        <StyledText fontSize={12} color={Colors.textTertiary} marginTop={8}>
+        <Text fontSize={12} color={Colors.textTertiary} marginTop={8}>
           Step {stepIndex + 1} of {totalSteps}
-        </StyledText>
+        </Text>
       </Stack>
 
       <Stack flex={1} paddingHorizontal={24} paddingTop={24}>
@@ -365,16 +365,16 @@ export default function OnboardingScreen() {
           shadowRadius={12}
           elevation={5}
         >
-          <StyledText fontSize={17} fontWeight="800" color={Colors.textInverse}>
+          <Text fontSize={17} fontWeight="800" color={Colors.textInverse}>
             {step === 'pin' ? 'Start tracking' : 'Continue'}
-          </StyledText>
+          </Text>
         </StyledPressable>
 
         {stepIndex > 0 && (
           <StyledPressable alignItems="center" paddingVertical={10} onPress={handleBack}>
-            <StyledText fontSize={14} color={Colors.textTertiary}>
+            <Text fontSize={14} color={Colors.textTertiary}>
               Back
-            </StyledText>
+            </Text>
           </StyledPressable>
         )}
       </Stack>

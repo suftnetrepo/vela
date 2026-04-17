@@ -5,7 +5,7 @@ import * as FileSystem from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
 import QRCode from 'react-native-qrcode-svg'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { toastService, loaderService, dialogueService } from 'fluent-styles'
 import { useColors } from '../../hooks/useColors'
 import { useCycles } from '../../hooks/useCycles'
@@ -190,24 +190,24 @@ export function ExportDataContent({ onDone }: ExportDataContentProps) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24 }}
     >
-      <StyledText
+      <Text
         fontSize={13}
         color={Colors.textTertiary}
         textAlign="center"
         marginBottom={20}
       >
         Choose what to export, then share your code with someone or save it for backup
-      </StyledText>
+      </Text>
 
       <Stack gap={8} marginBottom={20}>
-        <StyledText
+        <Text
           fontSize={12}
           fontWeight="700"
           color={Colors.textTertiary}
           letterSpacing={0.5}
         >
           EXPORT TYPE
-        </StyledText>
+        </Text>
 
         <Stack gap={8}>
           {[
@@ -233,20 +233,20 @@ export function ExportDataContent({ onDone }: ExportDataContentProps) {
                 />
 
                 <Stack flex={1}>
-                  <StyledText
+                  <Text
                     fontSize={14}
                     fontWeight="600"
                     color={exportLevel === option.id ? '#fff' : Colors.textPrimary}
                   >
                     {option.label}
-                  </StyledText>
+                  </Text>
 
-                  <StyledText
+                  <Text
                     fontSize={11}
                     color={exportLevel === option.id ? 'rgba(255,255,255,0.7)' : Colors.textTertiary}
                   >
                     {option.desc}
-                  </StyledText>
+                  </Text>
                 </Stack>
               </Stack>
             </StyledPressable>
@@ -266,27 +266,27 @@ export function ExportDataContent({ onDone }: ExportDataContentProps) {
             {summary.cycles > 0 && (
               <Stack horizontal alignItems="center" gap={8}>
                 <VelaIcon name="cycle" size={14} color={Colors.primary} />
-                <StyledText fontSize={12} color={Colors.textPrimary}>
+                <Text fontSize={12} color={Colors.textPrimary}>
                   {summary.cycles} cycle{summary.cycles !== 1 ? 's' : ''}
-                </StyledText>
+                </Text>
               </Stack>
             )}
 
             {summary.logs > 0 && (
               <Stack horizontal alignItems="center" gap={8}>
                 <VelaIcon name="activity" size={14} color={Colors.primary} />
-                <StyledText fontSize={12} color={Colors.textPrimary}>
+                <Text fontSize={12} color={Colors.textPrimary}>
                   {summary.logs} log{summary.logs !== 1 ? 's' : ''} ({summary.symptoms} symptoms)
-                </StyledText>
+                </Text>
               </Stack>
             )}
 
             {summary.dateRange && (
               <Stack horizontal alignItems="center" gap={8}>
                 <VelaIcon name="calendar" size={14} color={Colors.primary} />
-                <StyledText fontSize={12} color={Colors.textPrimary}>
+                <Text fontSize={12} color={Colors.textPrimary}>
                   {summary.dateRange}
-                </StyledText>
+                </Text>
               </Stack>
             )}
           </Stack>
@@ -326,14 +326,14 @@ export function ExportDataContent({ onDone }: ExportDataContentProps) {
             backgroundColor={Colors.surface}
             marginBottom={16}
           >
-            <StyledText
+            <Text
               fontSize={11}
               color={Colors.textTertiary}
               numberOfLines={2}
               style={{ fontFamily: 'monospace' }}
             >
               {code.slice(0, 80)}…
-            </StyledText>
+            </Text>
           </Stack>
 
           <Stack gap={10}>
@@ -348,9 +348,9 @@ export function ExportDataContent({ onDone }: ExportDataContentProps) {
               onPress={handleCopyCode}
             >
               <VelaIcon name="copy" size={18} color="#fff" />
-              <StyledText fontSize={15} fontWeight="700" color="#fff">
+              <Text fontSize={15} fontWeight="700" color="#fff">
                 Copy code
-              </StyledText>
+              </Text>
             </StyledPressable>
 
             <StyledPressable
@@ -366,9 +366,9 @@ export function ExportDataContent({ onDone }: ExportDataContentProps) {
               onPress={handleShareFile}
             >
               <VelaIcon name="share" size={18} color={Colors.primary} />
-              <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+              <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
                 Share file
-              </StyledText>
+              </Text>
             </StyledPressable>
           </Stack>
         </>

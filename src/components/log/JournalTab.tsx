@@ -1,7 +1,7 @@
 import React from 'react'
 import { ActivityIndicator } from 'react-native'
 import { Stack, StyledText, StyledPressable, StyledTextInput, Collapse } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { useMoods } from '../../hooks/useMoods'
@@ -43,11 +43,11 @@ function MoodChip({
       alignItems="center"
       gap={6}
     >
-      <StyledText fontSize={18}>{emoji}</StyledText>
-      <StyledText fontSize={13} fontWeight={selected ? '700' : '400'}
+      <Text fontSize={18}>{emoji}</Text>
+      <Text fontSize={13} fontWeight={selected ? '700' : '400'}
         color={selected ? Colors.primaryDark : Colors.textSecondary}>
         {label}
-      </StyledText>
+      </Text>
     </StyledPressable>
   )
 }
@@ -66,9 +66,9 @@ function LogSection({ title, children }: { title: string; children: React.ReactN
       shadowRadius={8}
       elevation={1}
     >
-      <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+      <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
         {title}
-      </StyledText>
+      </Text>
       {children}
     </Stack>
   )
@@ -117,9 +117,9 @@ export function JournalTab({ data, onChange }: JournalTabProps) {
               paddingVertical={8}
             >
               <VelaIcon name="edit" size={14} color={Colors.primary} />
-              <StyledText fontSize={13} color={Colors.primary} fontWeight="600">
+              <Text fontSize={13} color={Colors.primary} fontWeight="600">
                 Add moods in settings
-              </StyledText>
+              </Text>
             </StyledPressable>
           ) : (
             <>
@@ -136,9 +136,9 @@ export function JournalTab({ data, onChange }: JournalTabProps) {
                 ))}
               </Stack>
               {data.moods.length === MAX_MOODS && (
-                <StyledText fontSize={12} color={Colors.textTertiary} fontStyle="italic">
+                <Text fontSize={12} color={Colors.textTertiary} fontStyle="italic">
                   Max {MAX_MOODS} moods selected
-                </StyledText>
+                </Text>
               )}
             </>
           )}
@@ -162,26 +162,26 @@ export function JournalTab({ data, onChange }: JournalTabProps) {
                 justifyContent="center"
                 onPress={() => set({ energyLevel: n })}
               >
-                <StyledText
+                <Text
                   fontSize={16}
                   fontWeight="700"
                   color={n <= data.energyLevel ? Colors.textInverse : Colors.textTertiary}
                 >
                   {n}
-                </StyledText>
+                </Text>
               </StyledPressable>
             ))}
           </Stack>
           <Stack flexDirection="row" justifyContent="space-between">
-            <StyledText fontSize={11} color={Colors.textTertiary}>😴 Low energy</StyledText>
-            <StyledText fontSize={11} color={Colors.textTertiary}>⚡ High energy</StyledText>
+            <Text fontSize={11} color={Colors.textTertiary}>😴 Low energy</Text>
+            <Text fontSize={11} color={Colors.textTertiary}>⚡ High energy</Text>
           </Stack>
         </Stack>
       </LogSection>
 
       {/* ── Notes ────────────────────────────────────────────────────────── */}
       <LogSection title="Notes">
-        <StyledTextInput
+        <TextInput
           variant="outline"
           placeholder="How are you feeling today? Any observations…"
           multiline

@@ -11,6 +11,7 @@ import {
   StyledSpacer,
 } from "fluent-styles";
 import { router } from "expo-router";
+import { Text } from "@/components/text";
 import { useColors } from "../../../src/hooks/useColors";
 import { useSettings } from "../../../src/hooks/useSettings";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
@@ -65,13 +66,13 @@ export default function CycleSettingsScreen() {
             paddingHorizontal={16}
             paddingVertical={8}
           >
-            <StyledText
+            <Text
               fontSize={14}
               fontWeight="700"
               color={Colors.textInverse}
             >
               Save
-            </StyledText>
+            </Text>
           </StyledPressable>
         }
       />
@@ -94,16 +95,16 @@ export default function CycleSettingsScreen() {
           elevation={1}
         >
           <Stack gap={6}>
-            <StyledText
+            <Text
               fontSize={16}
               fontWeight="700"
               color={Colors.textPrimary}
             >
               Average cycle length
-            </StyledText>
-            <StyledText fontSize={13} color={Colors.textSecondary}>
+            </Text>
+            <Text fontSize={13} color={Colors.textSecondary}>
               From first day of period to first day of next period
-            </StyledText>
+            </Text>
           </Stack>
           <Stack
             backgroundColor={Colors.primaryFaint}
@@ -112,12 +113,12 @@ export default function CycleSettingsScreen() {
             alignItems="center"
             gap={2}
           >
-            <StyledText fontSize={42} fontWeight="800" color={Colors.primary}>
+            <Text fontSize={42} fontWeight="800" color={Colors.primary}>
               {cycleDisplay}
-            </StyledText>
-            <StyledText fontSize={14} color={Colors.textSecondary}>
+            </Text>
+            <Text fontSize={14} color={Colors.textSecondary}>
               days
-            </StyledText>
+            </Text>
           </Stack>
           <StyledSlider
             key="cycle-slider"
@@ -140,12 +141,12 @@ export default function CycleSettingsScreen() {
             alwaysShowTooltip
           />
           <Stack horizontal justifyContent="space-between">
-            <StyledText fontSize={11} color={Colors.textTertiary}>
+            <Text fontSize={11} color={Colors.textTertiary}>
               20 days (short)
-            </StyledText>
-            <StyledText fontSize={11} color={Colors.textTertiary}>
+            </Text>
+            <Text fontSize={11} color={Colors.textTertiary}>
               45 days (long)
-            </StyledText>
+            </Text>
           </Stack>
         </Stack>
 
@@ -162,16 +163,16 @@ export default function CycleSettingsScreen() {
           elevation={1}
         >
           <Stack gap={6}>
-            <StyledText
+            <Text
               fontSize={16}
               fontWeight="700"
               color={Colors.textPrimary}
             >
               Average period length
-            </StyledText>
-            <StyledText fontSize={13} color={Colors.textSecondary}>
+            </Text>
+            <Text fontSize={13} color={Colors.textSecondary}>
               How many days your bleeding typically lasts
-            </StyledText>
+            </Text>
           </Stack>
           <Stack
             backgroundColor={Colors.primaryFaint}
@@ -180,12 +181,12 @@ export default function CycleSettingsScreen() {
             alignItems="center"
             gap={2}
           >
-            <StyledText fontSize={42} fontWeight="800" color={Colors.primary}>
+            <Text fontSize={42} fontWeight="800" color={Colors.primary}>
               {periodDisplay}
-            </StyledText>
-            <StyledText fontSize={14} color={Colors.textSecondary}>
+            </Text>
+            <Text fontSize={14} color={Colors.textSecondary}>
               days
-            </StyledText>
+            </Text>
           </Stack>
           <StyledSlider
             key="period-slider"
@@ -208,12 +209,12 @@ export default function CycleSettingsScreen() {
             alwaysShowTooltip
           />
           <Stack horizontal justifyContent="space-between">
-            <StyledText fontSize={11} color={Colors.textTertiary}>
+            <Text fontSize={11} color={Colors.textTertiary}>
               2 days
-            </StyledText>
-            <StyledText fontSize={11} color={Colors.textTertiary}>
+            </Text>
+            <Text fontSize={11} color={Colors.textTertiary}>
               9 days
-            </StyledText>
+            </Text>
           </Stack>
         </Stack>
 
@@ -225,22 +226,22 @@ export default function CycleSettingsScreen() {
         >
           <Stack horizontal alignItems="center" gap={8}>
             <VelaIcon name="info" size={15} color={Colors.info} />
-            <StyledText
+            <Text
               fontSize={13}
               fontWeight="600"
               color={Colors.textPrimary}
             >
               Tip
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText
+          <Text
             fontSize={12}
             color={Colors.textSecondary}
             lineHeight={18}
           >
             As you log more cycles, Vela automatically refines predictions using
             your actual data. These are starting values only.
-          </StyledText>
+          </Text>
         </Stack>
       </StyledScrollView>
     </StyledPage>

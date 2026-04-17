@@ -10,6 +10,7 @@ import {
   StyledTextInput,
   TabBar,
 } from "fluent-styles";
+import { Text } from "@/components/text";
 import Svg, {
   Path,
   Circle,
@@ -258,12 +259,12 @@ function MetricInput({
       shadowRadius={10}
       elevation={2}
     >
-      <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+      <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
         {label}
-      </StyledText>
+      </Text>
       <Stack flexDirection="row" alignItems="center" gap={10}>
         <Stack flex={1}>
-          <StyledTextInput
+          <TextInput
             variant="outline"
             value={val}
             onChangeText={(v) => {
@@ -282,13 +283,13 @@ function MetricInput({
           paddingHorizontal={14}
           paddingVertical={12}
         >
-          <StyledText
+          <Text
             fontSize={14}
             fontWeight="600"
             color={Colors.textSecondary}
           >
             {unit}
-          </StyledText>
+          </Text>
         </Stack>
         <StyledPressable
           backgroundColor={justSaved ? Colors.success : Colors.primary}
@@ -305,9 +306,9 @@ function MetricInput({
         </StyledPressable>
       </Stack>
       {hint && (
-        <StyledText fontSize={12} color={Colors.textTertiary}>
+        <Text fontSize={12} color={Colors.textTertiary}>
           {hint}
-        </StyledText>
+        </Text>
       )}
     </Stack>
   );
@@ -332,16 +333,16 @@ function StatRow({
           alignItems="center"
           gap={3}
         >
-          <StyledText fontSize={17} fontWeight="800" color={s.color}>
+          <Text fontSize={17} fontWeight="800" color={s.color}>
             {s.value}
-          </StyledText>
-          <StyledText
+          </Text>
+          <Text
             fontSize={10}
             color={Colors.textTertiary}
             fontWeight="600"
           >
             {s.label.toUpperCase()}
-          </StyledText>
+          </Text>
         </Stack>
       ))}
     </Stack>
@@ -482,26 +483,26 @@ export default function TrackerScreen() {
                   alignItems="center"
                   justifyContent="space-between"
                 >
-                  <StyledText
+                  <Text
                     fontSize={16}
                     fontWeight="700"
                     color={Colors.textPrimary}
                   >
                     Weight trend
-                  </StyledText>
+                  </Text>
                   <Stack
                     backgroundColor={Colors.primaryFaint}
                     borderRadius={10}
                     paddingHorizontal={10}
                     paddingVertical={4}
                   >
-                    <StyledText
+                    <Text
                       fontSize={11}
                       color={Colors.primaryDark}
                       fontWeight="600"
                     >
                       Last {tracker.weightData.length} entries
-                    </StyledText>
+                    </Text>
                   </Stack>
                 </Stack>
                 <Stack
@@ -564,20 +565,20 @@ export default function TrackerScreen() {
                 >
                   <VelaIcon name="activity" size={28} color={Colors.primary} />
                 </Stack>
-                <StyledText
+                <Text
                   fontSize={15}
                   fontWeight="700"
                   color={Colors.textPrimary}
                 >
                   No weight data yet
-                </StyledText>
-                <StyledText
+                </Text>
+                <Text
                   fontSize={13}
                   color={Colors.textSecondary}
                   textAlign="center"
                 >
                   Log your weight daily to see trends over time.
-                </StyledText>
+                </Text>
               </Stack>
             )}
           </>
@@ -607,14 +608,14 @@ export default function TrackerScreen() {
               shadowRadius={10}
               elevation={2}
             >
-              <StyledText
+              <Text
                 fontSize={16}
                 fontWeight="700"
                 color={Colors.textPrimary}
                 alignSelf="flex-start"
               >
                 Today's reading
-              </StyledText>
+              </Text>
               <TempGauge
                 value={tracker.todayLog?.temperature ?? null}
                 colors={Colors}
@@ -646,9 +647,9 @@ export default function TrackerScreen() {
                       borderRadius={4}
                       backgroundColor={i.color}
                     />
-                    <StyledText fontSize={11} color={Colors.textTertiary}>
+                    <Text fontSize={11} color={Colors.textTertiary}>
                       {i.label} {i.range}
-                    </StyledText>
+                    </Text>
                   </Stack>
                 ))}
               </Stack>
@@ -666,13 +667,13 @@ export default function TrackerScreen() {
                 shadowRadius={10}
                 elevation={2}
               >
-                <StyledText
+                <Text
                   fontSize={16}
                   fontWeight="700"
                   color={Colors.textPrimary}
                 >
                   BBT chart
-                </StyledText>
+                </Text>
                 <SparkChart
                   data={tracker.tempData}
                   color={Colors.fertile}
@@ -717,14 +718,14 @@ export default function TrackerScreen() {
             shadowRadius={10}
             elevation={2}
           >
-            <StyledText
+            <Text
               fontSize={15}
               fontWeight="700"
               color={Colors.textPrimary}
             >
               Today's notes
-            </StyledText>
-            <StyledTextInput
+            </Text>
+            <TextInput
               variant="outline"
               placeholder="How's your body feeling? Any observations about energy, mood, or symptoms…"
               multiline
@@ -738,9 +739,9 @@ export default function TrackerScreen() {
               borderColor={Colors.border}
             />
             <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
-              <StyledText fontSize={11} color={Colors.textTertiary}>
+              <Text fontSize={11} color={Colors.textTertiary}>
                 Private journal for your cycle
-              </StyledText>
+              </Text>
               {noteDirty && (
                 <StyledPressable
                   onPress={handleSaveNotes}
@@ -753,13 +754,13 @@ export default function TrackerScreen() {
                   gap={6}
                 >
                   <VelaIcon name="check" size={14} color={Colors.textInverse} />
-                  <StyledText
+                  <Text
                     fontSize={13}
                     fontWeight="600"
                     color={Colors.textInverse}
                   >
                     Save
-                  </StyledText>
+                  </Text>
                 </StyledPressable>
               )}
             </Stack>

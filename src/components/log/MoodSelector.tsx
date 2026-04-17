@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { useMoods } from '../../hooks/useMoods'
@@ -21,7 +21,7 @@ export function MoodSelector({ value, onChange }: MoodSelectorProps) {
       <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
         <Stack flexDirection="row" alignItems="center" gap={8}>
           <VelaIcon name="heart" size={17} color={Colors.primary} />
-          <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>Mood</StyledText>
+          <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>Mood</Text>
         </Stack>
         <StyledPressable
           onPress={() => router.push('/(app)/(settings)/moods')}
@@ -36,7 +36,7 @@ export function MoodSelector({ value, onChange }: MoodSelectorProps) {
           borderColor={Colors.border}
         >
           <VelaIcon name="edit" size={12} color={Colors.primary} />
-          <StyledText fontSize={11} fontWeight="600" color={Colors.primaryDark}>Manage</StyledText>
+          <Text fontSize={11} fontWeight="600" color={Colors.primaryDark}>Manage</Text>
         </StyledPressable>
       </Stack>
 
@@ -59,10 +59,10 @@ export function MoodSelector({ value, onChange }: MoodSelectorProps) {
           borderWidth={1}
           borderColor={Colors.border}
         >
-          <StyledText fontSize={20}>💭</StyledText>
-          <StyledText fontSize={13} color={Colors.textSecondary} textAlign="center">
+          <Text fontSize={20}>💭</Text>
+          <Text fontSize={13} color={Colors.textSecondary} textAlign="center">
             No moods selected.{'\n'}Tap to manage your mood list.
-          </StyledText>
+          </Text>
         </StyledPressable>
       ) : (
         <Stack flexDirection="row" gap={8} flexWrap="wrap">
@@ -82,14 +82,14 @@ export function MoodSelector({ value, onChange }: MoodSelectorProps) {
                 alignItems="center"
                 gap={6}
               >
-                <StyledText fontSize={16}>{m.emoji}</StyledText>
-                <StyledText
+                <Text fontSize={16}>{m.emoji}</Text>
+                <Text
                   fontSize={13}
                   fontWeight={isActive ? '700' : '500'}
                   color={isActive ? Colors.primaryDark : Colors.textSecondary}
                 >
                   {m.label}
-                </StyledText>
+                </Text>
               </StyledPressable>
             )
           })}

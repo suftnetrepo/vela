@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { THEMES, type ThemeName } from '../../constants/themes'
 import { useColors } from '../../hooks/useColors'
 import { useSettingsStore } from '../../stores/settings.store'
@@ -54,20 +54,20 @@ export function ThemePreview({ onSelect }: ThemePreviewProps) {
             {/* Label + description */}
             <Stack flex={1} gap={3}>
               <Stack horizontal alignItems="center" gap={6}>
-                <StyledText fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+                <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
                   {THEME_LABELS[name]}
-                </StyledText>
+                </Text>
                 {locked && (
                   <Stack backgroundColor={Colors.primaryFaint} borderRadius={8}
                     paddingHorizontal={7} paddingVertical={3} horizontal alignItems="center" gap={3}>
                     <VelaIcon name="crown" size={10} color={Colors.primary} />
-                    <StyledText fontSize={10} fontWeight="700" color={Colors.primaryDark}>PRO</StyledText>
+                    <Text fontSize={10} fontWeight="700" color={Colors.primaryDark}>PRO</Text>
                   </Stack>
                 )}
               </Stack>
-              <StyledText fontSize={12} color={Colors.textTertiary}>
+              <Text fontSize={12} color={Colors.textTertiary}>
                 {THEME_DESCRIPTIONS[name]}
-              </StyledText>
+              </Text>
             </Stack>
 
             {/* Active check */}

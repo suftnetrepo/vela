@@ -10,6 +10,7 @@ import {
   theme,
 } from "fluent-styles";
 import { router } from "expo-router";
+import { Text } from "@/components/text";
 import { useColors } from "../../../src/hooks/useColors";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
 
@@ -149,14 +150,14 @@ export default function FAQScreen() {
           >
             <VelaIcon name="help" size={28} color={Colors.primary} />
           </Stack>
-          <StyledText fontSize={20} fontWeight="800" color={Colors.textPrimary}>
+          <Text fontSize={20} fontWeight="800" color={Colors.textPrimary}>
             How can we help?
-          </StyledText>
+          </Text>
         </Stack>
 
         {/* Search */}
         <Stack paddingHorizontal={20} paddingBottom={16}>
-          <StyledTextInput
+          <TextInput
             variant="filled"
             placeholder="Search questions…"
             value={search}
@@ -186,7 +187,7 @@ export default function FAQScreen() {
             paddingHorizontal={14}
             paddingVertical={8}
           >
-            <StyledText
+            <Text
               fontSize={13}
               fontWeight="600"
               color={
@@ -194,7 +195,7 @@ export default function FAQScreen() {
               }
             >
               All
-            </StyledText>
+            </Text>
           </StyledPressable>
           {CATEGORIES.map((cat) => (
             <StyledPressable
@@ -209,7 +210,7 @@ export default function FAQScreen() {
               paddingHorizontal={14}
               paddingVertical={8}
             >
-              <StyledText
+              <Text
                 fontSize={13}
                 fontWeight="600"
                 color={
@@ -219,7 +220,7 @@ export default function FAQScreen() {
                 }
               >
                 {cat}
-              </StyledText>
+              </Text>
             </StyledPressable>
           ))}
         </Stack>
@@ -229,9 +230,9 @@ export default function FAQScreen() {
           {filtered.length === 0 && (
             <Stack alignItems="center" paddingVertical={40} gap={10}>
               <VelaIcon name="search" size={28} color={Colors.textTertiary} />
-              <StyledText fontSize={15} color={Colors.textSecondary}>
+              <Text fontSize={15} color={Colors.textSecondary}>
                 No results for "{search}"
-              </StyledText>
+              </Text>
             </Stack>
           )}
           {filtered.map((item, i) => {
@@ -270,7 +271,7 @@ export default function FAQScreen() {
                       color={Colors.primary}
                     />
                   </Stack>
-                  <StyledText
+                  <Text
                     fontSize={14}
                     fontWeight="700"
                     color={Colors.textPrimary}
@@ -278,7 +279,7 @@ export default function FAQScreen() {
                     lineHeight={20}
                   >
                     {item.q}
-                  </StyledText>
+                  </Text>
                 </StyledPressable>
                 {isOpen && (
                   <Stack
@@ -286,13 +287,13 @@ export default function FAQScreen() {
                     paddingBottom={16}
                     paddingLeft={60}
                   >
-                    <StyledText
+                    <Text
                       fontSize={13}
                       color={Colors.textSecondary}
                       lineHeight={21}
                     >
                       {item.a}
-                    </StyledText>
+                    </Text>
                   </Stack>
                 )}
               </Stack>
@@ -321,34 +322,34 @@ export default function FAQScreen() {
             >
               <VelaIcon name="flower" size={20} color={Colors.primary} />
             </Stack>
-            <StyledText
+            <Text
               fontSize={15}
               fontWeight="700"
               color={Colors.textPrimary}
             >
               Still have questions?
-            </StyledText>
+            </Text>
           </Stack>
-          <StyledText
+          <Text
             fontSize={13}
             color={Colors.textSecondary}
             lineHeight={20}
           >
             Since Vela is fully offline, we can't offer in-app chat support. But
             you can reach us via the App Store review, or find us on GitHub.
-          </StyledText>
+          </Text>
           <Stack
             backgroundColor={Colors.surface}
             borderRadius={12}
             padding={12}
           >
-            <StyledText
+            <Text
               fontSize={12}
               color={Colors.textTertiary}
               fontWeight="600"
             >
               github.com/aaghorighor/fluent-styles
-            </StyledText>
+            </Text>
           </Stack>
         </Stack>
       </StyledScrollView>

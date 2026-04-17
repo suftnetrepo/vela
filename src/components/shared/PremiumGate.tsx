@@ -1,6 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
-import { Text } from '../text'
+import { Text } from '@/components/text'
 import { useColors } from '../../hooks/useColors'
 import { usePremium } from '../../hooks/usePremium'
 import { router } from 'expo-router'
@@ -28,13 +28,13 @@ export function PremiumGate({ children, feature, description, compact = false }:
         backgroundColor={Colors.surface}
         borderWidth={1} borderColor={Colors.border}
       >
-        <StyledText fontSize={18}>✨</StyledText>
+        <Text fontSize={18}>✨</Text>
         <Stack flex={1} gap={2}>
-          <StyledText fontSize={13} fontWeight="700" color={Colors.textPrimary}>
+          <Text fontSize={13} fontWeight="700" color={Colors.textPrimary}>
             {feature}
-          </StyledText>
+          </Text>
           {description && (
-            <StyledText fontSize={12} color={Colors.textSecondary}>{description}</StyledText>
+            <Text fontSize={12} color={Colors.textSecondary}>{description}</Text>
           )}
         </Stack>
         <StyledPressable
@@ -42,7 +42,7 @@ export function PremiumGate({ children, feature, description, compact = false }:
           borderRadius={20} backgroundColor={Colors.primary}
           onPress={() => router.push('/(app)/(settings)/premium')}
         >
-          <StyledText fontSize={12} fontWeight="700" color={Colors.textInverse}>Unlock</StyledText>
+          <Text fontSize={12} fontWeight="700" color={Colors.textInverse}>Unlock</Text>
         </StyledPressable>
       </Stack>
     )
@@ -55,13 +55,13 @@ export function PremiumGate({ children, feature, description, compact = false }:
         <VelaIcon name="crown" size={36} color={Colors.primary} />
       </Stack>
       <Stack gap={8} alignItems="center">
-        <StyledText fontSize={20} fontWeight="800" color={Colors.textPrimary} textAlign="center">
+        <Text fontSize={20} fontWeight="800" color={Colors.textPrimary} textAlign="center">
           {feature}
-        </StyledText>
+        </Text>
         {description && (
-          <StyledText fontSize={14} color={Colors.textSecondary} textAlign="center" lineHeight={21}>
+          <Text fontSize={14} color={Colors.textSecondary} textAlign="center" lineHeight={21}>
             {description}
-          </StyledText>
+          </Text>
         )}
       </Stack>
       <StyledPressable backgroundColor={Colors.primary} borderRadius={30}
@@ -71,13 +71,13 @@ export function PremiumGate({ children, feature, description, compact = false }:
         shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 4 }}
         shadowOpacity={0.3} shadowRadius={12} elevation={5}>
         <VelaIcon name="crown" size={16} color={Colors.textInverse} />
-        <StyledText fontSize={15} fontWeight="700" color={Colors.textInverse}>
+        <Text fontSize={15} fontWeight="700" color={Colors.textInverse}>
           Unlock Premium
-        </StyledText>
+        </Text>
       </StyledPressable>
-      <StyledText fontSize={12} color={Colors.textTertiary}>
+      <Text fontSize={12} color={Colors.textTertiary}>
         7-day free trial · From £2.99/month
-      </StyledText>
+      </Text>
     </Stack>
   )
 }

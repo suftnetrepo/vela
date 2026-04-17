@@ -9,6 +9,7 @@ import {
   theme,
 } from "fluent-styles";
 import { router } from "expo-router";
+import { Text } from "@/components/text";
 import { useColors } from "../../src/hooks/useColors";
 import { useCycles } from "../../src/hooks/useCycles";
 import { usePrediction } from "../../src/hooks/usePrediction";
@@ -100,12 +101,12 @@ export default function HomeScreen() {
             gap={5}
           >
             <VelaIcon name="info" size={12} color={Colors.primary} />
-            <StyledText fontSize={11} fontWeight="600" color={Colors.primary}>
+            <Text fontSize={11} fontWeight="600" color={Colors.primary}>
               {prediction.currentPhase
                 .split("_")
                 .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
                 .join(" ")}
-            </StyledText>
+            </Text>
           </Stack>
         ) : (
           <StyledPressable
@@ -121,13 +122,13 @@ export default function HomeScreen() {
             gap={5}
           >
             <VelaIcon name="drop" size={13} color={Colors.primary} />
-            <StyledText
+            <Text
               fontSize={12}
               fontWeight="700"
               color={Colors.primaryDark}
             >
               Period
-            </StyledText>
+            </Text>
           </StyledPressable>
         )}
       </Stack>

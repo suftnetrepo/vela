@@ -9,6 +9,7 @@ import {
   theme,
 } from "fluent-styles";
 import { router } from "expo-router";
+import { Text } from "@/components/text";
 import { useColors } from "../../../src/hooks/useColors";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
 
@@ -95,16 +96,16 @@ export default function PrivacyScreen() {
               <VelaIcon name="shield-check" size={28} color={Colors.success} />
             </Stack>
             <Stack flex={1} gap={3}>
-              <StyledText
+              <Text
                 fontSize={17}
                 fontWeight="800"
                 color={Colors.textPrimary}
               >
                 Zero data collection
-              </StyledText>
-              <StyledText fontSize={13} color={Colors.textSecondary}>
+              </Text>
+              <Text fontSize={13} color={Colors.textSecondary}>
                 This is not a legal disclaimer — it's a technical fact.
-              </StyledText>
+              </Text>
             </Stack>
           </Stack>
         </Stack>
@@ -123,20 +124,20 @@ export default function PrivacyScreen() {
           {SECTIONS.map((s, i) => (
             <Stack key={s.title}>
               <Stack padding={20} gap={8}>
-                <StyledText
+                <Text
                   fontSize={15}
                   fontWeight="700"
                   color={Colors.textPrimary}
                 >
                   {s.title}
-                </StyledText>
-                <StyledText
+                </Text>
+                <Text
                   fontSize={13}
                   color={Colors.textSecondary}
                   lineHeight={21}
                 >
                   {s.content}
-                </StyledText>
+                </Text>
               </Stack>
               {i < SECTIONS.length - 1 && (
                 <StyledDivider
@@ -149,12 +150,12 @@ export default function PrivacyScreen() {
         </Stack>
 
         <Stack alignItems="center" gap={4}>
-          <StyledText fontSize={12} color={Colors.textTertiary}>
+          <Text fontSize={12} color={Colors.textTertiary}>
             Last updated: January 2025
-          </StyledText>
-          <StyledText fontSize={12} color={Colors.textTertiary}>
+          </Text>
+          <Text fontSize={12} color={Colors.textTertiary}>
             Vela v1.0.0 · com.vela.cycle
-          </StyledText>
+          </Text>
         </Stack>
       </StyledScrollView>
     </StyledPage>

@@ -13,6 +13,7 @@ import { useColors } from "../../src/hooks/useColors";
 import { useCycles } from "../../src/hooks/useCycles";
 import { usePrediction } from "../../src/hooks/usePrediction";
 import { usePremium } from "../../src/hooks/usePremium";
+import { Text } from "@/components/text";
 import { CycleTrendsCard } from "../../src/components/insights/CycleTrendsCard";
 import { CycleRhythmChart } from "../../src/components/insights/CycleRhythmChart";
 import { CyclePhasePillBar } from "../../src/components/shared/CyclePhasePillBar";
@@ -56,15 +57,15 @@ const CycleHistoryCard = ({ entry, Colors }: { entry: any; Colors: any }) => {
         gap={8}
       >
         <Stack flex={1} gap={3}>
-          <StyledText fontSize={15} fontWeight="800" color={Colors.textPrimary}>
+          <Text fontSize={15} fontWeight="800" color={Colors.textPrimary}>
             {entry.cycleLength
               ? `${entry.cycleLength} day cycle`
               : "Cycle logged"}
-          </StyledText>
+          </Text>
 
-          <StyledText fontSize={12} color={Colors.textSecondary}>
+          <Text fontSize={12} color={Colors.textSecondary}>
             Started {format(entry.start, "MMM d, yyyy")}
-          </StyledText>
+          </Text>
         </Stack>
 
         {badge && (
@@ -74,9 +75,9 @@ const CycleHistoryCard = ({ entry, Colors }: { entry: any; Colors: any }) => {
             borderRadius={999}
             backgroundColor={badge.bg}
           >
-            <StyledText fontSize={11} fontWeight="700" color={badge.color}>
+            <Text fontSize={11} fontWeight="700" color={badge.color}>
               {badge.label}
-            </StyledText>
+            </Text>
           </Stack>
         )}
       </Stack>
@@ -89,12 +90,12 @@ const CycleHistoryCard = ({ entry, Colors }: { entry: any; Colors: any }) => {
           padding={10}
           gap={2}
         >
-          <StyledText fontSize={18} fontWeight="800" color={Colors.primary}>
+          <Text fontSize={18} fontWeight="800" color={Colors.primary}>
             {entry.cycleLength ?? "—"}
-          </StyledText>
-          <StyledText fontSize={11} color={Colors.textTertiary}>
+          </Text>
+          <Text fontSize={11} color={Colors.textTertiary}>
             Cycle length
-          </StyledText>
+          </Text>
         </Stack>
 
         <Stack
@@ -104,12 +105,12 @@ const CycleHistoryCard = ({ entry, Colors }: { entry: any; Colors: any }) => {
           padding={10}
           gap={2}
         >
-          <StyledText fontSize={18} fontWeight="800" color={Colors.textPrimary}>
+          <Text fontSize={18} fontWeight="800" color={Colors.textPrimary}>
             {entry.periodLength ?? "—"}
-          </StyledText>
-          <StyledText fontSize={11} color={Colors.textTertiary}>
+          </Text>
+          <Text fontSize={11} color={Colors.textTertiary}>
             Period length
-          </StyledText>
+          </Text>
         </Stack>
       </Stack>
     </Stack>
@@ -142,12 +143,12 @@ const ActiveCycleHistoryCard = ({
         gap={8}
       >
         <Stack flex={1} gap={3}>
-          <StyledText fontSize={16} fontWeight="800" color={Colors.textPrimary}>
+          <Text fontSize={16} fontWeight="800" color={Colors.textPrimary}>
             Current cycle
-          </StyledText>
-          <StyledText fontSize={12} color={Colors.textSecondary}>
+          </Text>
+          <Text fontSize={12} color={Colors.textSecondary}>
             Day {entry.currentDay} • Started {format(entry.start, "MMM d")}
-          </StyledText>
+          </Text>
         </Stack>
 
         <Stack
@@ -156,9 +157,9 @@ const ActiveCycleHistoryCard = ({
           paddingHorizontal={10}
           paddingVertical={5}
         >
-          <StyledText fontSize={11} fontWeight="700" color={Colors.textInverse}>
+          <Text fontSize={11} fontWeight="700" color={Colors.textInverse}>
             Active
-          </StyledText>
+          </Text>
         </Stack>
       </Stack>
 
@@ -179,12 +180,12 @@ const ActiveCycleHistoryCard = ({
           borderRadius={12}
           padding={10}
         >
-          <StyledText fontSize={11} color={Colors.textTertiary}>
+          <Text fontSize={11} color={Colors.textTertiary}>
             Average cycle
-          </StyledText>
-          <StyledText fontSize={14} fontWeight="800" color={Colors.textPrimary}>
+          </Text>
+          <Text fontSize={14} fontWeight="800" color={Colors.textPrimary}>
             {prediction?.averageCycleLength ?? "—"} days
-          </StyledText>
+          </Text>
         </Stack>
 
         <Stack
@@ -193,14 +194,14 @@ const ActiveCycleHistoryCard = ({
           borderRadius={12}
           padding={10}
         >
-          <StyledText fontSize={11} color={Colors.textTertiary}>
+          <Text fontSize={11} color={Colors.textTertiary}>
             Next period
-          </StyledText>
-          <StyledText fontSize={14} fontWeight="800" color={Colors.textPrimary}>
+          </Text>
+          <Text fontSize={14} fontWeight="800" color={Colors.textPrimary}>
             {prediction?.nextPeriodStart
               ? format(prediction.nextPeriodStart, "MMM d")
               : "—"}
-          </StyledText>
+          </Text>
         </Stack>
       </Stack>
     </Stack>
@@ -430,27 +431,27 @@ export default function InsightsScreen() {
                   borderColor={Colors.border}
                 >
                   <VelaIcon name="flower" size={32} color={Colors.primary} />
-                  <StyledText
+                  <Text
                     fontSize={15}
                     fontWeight="700"
                     color={Colors.textPrimary}
                   >
                     Start tracking your cycle
-                  </StyledText>
-                  <StyledText
+                  </Text>
+                  <Text
                     fontSize={13}
                     color={Colors.textSecondary}
                     textAlign="center"
                   >
                     Log your first period to see insights here.
-                  </StyledText>
+                  </Text>
                 </Stack>
               )}
             </PremiumGate>
 
             {prediction && (
               <Stack gap={12}>
-                <StyledText
+                <Text
                   fontSize={12}
                   fontWeight="700"
                   color={Colors.textTertiary}
@@ -458,7 +459,7 @@ export default function InsightsScreen() {
                   paddingHorizontal={4}
                 >
                   CURRENT PHASE
-                </StyledText>
+                </Text>
 
                 <Stack
                   backgroundColor={Colors.surface}
@@ -471,27 +472,27 @@ export default function InsightsScreen() {
                   shadowRadius={8}
                   elevation={1}
                 >
-                  <StyledText
+                  <Text
                     fontSize={20}
                     fontWeight="800"
                     color={Colors.primary}
                   >
                     {phaseName(prediction.currentPhase)}
-                  </StyledText>
-                  <StyledText
+                  </Text>
+                  <Text
                     fontSize={14}
                     color={Colors.textSecondary}
                     lineHeight={21}
                   >
                     {phaseDescription(prediction.currentPhase)}
-                  </StyledText>
+                  </Text>
                 </Stack>
               </Stack>
             )}
 
             {prediction && (
               <Stack gap={12}>
-                <StyledText
+                <Text
                   fontSize={12}
                   fontWeight="700"
                   color={Colors.textTertiary}
@@ -499,7 +500,7 @@ export default function InsightsScreen() {
                   paddingHorizontal={4}
                 >
                   UPCOMING EVENTS
-                </StyledText>
+                </Text>
 
                 <Stack
                   backgroundColor={Colors.surface}
@@ -557,20 +558,20 @@ export default function InsightsScreen() {
                           />
                         </Stack>
                         <Stack flex={1} gap={2}>
-                          <StyledText
+                          <Text
                             fontSize={14}
                             fontWeight="600"
                             color={Colors.textPrimary}
                           >
                             {item.label}
-                          </StyledText>
-                          <StyledText
+                          </Text>
+                          <Text
                             fontSize={12}
                             color={item.color}
                             fontWeight="500"
                           >
                             {item.date}
-                          </StyledText>
+                          </Text>
                         </Stack>
                       </Stack>
                       {idx < 2 && (
@@ -619,14 +620,14 @@ export default function InsightsScreen() {
                   <VelaIcon name="check-circle" size={20} color={Colors.success} />
                 </Stack>
                 <Stack flex={1} justifyContent="center" paddingVertical={2}>
-                  <StyledText
+                  <Text
                     fontSize={13}
                     fontWeight="600"
                     color={Colors.textPrimary}
                     lineHeight={20}
                   >
                     {motivationMsg}
-                  </StyledText>
+                  </Text>
                 </Stack>
               </Stack>
             )}
@@ -635,7 +636,7 @@ export default function InsightsScreen() {
 
         {tab === "cycles" && (
           <>
-            {/* <StyledText
+            {/* <Text
               fontSize={12}
               fontWeight="700"
               color={Colors.textTertiary}
@@ -647,7 +648,7 @@ export default function InsightsScreen() {
                 ? "S"
                 : ""}{" "}
               TRACKED
-            </StyledText> */}
+            </Text> */}
 
             {historyGroups.length === 0 && (
               <Stack
@@ -662,13 +663,13 @@ export default function InsightsScreen() {
                   size={32}
                   color={Colors.textTertiary}
                 />
-                <StyledText
+                <Text
                   fontSize={15}
                   color={Colors.textSecondary}
                   textAlign="center"
                 >
                   No cycles logged yet.
-                </StyledText>
+                </Text>
               </Stack>
             )}
 
@@ -689,13 +690,13 @@ export default function InsightsScreen() {
 
               return (
                 <Stack key={group.month} gap={12} marginHorizontal={8}>
-                  <StyledText
+                  <Text
                     fontSize={14}
                     fontWeight={theme.fontWeight.semiBold}
                     color={Colors.textPrimary}
                   >
                     {group.month}
-                  </StyledText>
+                  </Text>
 
                   <StyledTimeline
                     items={timelineItems}
@@ -750,13 +751,13 @@ export default function InsightsScreen() {
             </PremiumGate>
 
             <Stack gap={12}>
-              <StyledText
+              <Text
                 fontSize={13}
                 fontWeight="600"
                 color={Colors.textSecondary}
               >
                 Symptom insights
-              </StyledText>
+              </Text>
 
               <Stack
                 backgroundColor={Colors.primaryFaint}
@@ -778,22 +779,22 @@ export default function InsightsScreen() {
                   <VelaIcon name="activity" size={24} color={Colors.primary} />
                 </Stack>
                 <Stack alignItems="center" gap={6}>
-                  <StyledText
+                  <Text
                     fontSize={15}
                     fontWeight="600"
                     color={Colors.textPrimary}
                     textAlign="center"
                   >
                     Log more cycles to unlock
-                  </StyledText>
-                  <StyledText
+                  </Text>
+                  <Text
                     fontSize={12}
                     color={Colors.textSecondary}
                     textAlign="center"
                     lineHeight={17}
                   >
                     Symptom patterns appear after a few more cycles.
-                  </StyledText>
+                  </Text>
                 </Stack>
               </Stack>
             </Stack>
