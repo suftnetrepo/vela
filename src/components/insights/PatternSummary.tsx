@@ -53,7 +53,7 @@ export function PatternSummary({ cycles }: PatternSummaryProps) {
     <Stack backgroundColor={Colors.surface} borderRadius={20} padding={20} gap={14}
       shadowColor="#000" shadowOffset={{ width: 0, height: 2 }} shadowOpacity={0.06}
       shadowRadius={10} elevation={2}>
-      <Text fontSize={17} fontWeight="700" color={Colors.textPrimary}>
+      <Text variant="title" color={Colors.textPrimary}>
         Cycle patterns
       </Text>
 
@@ -65,8 +65,10 @@ export function PatternSummary({ cycles }: PatternSummaryProps) {
         ] as { label: string; value: string }[]).map((item, idx) => (
           <Stack key={item.label} flex={1} backgroundColor={Colors.surfaceAlt} borderRadius={14}
             padding={idx === 1 ? 14 : 12} alignItems="center" gap={4}>
-            <Text fontSize={idx === 1 ? 18 : 16} fontWeight="800" color={Colors.textPrimary}>{item.value}</Text>
-            <Text fontSize={10} color={Colors.textTertiary} fontWeight={idx === 1 ? "600" : "500"}>
+            <Text variant="metric" color={Colors.textPrimary}>
+              {item.value}
+            </Text>
+            <Text variant="subLabel" color={Colors.textTertiary} fontWeight={idx === 1 ? "600" : "500"}>
               {item.label}
             </Text>
           </Stack>
@@ -75,7 +77,7 @@ export function PatternSummary({ cycles }: PatternSummaryProps) {
 
       <Stack gap={8}>
         {insights.map((insight, idx) => (
-          <Text key={idx} fontSize={13} color={Colors.textSecondary} lineHeight={19}>
+          <Text key={idx} variant="body" color={Colors.textSecondary} lineHeight={19}>
             {insight}
           </Text>
         ))}
@@ -84,8 +86,8 @@ export function PatternSummary({ cycles }: PatternSummaryProps) {
       <Stack horizontal alignItems="center" gap={8} backgroundColor={Colors.primaryFaint}
         borderRadius={12} paddingHorizontal={12} paddingVertical={8}>
         <Stack flex={1} gap={0.5}>
-          <Text fontSize={12} fontWeight="600" color={Colors.textPrimary}>{regularity}</Text>
-          <Text fontSize={11} color={Colors.textTertiary}>Based on {lengths.length} cycles</Text>
+          <Text variant="label" color={Colors.textPrimary}>{regularity}</Text>
+          <Text variant="caption" color={Colors.textTertiary}>Based on {lengths.length} cycles</Text>
         </Stack>
         <VelaIcon name={regularityIcon} size={16} color={regularityColor} />
       </Stack>

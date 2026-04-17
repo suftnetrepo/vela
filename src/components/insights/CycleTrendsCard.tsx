@@ -37,10 +37,10 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
       <Stack flexDirection="row" alignItems="center" justifyContent="space-between"
         paddingHorizontal={20} paddingTop={20} paddingBottom={16}>
         <Stack gap={2}>
-          <Text fontSize={18} fontWeight="800" color={Colors.textPrimary}>
+          <Text variant="title" color={Colors.textPrimary}>
             Cycle trends
           </Text>
-          <Text fontSize={13} color={Colors.textSecondary}>
+          <Text variant="body" color={Colors.textSecondary}>
             Average of the last 7 cycles
           </Text>
         </Stack>
@@ -58,10 +58,11 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
         <Stack flex={1} backgroundColor={Colors.surfaceAlt} borderRadius={20} padding={18} gap={10}
           position="relative" overflow="hidden">
           <Stack gap={4}>
+            {/* Prominent stat numbers: 28/800 is intentionally between metric (18/800) and display (32/800) */}
             <Text fontSize={28} fontWeight="800" color={Colors.textPrimary}>
               {prediction.averagePeriodLength} days
             </Text>
-            <Text fontSize={13} color={Colors.textPrimary}>
+            <Text variant="body" color={Colors.textPrimary}>
               Avg. period length
             </Text>
           </Stack>
@@ -80,10 +81,11 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
         <Stack flex={1} backgroundColor={Colors.surfaceAlt} borderRadius={20} padding={18} gap={10}
           position="relative" overflow="hidden">
           <Stack gap={4}>
+            {/* Prominent stat numbers: 28/800 is intentionally between metric (18/800) and display (32/800) */}
             <Text fontSize={28} fontWeight="800" color={Colors.textPrimary}>
               {prediction.averageCycleLength} days
             </Text>
-            <Text fontSize={13} color={Colors.textPrimary}>
+            <Text variant="body" color={Colors.textPrimary}>
               Avg. cycle length
             </Text>
           </Stack>
@@ -105,18 +107,18 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
       {/* Current cycle section */}
       <Stack padding={20} gap={10}>
         <Stack gap={2}>
-          <Text fontSize={16} fontWeight="700" color={Colors.textPrimary}>
+          <Text variant="subtitle" color={Colors.textPrimary}>
             Current cycle
           </Text>
           <Stack flexDirection="row" alignItems="center" gap={8}>
-            <Text fontSize={14} color={Colors.textSecondary}>
+            <Text variant="body" color={Colors.textSecondary}>
               {currentDay} days
             </Text>
             {startedText && (
               <>
                 <Stack width={3} height={3} borderRadius={2}
                   backgroundColor={Colors.textTertiary} />
-                <Text fontSize={14} color={Colors.textSecondary}>
+                <Text variant="body" color={Colors.textSecondary}>
                   {startedText}
                 </Text>
               </>

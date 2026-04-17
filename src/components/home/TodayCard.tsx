@@ -99,7 +99,7 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
               shadowOpacity={0.08} shadowRadius={4} elevation={2}>
               <VelaIcon name={iconName} size={20} color={phaseColor} />
             </Stack>
-            <Text fontSize={18} fontWeight="800" color={Colors.textPrimary}>
+            <Text variant="metric" color={Colors.textPrimary}>
               {phaseName(prediction.currentPhase)}
             </Text>
           </Stack>
@@ -108,7 +108,7 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
             alignItems="center" justifyContent="center"
             shadowColor={phaseColor} shadowOffset={{ width: 0, height: 2 }}
             shadowOpacity={0.20} shadowRadius={6} elevation={3}>
-            <Text fontSize={18} fontWeight="800" color={Colors.dayMuted}>
+            <Text variant="metric" color={Colors.dayMuted}>
               {prediction.currentCycleDay}
             </Text>
           </Stack>
@@ -116,13 +116,13 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
       </Stack>
 
       {/* Phase description */}
-      <Text fontSize={14} color={Colors.textSecondary} lineHeight={21}>
+      <Text variant="body" color={Colors.textSecondary} lineHeight={21}>
         {phaseDescription(prediction.currentPhase)}
       </Text>
 
       {/* Prediction confidence note */}
       {getPredictionConfidence() && (
-        <Text fontSize={12} color={Colors.textTertiary} fontWeight="600" lineHeight={17}>
+        <Text variant="subLabel" color={Colors.textTertiary} lineHeight={17}>
           💡 {getPredictionConfidence()}
         </Text>
       )}
@@ -130,18 +130,18 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
       {/* Next period info + Log button section */}
       <Stack horizontal alignItems="center" gap={10} justifyContent="space-between" >
         <Stack backgroundColor={Colors.surface} borderRadius={16} padding={12} gap={4} flex={1}>
-          <Text fontSize={10} color={Colors.textTertiary} fontWeight="700">
+          <Text variant="overline" color={Colors.textTertiary}>
             NEXT PERIOD
           </Text>
           <Stack horizontal alignItems="center" gap={6}>
             <VelaIcon name="phase-predicted" size={14} color={Colors.primary} />
-            <Text fontSize={14} fontWeight="800" color={Colors.textPrimary}>
+            <Text variant="metric" color={Colors.textPrimary} fontSize={14}>
               {daysUntilText(prediction.daysUntilNextPeriod)}
             </Text>
             {prediction.confidenceDays > 1 && (
-              <Text fontSize={10} color={Colors.textTertiary} fontWeight="600">
-                ±{prediction.confidenceDays}d
-              </Text>
+            <Text variant="caption" color={Colors.textTertiary}>
+              ±{prediction.confidenceDays}d
+            </Text>
             )}
           </Stack>
         </Stack>
@@ -163,7 +163,7 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
             elevation={3}
           >
             <VelaIcon name="edit" size={18} color={Colors.textInverse} />
-            <Text fontSize={13} fontWeight="700" color={Colors.textInverse}>
+            <Text variant="button" color={Colors.textInverse} fontSize={13}>
               Log
             </Text>
           </StyledPressable>

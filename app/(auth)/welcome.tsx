@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Dimensions } from 'react-native'
-import { Stack, StyledText, StyledPressable, StyledPage } from 'fluent-styles'
+import { Stack, StyledPressable, StyledPage } from 'fluent-styles'
 import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../src/hooks/useColors'
@@ -68,11 +68,9 @@ export default function WelcomeScreen() {
         {/* Big coloured headline word */}
         <Stack alignItems="center" marginBottom={8}>
           <Text
-            fontSize={56}
-            fontWeight="800"
+            variant="hero"
             color={Colors.primary}
             textAlign="center"
-            letterSpacing={-1}
           >
             {p.headline}
           </Text>
@@ -81,8 +79,7 @@ export default function WelcomeScreen() {
         {/* Supporting title */}
         <Stack alignItems="center" marginBottom={14}>
           <Text
-            fontSize={22}
-            fontWeight="700"
+            variant="title"
             color={Colors.textPrimary}
             textAlign="center"
           >
@@ -93,7 +90,7 @@ export default function WelcomeScreen() {
         {/* Subtitle */}
         <Stack alignItems="center" marginBottom={40}>
           <Text
-            fontSize={15}
+            variant="body"
             color={Colors.textSecondary}
             textAlign="center"
             lineHeight={21}
@@ -140,7 +137,7 @@ export default function WelcomeScreen() {
           shadowRadius={14}
           elevation={6}
         >
-          <Text fontSize={17} fontWeight="800" color={Colors.textInverse}>
+          <Text variant="button" color={Colors.textInverse}>
             {isLast ? 'Get started' : 'Next'}
           </Text>
         </StyledPressable>
@@ -151,7 +148,7 @@ export default function WelcomeScreen() {
             paddingVertical={12}
             onPress={() => router.replace('/(auth)/onboarding')}
           >
-            <Text fontSize={14} color={Colors.textTertiary}>
+            <Text variant="body" color={Colors.textTertiary}>
               Skip
             </Text>
           </StyledPressable>

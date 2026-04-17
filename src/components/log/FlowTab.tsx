@@ -59,7 +59,7 @@ function SelectTile({
         {icon}
       </Stack>
       <Text
-        fontSize={12}
+        variant="subLabel"
         fontWeight={selected ? '700' : '500'}
         color={selected ? Colors.primaryDark : Colors.textSecondary}
         textAlign="center"
@@ -85,7 +85,7 @@ function LogSection({ title, children }: { title: string; children: React.ReactN
       shadowRadius={8}
       elevation={1}
     >
-      <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+      <Text variant="subtitle" fontSize={15} fontWeight="700" color={Colors.textPrimary}>
         {title}
       </Text>
       {children}

@@ -16,7 +16,7 @@ export function QuickLogButton({ onPress }: QuickLogButtonProps) {
       shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 4 }}
       shadowOpacity={0.3} shadowRadius={12} elevation={5}>
       <VelaIcon name="edit" size={18} color={Colors.textInverse} />
-      <Text fontSize={15} fontWeight="700" color={Colors.textInverse}>
+      <Text variant="button" fontSize={15} color={Colors.textInverse}>
         Log today
       </Text>
     </StyledPressable>
