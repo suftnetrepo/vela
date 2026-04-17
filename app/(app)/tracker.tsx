@@ -24,7 +24,11 @@ import Svg, {
 import { useColors } from "../../src/hooks/useColors";
 import { useTracker } from "../../src/hooks/useTracker";
 import { VelaIcon } from "../../src/components/shared/VelaIcon";
-import { formatMeasurement, getMeasurementErrorMessage, TRACKER_UNITS } from "../../src/constants/tracker";
+import {
+  formatMeasurement,
+  getMeasurementErrorMessage,
+  TRACKER_UNITS,
+} from "../../src/constants/tracker";
 import { format, parseISO } from "date-fns";
 import { loaderService, toastService } from "fluent-styles";
 
@@ -284,11 +288,7 @@ function MetricInput({
           paddingHorizontal={14}
           paddingVertical={12}
         >
-          <Text
-            fontSize={14}
-            fontWeight="600"
-            color={Colors.textSecondary}
-          >
+          <Text fontSize={14} fontWeight="600" color={Colors.textSecondary}>
             {unit}
           </Text>
         </Stack>
@@ -337,11 +337,7 @@ function StatRow({
           <Text fontSize={17} fontWeight="800" color={s.color}>
             {s.value}
           </Text>
-          <Text
-            fontSize={10}
-            color={Colors.textTertiary}
-            fontWeight="600"
-          >
+          <Text fontSize={10} color={Colors.textTertiary} fontWeight="600">
             {s.label.toUpperCase()}
           </Text>
         </Stack>
@@ -366,8 +362,13 @@ export default function TrackerScreen() {
 
   const handleSaveWeight = async (raw: string) => {
     const n = parseFloat(raw);
-    if (isNaN(n) || n <= 0 || n < TRACKER_UNITS.weight.min || n > TRACKER_UNITS.weight.max) {
-      toastService.error(getMeasurementErrorMessage('weight'));
+    if (
+      isNaN(n) ||
+      n <= 0 ||
+      n < TRACKER_UNITS.weight.min ||
+      n > TRACKER_UNITS.weight.max
+    ) {
+      toastService.error(getMeasurementErrorMessage("weight"));
       return;
     }
     const id = loaderService.show({ variant: "dots", label: "Saving…" });
@@ -383,8 +384,12 @@ export default function TrackerScreen() {
 
   const handleSaveTemp = async (raw: string) => {
     const n = parseFloat(raw);
-    if (isNaN(n) || n < TRACKER_UNITS.temperature.min || n > TRACKER_UNITS.temperature.max) {
-      toastService.error(getMeasurementErrorMessage('temperature'));
+    if (
+      isNaN(n) ||
+      n < TRACKER_UNITS.temperature.min ||
+      n > TRACKER_UNITS.temperature.max
+    ) {
+      toastService.error(getMeasurementErrorMessage("temperature"));
       return;
     }
     const id = loaderService.show({ variant: "dots", label: "Saving…" });
@@ -431,7 +436,7 @@ export default function TrackerScreen() {
           fontSize: 22,
           fontWeight: "800",
           color: Colors.textPrimary,
-                fontFamily: "PlusJakartaSans_700Bold",
+          fontFamily: "PlusJakartaSans_700Bold",
         }}
       />
 
@@ -525,12 +530,15 @@ export default function TrackerScreen() {
                   items={[
                     {
                       label: "Current",
-                      value: formatMeasurement(wVals[wVals.length - 1], 'weight'),
+                      value: formatMeasurement(
+                        wVals[wVals.length - 1],
+                        "weight",
+                      ),
                       color: Colors.textPrimary,
                     },
                     {
                       label: "Change",
-                      value: `${wVals[wVals.length - 1] - wVals[0] >= 0 ? "+" : ""}${formatMeasurement(wVals[wVals.length - 1] - wVals[0], 'weight')}`,
+                      value: `${wVals[wVals.length - 1] - wVals[0] >= 0 ? "+" : ""}${formatMeasurement(wVals[wVals.length - 1] - wVals[0], "weight")}`,
                       color:
                         wVals[wVals.length - 1] - wVals[0] <= 0
                           ? Colors.success
@@ -567,11 +575,7 @@ export default function TrackerScreen() {
                 >
                   <VelaIcon name="activity" size={28} color={Colors.primary} />
                 </Stack>
-                <Text
-                  fontSize={15}
-                  fontWeight="700"
-                  color={Colors.textPrimary}
-                >
+                <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
                   No weight data yet
                 </Text>
                 <Text
@@ -668,31 +672,48 @@ export default function TrackerScreen() {
                 shadowOpacity={0.06}
                 shadowRadius={10}
                 elevation={2}
+                flex={1}
               >
-                <Text
-                  fontSize={16}
-                  fontWeight="700"
-                  color={Colors.textPrimary}
+                <Stack
+                  horizontal
+                  flex={1}
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
                 >
-                  BBT chart
-                </Text>
-                <SparkChart
-                  data={tracker.tempData}
-                  color={Colors.fertile}
-                  unit={TRACKER_UNITS.temperature.display}
-                  minY={Math.min(...tVals) - 0.3}
-                  maxY={Math.max(...tVals) + 0.3}
-                />
+                  <Text
+                    fontSize={16}
+                    fontWeight="700"
+                    color={Colors.textPrimary}
+                  >
+                    BBT chart
+                  </Text>
+                </Stack>
+                <Stack justifyContent="center" alignItems="center">
+                  <SparkChart
+                    data={tracker.tempData}
+                    color={Colors.fertile}
+                    unit={TRACKER_UNITS.temperature.display}
+                    minY={Math.min(...tVals) - 0.3}
+                    maxY={Math.max(...tVals) + 0.3}
+                  />
+                </Stack>
+
                 <StatRow
                   items={[
                     {
                       label: "Today",
-                      value: formatMeasurement(tVals[tVals.length - 1], 'temperature'),
+                      value: formatMeasurement(
+                        tVals[tVals.length - 1],
+                        "temperature",
+                      ),
                       color: Colors.textPrimary,
                     },
                     {
                       label: "Average",
-                      value: formatMeasurement(tVals.reduce((a, b) => a + b, 0) / tVals.length, 'temperature'),
+                      value: formatMeasurement(
+                        tVals.reduce((a, b) => a + b, 0) / tVals.length,
+                        "temperature",
+                      ),
                       color: Colors.fertile,
                     },
                     {
@@ -720,11 +741,7 @@ export default function TrackerScreen() {
             shadowRadius={10}
             elevation={2}
           >
-            <Text
-              fontSize={15}
-              fontWeight="700"
-              color={Colors.textPrimary}
-            >
+            <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
               Today's notes
             </Text>
             <StyledInput
@@ -740,7 +757,11 @@ export default function TrackerScreen() {
               focusColor={Colors.primary}
               borderColor={Colors.border}
             />
-            <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
+            <Stack
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <Text fontSize={11} color={Colors.textTertiary}>
                 Private journal for your cycle
               </Text>

@@ -167,7 +167,7 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
         <Text fontSize={12} fontWeight="700" color={Colors.textTertiary} letterSpacing={0.5}>
           PASTE CODE
         </Text>
-        <TextInput
+        <StyledTextInput
           variant="filled"
           placeholder="Paste export code here…"
           value={code}
@@ -287,7 +287,7 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
         <Stack horizontal gap={8} alignItems="flex-start">
           <VelaIcon name="info" size={16} color={Colors.primary} style={{ marginTop: 2 }} />
           <Text fontSize={12} color={Colors.textPrimary} lineHeight={18} flex={1}>
-            <Text fontWeight="600">Privacy</Text>: Only your cycle, logs, and settings are imported. Personal data like PIN and biometric settings are kept separate.
+            <Text color={Colors.textPrimary} variant='label'>Privacy</Text>: Only your cycle, logs, and settings are imported. Personal data like PIN and biometric settings are kept separate.
           </Text>
         </Stack>
       </Stack>
