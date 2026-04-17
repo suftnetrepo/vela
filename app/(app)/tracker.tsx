@@ -9,6 +9,7 @@ import {
   StyledPressable,
   StyledTextInput,
   TabBar,
+  StyledInput,
 } from "fluent-styles";
 import { Text } from "@/components/text";
 import Svg, {
@@ -264,7 +265,7 @@ function MetricInput({
       </Text>
       <Stack flexDirection="row" alignItems="center" gap={10}>
         <Stack flex={1}>
-          <TextInput
+          <StyledInput
             variant="outline"
             value={val}
             onChangeText={(v) => {
@@ -725,7 +726,7 @@ export default function TrackerScreen() {
             >
               Today's notes
             </Text>
-            <TextInput
+            <StyledInput
               variant="outline"
               placeholder="How's your body feeling? Any observations about energy, mood, or symptoms…"
               multiline

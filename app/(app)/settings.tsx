@@ -69,7 +69,7 @@ export default function SettingsScreen() {
         marginHorizontal={32}
         title="Settings" titleAlignment="left"
         backgroundColor={Colors.background}
-        titleProps={{ fontSize: 22, fontWeight: '800', color: Colors.textPrimary }} />
+        titleProps={{ fontSize: 22, fontWeight: '800', fontFamily:'PlusJakartaSans_700Bold',  color: Colors.textPrimary }} />
       
       <StyledScrollView contentContainerStyle={{ padding: 16, paddingBottom: 48, gap: 20 }}
         showsVerticalScrollIndicator={false}>

@@ -105,7 +105,7 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
     <Stack gap={12}>
 
       {/* ── Search ───────────────────────────────────────────────────────── */}
-      <TextInput
+      <StyledTextInput
         variant="filled"
         placeholder="Search symptoms…"
         value={search}

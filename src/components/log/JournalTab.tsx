@@ -181,7 +181,7 @@ export function JournalTab({ data, onChange }: JournalTabProps) {
 
       {/* ── Notes ────────────────────────────────────────────────────────── */}
       <LogSection title="Notes">
-        <TextInput
+        <StyledTextInput
           variant="outline"
           placeholder="How are you feeling today? Any observations…"
           multiline

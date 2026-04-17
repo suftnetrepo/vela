@@ -8,6 +8,7 @@ import {
   StyledPressable,
   StyledTextInput,
   theme,
+  StyledInput,
 } from "fluent-styles";
 import { router } from "expo-router";
 import { Text } from "@/components/text";
@@ -157,7 +158,7 @@ export default function FAQScreen() {
 
         {/* Search */}
         <Stack paddingHorizontal={20} paddingBottom={16}>
-          <TextInput
+          <StyledInput
             variant="filled"
             placeholder="Search questions…"
             value={search}
