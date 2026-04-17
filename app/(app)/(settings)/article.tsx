@@ -117,7 +117,7 @@ export default function ArticleScreen() {
           marginHorizontal={16}
           shapeProps={{
             size: 48,
-            backgroundColor: theme.colors.pink[50],
+            backgroundColor: Colors.primaryFaint,
           }}
           backArrowProps={{
             color: Colors.textPrimary,
@@ -147,7 +147,7 @@ export default function ArticleScreen() {
         marginBottom={8}
         shapeProps={{
           size: 48,
-          backgroundColor: theme.colors.pink[50],
+          backgroundColor: Colors.primaryFaint,
         }}
         backArrowProps={{
           color: Colors.textPrimary,

@@ -76,7 +76,7 @@ export default function SecurityScreen() {
           marginHorizontal={16}
           shapeProps={{
             size: 48,
-            backgroundColor: theme.colors.pink[50],
+            backgroundColor: Colors.primaryFaint,
           }}
           backArrowProps={{
             color: Colors.textPrimary,
@@ -110,7 +110,7 @@ export default function SecurityScreen() {
           marginHorizontal={16}
           shapeProps={{
             size: 48,
-            backgroundColor: theme.colors.pink[50],
+            backgroundColor: Colors.primaryFaint,
           }}
           backArrowProps={{
             color: Colors.textPrimary,
@@ -140,7 +140,7 @@ export default function SecurityScreen() {
         marginHorizontal={16}
         shapeProps={{
           size: 48,
-          backgroundColor: theme.colors.pink[50],
+          backgroundColor: Colors.primaryFaint,
         }}
         backArrowProps={{
           color: Colors.textPrimary,
