@@ -1,5 +1,6 @@
 import React from 'react'
 import { Stack, StyledText } from 'fluent-styles'
+import { Text } from '../text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
 import type { VelaIconName } from '../shared/VelaIcon'

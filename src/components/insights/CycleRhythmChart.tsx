@@ -12,6 +12,7 @@
 import React from 'react'
 import { Dimensions } from 'react-native'
 import { Stack, StyledText } from 'fluent-styles'
+import { Text } from '../text'
 import Svg, {
   Path, Circle, Line, Text as SvgText,
   Defs, LinearGradient, Stop,

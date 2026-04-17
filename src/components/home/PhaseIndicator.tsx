@@ -1,5 +1,6 @@
 import React from 'react'
 import { Stack, StyledText } from 'fluent-styles'
+import { Text } from '../text'
 import { useColors } from '../../hooks/useColors'
 import type { CyclePhase } from '../../algorithm/prediction'
 import { phaseName } from '../../algorithm/prediction'

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { Dimensions } from 'react-native'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
+import { Text } from '../text'
 import { useColors } from '../../hooks/useColors'
 import { buildCalendarMap } from '../../algorithm/prediction'
 import type { CyclePrediction, DayMeta } from '../../algorithm/prediction'

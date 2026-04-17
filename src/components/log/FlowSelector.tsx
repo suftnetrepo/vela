@@ -1,5 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
+import { Text } from '../text'
 import { useColors } from '../../hooks/useColors'
 import { FLOW_LEVELS } from '../../constants/moods'
 import { VelaIcon } from '../shared/VelaIcon'

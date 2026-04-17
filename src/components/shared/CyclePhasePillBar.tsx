@@ -16,6 +16,7 @@
 import React from 'react'
 import { Dimensions } from 'react-native'
 import { Stack, StyledText } from 'fluent-styles'
+import { Text } from '../text'
 import { useColors } from '../../hooks/useColors'
 import type { CyclePrediction } from '../../algorithm/prediction'
 

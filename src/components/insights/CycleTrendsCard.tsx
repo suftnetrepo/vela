@@ -8,6 +8,7 @@
 
 import React from 'react'
 import { Stack, StyledText, StyledPressable, StyledCard, theme } from 'fluent-styles'
+import { Text } from '../text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
 import { CyclePhasePillBar } from '../shared/CyclePhasePillBar'

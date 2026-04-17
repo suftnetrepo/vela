@@ -4,6 +4,7 @@ import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import {
   useFonts,
+  PlusJakartaSans_300Light,
   PlusJakartaSans_400Regular,
   PlusJakartaSans_500Medium,
   PlusJakartaSans_600SemiBold,
@@ -32,6 +33,7 @@ export default function RootLayout() {
   const setHasPin = useAuthStore(s => s.setHasPin)
 
   const [fontsLoaded] = useFonts({
+    PlusJakartaSans_300Light,
     PlusJakartaSans_400Regular,
     PlusJakartaSans_500Medium,
     PlusJakartaSans_600SemiBold,

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Dimensions } from 'react-native'
 import { Stack, StyledText, StyledPressable, StyledPage } from 'fluent-styles'
+import { Text } from '../../src/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../src/hooks/useColors'
 import { PrivacyBadge } from '../../src/components/shared/PrivacyBadge'
@@ -66,7 +67,7 @@ export default function WelcomeScreen() {
 
         {/* Big coloured headline word */}
         <Stack alignItems="center" marginBottom={8}>
-          <StyledText
+          <Text
             fontSize={56}
             fontWeight="800"
             color={Colors.primary}
@@ -74,31 +75,31 @@ export default function WelcomeScreen() {
             letterSpacing={-1}
           >
             {p.headline}
-          </StyledText>
+          </Text>
         </Stack>
 
         {/* Supporting title */}
         <Stack alignItems="center" marginBottom={14}>
-          <StyledText
+          <Text
             fontSize={22}
             fontWeight="700"
             color={Colors.textPrimary}
             textAlign="center"
           >
             {p.title}
-          </StyledText>
+          </Text>
         </Stack>
 
         {/* Subtitle */}
         <Stack alignItems="center" marginBottom={40}>
-          <StyledText
-            fontSize={16}
+          <Text
+            fontSize={15}
             color={Colors.textSecondary}
             textAlign="center"
-            lineHeight={25}
+            lineHeight={21}
           >
-            {p.subtitle}
-          </StyledText>
+            {page.subtitle}
+          </Text>
         </Stack>
 
         {/* Privacy badge on last page */}
@@ -139,9 +140,9 @@ export default function WelcomeScreen() {
           shadowRadius={14}
           elevation={6}
         >
-          <StyledText fontSize={17} fontWeight="800" color={Colors.textInverse}>
+          <Text fontSize={17} fontWeight="800" color={Colors.textInverse}>
             {isLast ? 'Get started' : 'Next'}
-          </StyledText>
+          </Text>
         </StyledPressable>
 
         {!isLast && (
@@ -150,9 +151,9 @@ export default function WelcomeScreen() {
             paddingVertical={12}
             onPress={() => router.replace('/(auth)/onboarding')}
           >
-            <StyledText fontSize={14} color={Colors.textTertiary}>
+            <Text fontSize={14} color={Colors.textTertiary}>
               Skip
-            </StyledText>
+            </Text>
           </StyledPressable>
         )}
       </Stack>

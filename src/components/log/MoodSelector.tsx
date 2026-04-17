@@ -1,5 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
+import { Text } from '../text'
 import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { useMoods } from '../../hooks/useMoods'

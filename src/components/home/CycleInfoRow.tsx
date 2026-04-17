@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { Stack, StyledText, StyledScrollView, StyledPressable } from 'fluent-styles'
+import { Text } from '../text'
 import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'

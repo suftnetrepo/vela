@@ -1,5 +1,6 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
+import { Text } from '../text'
 import { THEMES, type ThemeName } from '../../constants/themes'
 import { useColors } from '../../hooks/useColors'
 import { useSettingsStore } from '../../stores/settings.store'

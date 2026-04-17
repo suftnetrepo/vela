@@ -13,6 +13,7 @@
 
 import React from 'react'
 import { Stack, StyledText } from 'fluent-styles'
+import { Text } from '../text'
 import { VelaIcon } from './VelaIcon'
 
 interface BrandHeaderProps {

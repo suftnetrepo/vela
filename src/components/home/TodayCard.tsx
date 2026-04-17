@@ -1,11 +1,14 @@
 import React from 'react'
 import { Stack, StyledText, StyledPressable, theme } from 'fluent-styles'
+import { Text } from '../text'
 import { useColors } from '../../hooks/useColors'
 import type { CyclePrediction } from '../../algorithm/prediction'
 import { phaseName, phaseDescription } from '../../algorithm/prediction'
 import { daysUntilText } from '../../utils/date'
 import { VelaIcon } from '../shared/VelaIcon'
 import type { VelaIconName } from '../shared/VelaIcon'
+import { Text } from '../text'
+
 
 interface TodayCardProps {
   prediction:  CyclePrediction | null
@@ -54,12 +57,12 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
             <VelaIcon name="flower" size={26} color={Colors.primary} />
           </Stack>
           <Stack flex={1} gap={2}>
-            <StyledText fontSize={18} fontWeight="800" color={Colors.textPrimary}>
+            <Text fontSize={18} fontWeight="800" color={Colors.textPrimary}>
               Welcome to Vela
-            </StyledText>
-            <StyledText fontSize={13} color={Colors.textSecondary}>
+            </Text>
+            <Text fontSize={13} color={Colors.textSecondary}>
               Log your first period to start tracking
-            </StyledText>
+            </Text>
           </Stack>
         </Stack>
         {onLogPress && (
@@ -67,9 +70,9 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
             paddingHorizontal={20} paddingVertical={12} alignSelf="flex-start"
             onPress={onLogPress} flexDirection="row" alignItems="center" gap={8}>
             <VelaIcon name="edit" size={15} color={Colors.textInverse} />
-            <StyledText fontSize={14} fontWeight="700" color={Colors.textInverse}>
+            <Text fontSize={14} fontWeight="700" color={Colors.textInverse}>
               Log today
-            </StyledText>
+            </Text>
           </StyledPressable>
         )}
       </Stack>

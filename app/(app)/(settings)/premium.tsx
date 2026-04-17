@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Stack, StyledText, StyledScrollView, StyledPage, StyledPressable, StyledDivider, theme } from 'fluent-styles'
+import { Text } from '../../../src/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../../src/hooks/useColors'
 import { usePremium } from '../../../src/hooks/usePremium'

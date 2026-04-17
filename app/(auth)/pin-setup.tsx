@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Stack, StyledText, StyledPressable, StyledPage } from 'fluent-styles'
+import { Text } from '../../src/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../src/hooks/useColors'
 import { useSettings } from '../../src/hooks/useSettings'

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dimensions } from 'react-native'
 import { Stack, StyledText } from 'fluent-styles'
+import { Text } from '../text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from '../shared/VelaIcon'
 import type { Cycle } from '../../db/schema'

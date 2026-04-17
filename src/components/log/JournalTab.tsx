@@ -1,6 +1,7 @@
 import React from 'react'
 import { ActivityIndicator } from 'react-native'
 import { Stack, StyledText, StyledPressable, StyledTextInput, Collapse } from 'fluent-styles'
+import { Text } from '../text'
 import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
 import { useMoods } from '../../hooks/useMoods'

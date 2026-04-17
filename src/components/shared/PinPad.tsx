@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Stack, StyledText, StyledPressable } from 'fluent-styles'
+import { Text } from '../text'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from './VelaIcon'
 import { APP_CONFIG } from '../../constants/config'
