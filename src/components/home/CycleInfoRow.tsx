@@ -151,7 +151,7 @@ export function CycleInfoRow({ prediction }: CycleInfoRowProps) {
             </Text>
           </Stack>
           <Text fontSize={10} fontWeight="600" color={Colors.textSecondary} textAlign="center">
-            Based on cycle{'\n'}phase
+            Cycle phase
           </Text>
         </StyledPressable>
 

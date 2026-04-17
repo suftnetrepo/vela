@@ -103,7 +103,7 @@ export default function NotificationsScreen() {
     <StyledPage flex={1} backgroundColor={Colors.background}>
       <StyledPage.Header
         title="Notifications"
-        titleAlignment="center"
+        titleAlignment="left"
         marginHorizontal={16}
         shapeProps={{
           size:48,
@@ -115,7 +115,8 @@ export default function NotificationsScreen() {
         showBackArrow
         onBackPress={() => router.push("/(app)/settings")}
         backgroundColor={Colors.background}
-        titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
+        titleProps={{ fontWeight: "700", color: Colors.textPrimary, fontFamily: "PlusJakartaSans_700Bold" }}
+        rightIcon={<></>}
       />
 
       <StyledScrollView

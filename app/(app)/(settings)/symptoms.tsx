@@ -257,7 +257,7 @@ export default function SymptomsSettingsScreen() {
         showBackArrow
         onBackPress={() => router.push("/(app)/settings")}
         backgroundColor={Colors.background}
-        titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
+        titleProps={{ fontWeight: "700", color: Colors.textPrimary, fontFamily: "PlusJakartaSans_700Bold" }}
       />
   
       <Stack

@@ -207,7 +207,7 @@ export default function LogScreen() {
         showBackArrow
         onBackPress={() => router.back()}
         backgroundColor={Colors.background}
-        titleProps={{ fontWeight: '700', color: Colors.textPrimary }}
+        titleProps={{ fontWeight: '700', color: Colors.textPrimary,       fontFamily: "PlusJakartaSans_700Bold" }}
         rightIcon={
           log ? (
             <StyledPressable onPress={handleDelete} padding={8}>

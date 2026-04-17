@@ -25,7 +25,7 @@ export default function ThemeScreen() {
     <StyledPage flex={1} backgroundColor={Colors.background}>
        <StyledPage.Header
         title="Theme"
-        titleAlignment="center"
+        titleAlignment="left"
         marginHorizontal={16}
         shapeProps={{
           size: 48,
@@ -37,7 +37,7 @@ export default function ThemeScreen() {
         showBackArrow
         onBackPress={() => router.push("/(app)/settings")}
         backgroundColor={Colors.background}
-        titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
+        titleProps={{ fontWeight: "700", color: Colors.textPrimary, fontFamily: "PlusJakartaSans_700Bold" }}
       />
       <StyledScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
         <ThemePreview onSelect={handleSelect} />

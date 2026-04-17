@@ -54,6 +54,7 @@ type TextVariant =
   | 'caption'
   | 'button'
   | 'metric'
+  | 'metric_small'
   | 'hero'
   | 'overline'
 
@@ -129,6 +130,11 @@ const TEXT_VARIANTS: Record<TextVariant, any> = {
     fontSize: 18,
     fontWeight: '800',
     lineHeight: 26,
+  },
+   metric_small: {
+    fontSize: 14,
+    fontWeight: '600',
+    lineHeight: 20,
   },
   // Large splash / hero welcome text
   hero: {

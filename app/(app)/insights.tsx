@@ -181,7 +181,7 @@ const ActiveCycleHistoryCard = ({
           padding={10}
         >
           <Text fontSize={11} color={Colors.textTertiary}>
-            Average cycle
+            Avg cycle
           </Text>
           <Text fontSize={14} fontWeight="800" color={Colors.textPrimary}>
             {prediction?.averageCycleLength ?? "—"} days
@@ -384,6 +384,7 @@ export default function InsightsScreen() {
         titleProps={{
           fontSize: 22,
           fontWeight: "800",
+          fontFamily: "PlusJakartaSans_700Bold",
           color: Colors.textPrimary,
         }}
       />
@@ -689,7 +690,7 @@ export default function InsightsScreen() {
               );
 
               return (
-                <Stack key={group.month} gap={12} marginHorizontal={8}>
+                <Stack key={group.month} gap={6} marginHorizontal={1}>
                   <Text
                     fontSize={14}
                     fontWeight={theme.fontWeight.semiBold}
@@ -700,7 +701,7 @@ export default function InsightsScreen() {
 
                   <StyledTimeline
                     items={timelineItems}
-                    variant="default"
+                    variant="spacious"
                     dotShape="filled"
                     dotSize={15}
                     timeColumnWidth={58}

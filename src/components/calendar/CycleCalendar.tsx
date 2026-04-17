@@ -145,7 +145,7 @@ export function CycleCalendar({ prediction, cycles, onDayPress, loggedDates }: C
       ))}
 
       {/* Legend */}
-      <Stack horizontal gap={16} flexWrap="wrap" paddingTop={16} paddingHorizontal={4}>
+      <Stack horizontal gap={8} flexWrap="wrap"  paddingHorizontal={4}>
         {[
           { color: Colors.dayPeriod,    label: 'Period' },
           { color: Colors.dayFertile,   label: 'Fertile' },

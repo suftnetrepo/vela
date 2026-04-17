@@ -431,6 +431,7 @@ export default function TrackerScreen() {
           fontSize: 22,
           fontWeight: "800",
           color: Colors.textPrimary,
+                fontFamily: "PlusJakartaSans_700Bold",
         }}
       />
 

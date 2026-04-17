@@ -142,7 +142,7 @@ export default function ArticleScreen() {
     <StyledPage flex={1} backgroundColor={Colors.background}>
       <StyledPage.Header
         title=""
-        titleAlignment="center"
+        titleAlignment="left"
         marginHorizontal={16}
         marginBottom={8}
         shapeProps={{
@@ -155,7 +155,7 @@ export default function ArticleScreen() {
         showBackArrow
         onBackPress={handleBackPress}
         backgroundColor={Colors.background}
-        titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
+        titleProps={{ fontWeight: "700", color: Colors.textPrimary, fontFamily: "PlusJakartaSans_700Bold" }}
       />
 
       <StyledScrollView

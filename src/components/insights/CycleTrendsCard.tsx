@@ -63,7 +63,7 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
               {prediction.averagePeriodLength} days
             </Text>
             <Text variant="body" color={Colors.textPrimary}>
-              Avg. period length
+              Avg. period 
             </Text>
           </Stack>
           {/* Icon top-right */}
@@ -86,7 +86,7 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
               {prediction.averageCycleLength} days
             </Text>
             <Text variant="body" color={Colors.textPrimary}>
-              Avg. cycle length
+              Avg. cycle 
             </Text>
           </Stack>
           {/* Icon top-right */}

@@ -73,7 +73,7 @@ export default function PremiumScreen() {
     <StyledPage flex={1} backgroundColor={Colors.background}>
       <StyledPage.Header
         title=""
-        titleAlignment="center"
+        titleAlignment="left"
         marginHorizontal={16}
         shapeProps={{
           size: 48,
@@ -85,7 +85,7 @@ export default function PremiumScreen() {
         showBackArrow
         onBackPress={() => router.push('/(app)/settings')}
         backgroundColor={Colors.background}
-        titleProps={{ fontWeight: "700", color: Colors.textPrimary }}
+        titleProps={{ fontWeight: "700", color: Colors.textPrimary, fontFamily: "PlusJakartaSans_700Bold" }}
       />
       <StyledScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
 
