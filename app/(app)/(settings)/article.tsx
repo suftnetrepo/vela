@@ -120,7 +120,7 @@ export default function ArticleScreen() {
             backgroundColor: theme.colors.pink[50],
           }}
           backArrowProps={{
-            color: theme.colors.pink[500],
+            color: Colors.textPrimary,
           }}
           showBackArrow
           onBackPress={handleBackPress}
@@ -150,7 +150,7 @@ export default function ArticleScreen() {
           backgroundColor: theme.colors.pink[50],
         }}
         backArrowProps={{
-          color: theme.colors.pink[500],
+          color: Colors.textPrimary,
         }}
         showBackArrow
         onBackPress={handleBackPress}

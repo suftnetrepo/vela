@@ -79,7 +79,7 @@ export default function SecurityScreen() {
             backgroundColor: theme.colors.pink[50],
           }}
           backArrowProps={{
-            color: theme.colors.pink[500],
+            color: Colors.textPrimary,
           }}
           showBackArrow
            onBackPress={() => {
@@ -113,7 +113,7 @@ export default function SecurityScreen() {
             backgroundColor: theme.colors.pink[50],
           }}
           backArrowProps={{
-            color: theme.colors.pink[500],
+            color: Colors.textPrimary,
           }}
           showBackArrow
           onBackPress={() => router.push("/(app)/settings")}
@@ -143,7 +143,7 @@ export default function SecurityScreen() {
           backgroundColor: theme.colors.pink[50],
         }}
         backArrowProps={{
-          color: theme.colors.pink[500],
+          color: Colors.textPrimary,
         }}
         showBackArrow
         onBackPress={() => router.push("/(app)/settings")}

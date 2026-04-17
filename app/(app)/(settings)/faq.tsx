@@ -121,7 +121,7 @@ export default function FAQScreen() {
           backgroundColor: theme.colors.pink[50],
         }}
         backArrowProps={{
-          color: theme.colors.pink[500],
+          color: Colors.textPrimary,
         }}
         showBackArrow
         onBackPress={() => router.push("/(app)/settings")}

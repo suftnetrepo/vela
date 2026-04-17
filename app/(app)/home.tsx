@@ -72,8 +72,7 @@ export default function HomeScreen() {
         alignItems="center"
         justifyContent="space-between"
         paddingHorizontal={20}
-        paddingTop={12}
-        paddingBottom={16}
+        paddingBottom={8}
         backgroundColor={Colors.background}
       >
         {/* Left: Brand Logo + Wordmark */}

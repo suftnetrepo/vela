@@ -95,7 +95,7 @@ export default function WelcomeScreen() {
             textAlign="center"
             lineHeight={21}
           >
-            {page.subtitle}
+            {p.subtitle}
           </Text>
         </Stack>
 
