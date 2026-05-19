@@ -1,8 +1,8 @@
 import React from 'react'
+import { Alert } from 'react-native'
 import {
-  Stack, StyledText, StyledScrollView, StyledPage,
-  StyledHeader, StyledPressable, StyledDivider, actionSheetService,
-  theme,
+  Stack, StyledScrollView, StyledPage,
+  StyledPressable, StyledDivider, actionSheetService,
 } from 'fluent-styles'
 import { router } from 'expo-router'
 import { Text } from '@/components/text'
@@ -12,6 +12,7 @@ import { VelaIcon } from '../../src/components/shared/VelaIcon'
 import { PrivacyBadge } from '../../src/components/shared/PrivacyBadge'
 import { ExportDataContent } from '../../src/components/shared/ExportDataContent'
 import { ImportDataContent } from '../../src/components/shared/ImportDataContent'
+import { devResetService } from '../../src/services/dev-reset.service'
 import type { VelaIconName } from '../../src/components/shared/VelaIcon'
 
 function MenuRow({
@@ -64,6 +65,33 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function SettingsScreen() {
   const Colors   = useColors()
   const settings = useSettings()
+
+  const handleDevReset = async () => {
+    Alert.alert(
+      'Reset local app data?',
+      'This will erase all locally stored development data and restart the app.',
+      [
+        { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+        {
+          text: 'Reset',
+          onPress: async () => {
+            try {
+              await devResetService.resetAllData()
+              // Delay slightly to ensure state updates are processed
+              setTimeout(() => {
+                Alert.alert('Success', 'App data has been reset. Please restart the app.', [
+                  { text: 'OK', onPress: () => router.navigate('/(auth)/welcome') }
+                ])
+              }, 500)
+            } catch {
+              Alert.alert('Error', 'Failed to reset app data. Please try again.')
+            }
+          },
+          style: 'destructive',
+        },
+      ]
+    )
+  }
 
   return (
     <StyledPage flex={1} backgroundColor={Colors.background}>
@@ -176,6 +204,20 @@ export default function SettingsScreen() {
           <StyledDivider borderBottomColor={Colors.border} opacity={0.25} marginHorizontal={16} />
           <MenuRow icon="info" label="About Vela" subtitle="Version 1.0.0" />
         </Section>
+
+        {/* Development only: Reset button */}
+        {__DEV__ && (
+          <Section title="DEVELOPMENT">
+            <MenuRow 
+              icon="refresh-cw" 
+              label="Reset Local Data" 
+              subtitle="Clear all data and restart"
+              destructive
+              onPress={handleDevReset}
+              iconBg={Colors.surface}
+            />
+          </Section>
+        )}
 
         <PrivacyBadge />
         <Stack alignItems="center" paddingTop={4} gap={3}>
