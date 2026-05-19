@@ -147,7 +147,7 @@ export default function HomeScreen() {
           alignItems="center"
           gap={8}
         >
-          <VelaIcon name="info-circle" size={16} color={Colors.textTertiary} />
+          <VelaIcon name="moon" size={16} color={Colors.textTertiary} />
           <Text fontSize={12} fontWeight="500" color={Colors.textSecondary}>
             Your cycle appears later than usual ({Math.abs(prediction.daysUntilNextPeriod)} day{Math.abs(prediction.daysUntilNextPeriod) !== 1 ? 's' : ''})
           </Text>
@@ -155,7 +155,7 @@ export default function HomeScreen() {
       )}
 
       <StyledScrollView
-        contentContainerStyle={{ paddingBottom: 80 }}
+        contentContainerStyle={{ paddingBottom: 0 }}
         showsVerticalScrollIndicator={false}
       >
         {/* 1. Today hero card */}

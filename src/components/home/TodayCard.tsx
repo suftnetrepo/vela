@@ -196,7 +196,7 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
 
       {/* ── Confidence note ── */}
       {confidence && (
-        <Text paddingHorizontal={12} fontSize={11.5} color={Colors.textTertiary} lineHeight={16}>
+        <Text paddingHorizontal={12} fontSize={11} color={Colors.textTertiary} lineHeight={16} opacity={0.65}>
             {confidence}
         </Text>
       )}
@@ -235,7 +235,7 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
                 ? "Today"
                 : prediction.daysUntilNextPeriod > 0
                 ? `In ${prediction.daysUntilNextPeriod}d`
-                : `Expected Around ${Math.abs(prediction.daysUntilNextPeriod)}d ago`}
+                : `Around ${Math.abs(prediction.daysUntilNextPeriod)} days late`}
             </Text>
             {prediction.confidenceDays > 1 && (
               <Text fontSize={11} color={Colors.textTertiary}>

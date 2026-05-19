@@ -77,7 +77,7 @@ export function CycleCalendar({ prediction, cycles, onDayPress, loggedDates }: C
       </Stack>
 
       {/* Day labels */}
-      <Stack horizontal paddingBottom={8}>
+      <Stack horizontal paddingBottom={8} paddingTop={6}>
         {DAY_LABELS.map(d => (
           <Stack key={d} flex={1} alignItems="center">
             <Text fontSize={11} color={Colors.textTertiary} fontWeight="600">
