@@ -103,21 +103,15 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
       {/* ── Search ───────────────────────────────────────────────────────── */}
       <Stack borderRadius={16} overflow="hidden">
         <StyledTextInput
-          variant="filled"
+          variant="ghost"
           placeholder="Search symptoms…"
           value={search}
           onChangeText={setSearch}
-          leftIcon={<VelaIcon name="search" size={18} color={Colors.textTertiary} />}
+          backgroundColor={Colors.inputBackground}
           clearable
           focusColor={Colors.primary}
           placeholderTextColor={Colors.textTertiary}
-          style={{
-            backgroundColor: Colors.surface,
-            borderWidth: 1,
-            borderColor: Colors.border,
-            paddingLeft: 14,
-            paddingRight: 14,
-          }}
+          
         />
       </Stack>
 

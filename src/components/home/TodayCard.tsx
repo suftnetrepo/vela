@@ -196,7 +196,7 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
 
       {/* ── Confidence note ── */}
       {confidence && (
-        <Text paddingHorizontal={12} fontSize={11} color={Colors.textTertiary} lineHeight={16} opacity={0.65}>
+        <Text fontSize={11} color={Colors.textTertiary} lineHeight={16} opacity={0.65}>
             {confidence}
         </Text>
       )}
@@ -214,7 +214,7 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
         <Stack
           backgroundColor={Colors.primaryFaint}
           borderRadius={14}
-          paddingHorizontal={14}
+          paddingHorizontal={0}
           paddingVertical={10}
           gap={4}
           flex={1}
@@ -232,16 +232,13 @@ export function TodayCard({ prediction, onLogPress, cycles }: TodayCardProps) {
             <VelaIcon name="phase-predicted" size={13} color={Colors.primary} />
             <Text fontSize={11} fontWeight="500" color={Colors.textPrimary}>
               {prediction.daysUntilNextPeriod === 0
-                ? "Today"
+                ? "Expected today"
+                : prediction.daysUntilNextPeriod === 1
+                ? "Expected tomorrow"
                 : prediction.daysUntilNextPeriod > 0
-                ? `In ${prediction.daysUntilNextPeriod}d`
+                ? `In about ${prediction.daysUntilNextPeriod} days`
                 : `Around ${Math.abs(prediction.daysUntilNextPeriod)} days late`}
             </Text>
-            {prediction.confidenceDays > 1 && (
-              <Text fontSize={11} color={Colors.textTertiary}>
-                ±{prediction.confidenceDays}d
-              </Text>
-            )}
           </Stack>
         </Stack>
 

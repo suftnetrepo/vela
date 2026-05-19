@@ -273,7 +273,7 @@ function MetricInput({
       <Stack flexDirection="row" alignItems="center" gap={12}>
         <Stack flex={1}>
           <StyledInput
-            variant="outline"
+            variant="filled"
             value={val}
             onChangeText={(v) => {
               setVal(v);
@@ -283,9 +283,7 @@ function MetricInput({
             placeholder={placeholder}
             placeholderTextColor={Colors.textTertiary}
             focusColor={Colors.primary}
-            borderColor={Colors.border}
-            borderRadius={12}
-            borderWidth={1}
+           
             backgroundColor={Colors.inputBackground}
             color={Colors.textPrimary}
             padding={12}
@@ -796,7 +794,7 @@ export default function TrackerScreen() {
               Today's notes
             </Text>
             <StyledInput
-              variant="outline"
+              variant="filled"
               placeholder="How's your body feeling? Any observations about energy, mood, or symptoms…"
               placeholderTextColor={Colors.textTertiary}
               multiline
@@ -807,9 +805,7 @@ export default function TrackerScreen() {
                 setNoteDirty(true);
               }}
               focusColor={Colors.primary}
-              borderColor={Colors.border}
-              borderRadius={12}
-              borderWidth={1}
+             
               backgroundColor={Colors.inputBackground}
               color={Colors.textPrimary}
               padding={12}

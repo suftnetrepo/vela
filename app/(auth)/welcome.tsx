@@ -19,24 +19,27 @@ interface PageDef {
 
 const PAGES: PageDef[] = [
   {
-    icon:     'flower',
-    headline: 'Vela',
-    title:    'Your cycle, privately.',
-    subtitle: 'A fully offline period tracker. No accounts, no cloud, no data sharing — ever.',
+    icon: 'flower',
+    headline: 'Welcome',
+    title: 'Your cycle, privately.',
+    subtitle:
+      'A beautifully simple period tracker that works entirely offline. No accounts, no cloud, no tracking.',
   },
   {
-    icon:     'phase-predicted',
-    headline: 'Predict',
-    title:    'Know your cycle.',
-    subtitle: 'Vela learns your unique pattern and predicts your next period, fertile window, and ovulation day.',
+    icon: 'phase-predicted',
+    headline: 'Predictions',
+    title: 'Understand your rhythm.',
+    subtitle:
+      'Vela learns your cycle patterns to estimate upcoming periods, fertile days, and ovulation windows.',
   },
   {
-    icon:     'shield-check',
-    headline: 'Private',
-    title:    'Your data stays here.',
-    subtitle: 'Everything you log lives only on your phone. Zero network requests. Zero tracking. Forever.',
+    icon: 'shield-check',
+    headline: 'Privacy',
+    title: 'Your data stays with you.',
+    subtitle:
+      'Everything you log stays on your device. Vela does not track, collect, or share your personal data.',
   },
-]
+];
 
 export default function WelcomeScreen() {
   const Colors  = useColors()

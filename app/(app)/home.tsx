@@ -65,14 +65,14 @@ export default function HomeScreen() {
   };
 
   return (
-    <StyledPage flex={1} backgroundColor={Colors.background}>
+    <StyledPage  backgroundColor={Colors.background}>
       {/* Premium Brand Header */}
       <Stack
         flexDirection="row"
         alignItems="center"
         justifyContent="space-between"
         paddingHorizontal={20}
-        paddingBottom={8}
+      
         backgroundColor={Colors.background}
       >
         {/* Left: Brand Logo + Wordmark */}
@@ -155,7 +155,7 @@ export default function HomeScreen() {
       )}
 
       <StyledScrollView
-        contentContainerStyle={{ paddingBottom: 0 }}
+        contentContainerStyle={{ paddingBottom: 0, marginBottom: 0 }}
         showsVerticalScrollIndicator={false}
       >
         {/* 1. Today hero card */}
@@ -187,7 +187,7 @@ export default function HomeScreen() {
             backgroundColor={Colors.surface}
             borderRadius={24}
             padding={20}
-            paddingBottom={28}
+            paddingBottom={16}
             shadowColor="#000"
             shadowOffset={{ width: 0, height: 2 }}
             shadowOpacity={0.06}
@@ -223,7 +223,7 @@ export default function HomeScreen() {
 
         {/* 3. Cycle trends card */}
         {prediction && (
-          <Stack paddingHorizontal={20} paddingBottom={16}>
+          <Stack paddingHorizontal={20} paddingBottom={12}>
             <CycleTrendsCard
               prediction={prediction}
               activeCycle={activeCycle}

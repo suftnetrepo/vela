@@ -325,6 +325,7 @@ export default function ProfileScreen() {
           />
           <StyledDivider
             borderBottomColor={Colors.border}
+            height={0.2}
             marginHorizontal={16}
           />
           <PrefRow
@@ -360,6 +361,7 @@ export default function ProfileScreen() {
           />
           <StyledDivider
             borderBottomColor={Colors.border}
+            height={0.5}
             marginHorizontal={16}
           />
           <PrefRow
@@ -393,6 +395,7 @@ export default function ProfileScreen() {
           />
           <StyledDivider
             borderBottomColor={Colors.border}
+              height={0.2}
             marginHorizontal={16}
           />
           <PrefRow
@@ -424,6 +427,7 @@ export default function ProfileScreen() {
           />
           <StyledDivider
             borderBottomColor={Colors.border}
+              height={0.5}
             marginHorizontal={16}
           />
           <PrefRow
@@ -444,6 +448,7 @@ export default function ProfileScreen() {
           />
           <StyledDivider
             borderBottomColor={Colors.border}
+              height={0.2}
             marginHorizontal={16}
           />
           <PrefRow
@@ -463,6 +468,7 @@ export default function ProfileScreen() {
           />
           <StyledDivider
             borderBottomColor={Colors.border}
+              height={0.5}
             marginHorizontal={16}
           />
           <PrefRow
@@ -478,6 +484,7 @@ export default function ProfileScreen() {
           />
           <StyledDivider
             borderBottomColor={Colors.border}
+              height={0.2}
             marginHorizontal={16}
           />
           <PrefRow
@@ -499,6 +506,7 @@ export default function ProfileScreen() {
           />
           <StyledDivider
             borderBottomColor={Colors.border}
+              height={0.2}
             marginHorizontal={16}
           />
           <PrefRow icon="info" label="About Vela" subtitle="Version 1.0.0" />
@@ -519,6 +527,7 @@ export default function ProfileScreen() {
             />
             <StyledDivider
               borderBottomColor={Colors.border}
+                height={0.5}
               marginHorizontal={16}
             />
             <PrefRow

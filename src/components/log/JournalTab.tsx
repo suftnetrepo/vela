@@ -193,15 +193,7 @@ export function JournalTab({ data, onChange }: JournalTabProps) {
           value={data.notes}
           onChangeText={v => set({ notes: v })}
           focusColor={Colors.primary}
-          style={{
-            borderColor: Colors.border,
-            borderWidth: 1,
-            borderRadius: 12,
-            backgroundColor: Colors.inputBackground,
-            color: Colors.textPrimary,
-            padding: 12,
-            textAlignVertical: 'top',
-          }}
+           backgroundColor={Colors.inputBackground}
         />
       </LogSection>
 

@@ -210,9 +210,9 @@ export function phaseName(phase: CyclePhase): string {
 
 export function phaseDescription(phase: CyclePhase): string {
   const desc: Record<CyclePhase, string> = {
-    menstrual:        'Your period is estimated to be starting. Rest and care for yourself. 💗',
+    menstrual:        'Your period is estimated to be starting. Rest and care for yourself.',
     follicular:       'Energy is building. Great time for new projects.',
-    ovulation:        'Peak energy day. You may feel your best today. ✨',
+    ovulation:        'Peak energy day. You may feel your best today.',
     fertile:          'You may be entering your fertile window.',
     luteal:           'Winding down. You may notice some changes in how you feel.',
     predicted_period: '',

@@ -37,7 +37,7 @@ import { PREMIUM_STORAGE_KEY } from "../constants/premium";
 
 const REVENUECAT_API_KEY = __DEV__
   ? "test_CUwZEYKAHnjpWzNGwwjrKCEILNM"
-  : "appl_YOUR_VELA_PRODUCTION_KEY";
+  : "appl_DLDmelsrlWRjyPwWCSVYXFouVDP";
 
 // ─── Helper: Determine plan type from product ID ──────────────────────────────
 

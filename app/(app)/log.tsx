@@ -292,10 +292,7 @@ export default function LogScreen() {
         bottom={0}
         left={0}
         right={0}
-        borderTopWidth={1}
-        borderTopColor={Colors.border}
-        paddingHorizontal={20}
-        paddingVertical={16}
+       
       >
         <StyledPressable
           onPress={handleSave}
