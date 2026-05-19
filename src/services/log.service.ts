@@ -1,4 +1,5 @@
 import { eq, gte, lte, and, desc } from 'drizzle-orm'
+import { parseISO, startOfDay } from 'date-fns'
 import { db } from '../db/client'
 import { dailyLogs, symptomLogs } from '../db/schema'
 import type { DailyLog, NewDailyLog, SymptomLog, NewSymptomLog } from '../db/schema'
@@ -38,6 +39,14 @@ export const logService = {
   },
 
   async upsertLog(date: string, data: Partial<NewDailyLog>): Promise<DailyLog> {
+    // Validate date is not in the future
+    const logDate = startOfDay(parseISO(date))
+    const today = startOfDay(new Date())
+    
+    if (logDate > today) {
+      throw new Error('Future dates cannot be logged.')
+    }
+
     const existing = await logService.getByDate(date)
 
     if (existing) {

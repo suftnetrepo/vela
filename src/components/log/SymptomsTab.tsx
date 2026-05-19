@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { ActivityIndicator } from 'react-native'
-import { Stack, StyledText, StyledPressable, StyledTextInput, Collapse } from 'fluent-styles'
+import { Stack, StyledText, StyledPressable, StyledTextInput, StyleShape } from 'fluent-styles'
 import { Text } from '@/components/text'
 import { router } from 'expo-router'
 import { useColors } from '../../hooks/useColors'
@@ -37,25 +37,21 @@ function SymptomChip({
   const icon = getSymptomIcon(symptomKey)
   
   return (
-    <StyledPressable onPress={onPress} alignItems="center" gap={6} width={72}>
-      <Stack
-        width={60} height={60} borderRadius={16}
-        backgroundColor={selected ? Colors.primaryFaint : Colors.surfaceAlt}
-        borderWidth={selected ? 2 : 1.5}
+    <StyledPressable onPress={onPress} alignItems="center"  width="22%">
+      <StyleShape
+        size={48}
+        cycle
+        backgroundColor={selected ? Colors.primaryFaint : Colors.surface}
+        borderWidth={1.2}
         borderColor={selected ? Colors.primary : Colors.border}
         alignItems="center" justifyContent="center"
-        shadowColor={selected ? Colors.primary : '#000'}
-        shadowOffset={{ width: 0, height: selected ? 2 : 1 }}
-        shadowOpacity={selected ? 0.12 : 0.04}
-        shadowRadius={selected ? 6 : 3}
-        elevation={selected ? 2 : 1}
       >
-        <VelaIcon name={icon} size={26}
+        <VelaIcon name={icon} size={24}
           color={selected ? Colors.primary : Colors.textSecondary} />
-      </Stack>
-      <Text fontSize={11} fontWeight={selected ? '700' : '400'}
-        color={selected ? Colors.primaryDark : Colors.textSecondary}
-        textAlign="center" numberOfLines={2}>
+      </StyleShape>
+      <Text variant='caption' fontWeight={selected ? '700' : '500'}
+        color={selected ? Colors.primary : Colors.textSecondary}
+        textAlign="center" numberOfLines={3} lineHeight={12}>
         {label}
       </Text>
     </StyledPressable>
@@ -105,15 +101,25 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
     <Stack gap={12}>
 
       {/* ── Search ───────────────────────────────────────────────────────── */}
-      <StyledTextInput
-        variant="filled"
-        placeholder="Search symptoms…"
-        value={search}
-        onChangeText={setSearch}
-        leftIcon={<VelaIcon name="search" size={16} color={Colors.textTertiary} />}
-        clearable
-        focusColor={Colors.primary}
-      />
+      <Stack borderRadius={16} overflow="hidden">
+        <StyledTextInput
+          variant="filled"
+          placeholder="Search symptoms…"
+          value={search}
+          onChangeText={setSearch}
+          leftIcon={<VelaIcon name="search" size={18} color={Colors.textTertiary} />}
+          clearable
+          focusColor={Colors.primary}
+          placeholderTextColor={Colors.textTertiary}
+          style={{
+            backgroundColor: Colors.surface,
+            borderWidth: 1,
+            borderColor: Colors.border,
+            paddingLeft: 14,
+            paddingRight: 14,
+          }}
+        />
+      </Stack>
 
       {/* ── Selected count pill ───────────────────────────────────────────── */}
       {totalSelected > 0 && (
@@ -126,14 +132,15 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
           alignItems="center"
           justifyContent="space-between"
           borderWidth={1}
-          borderColor={Colors.border}
+          borderColor={Colors.primary}
+          opacity={0.9}
         >
-          <Text fontSize={13} fontWeight="600" color={Colors.primaryDark}>
+          <Text fontSize={13} fontWeight="600" color={Colors.primary}>
             {totalSelected} item{totalSelected > 1 ? 's' : ''} selected
           </Text>
           <StyledPressable onPress={() => onChange([])}>
-            <Text fontSize={12} color={Colors.primary} fontWeight="600">
-              Clear all
+            <Text fontSize={12} color={Colors.primary} fontWeight="700">
+              Clear
             </Text>
           </StyledPressable>
         </Stack>
@@ -179,18 +186,45 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
           const categoryLabel = CATEGORY_LABELS[cat] || cat
 
           return (
-            <Collapse
+            <Stack
               key={cat}
-              variant="card"
-              collapse ={true}
-              bodyDivider
-              bodyStyle={{ borderColor: 'transparent', paddingTop: 8 }}
-              title={categoryLabel}
-              subtitle={hasSelected ? `${items.filter(s => selected.includes(s.key)).length} selected` : undefined}
+              backgroundColor={Colors.surface}
+              borderRadius={16}
+              overflow="hidden"
+              borderWidth={1}
+              borderColor={Colors.border}
+              shadowColor="#000"
+              shadowOffset={{ width: 0, height: 1 }}
+              shadowOpacity={0.03}
+              shadowRadius={4}
+              elevation={0}
             >
+              {/* Category header */}
+              <Stack
+                paddingHorizontal={16}
+                paddingVertical={14}
+                borderBottomWidth={1}
+                borderBottomColor={Colors.border}
+                opacity={0.7}
+              >
+                <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
+                  <Text fontSize={14} fontWeight="700" color={Colors.textPrimary}>
+                    {categoryLabel}
+                  </Text>
+                  {hasSelected && (
+                    <Text fontSize={12} fontWeight="600" color={Colors.primary}>
+                      {items.filter(s => selected.includes(s.key)).length} of {items.length}
+                    </Text>
+                  )}
+                </Stack>
+              </Stack>
+
+              {/* Symptoms grid */}
               <Stack
                 flexDirection="row" flexWrap="wrap"
-               paddingBottom={16} gap={10}
+                paddingHorizontal={4} paddingVertical={12}
+                gap={8}
+                justifyContent="center"
               >
                 {items.map(symptom => (
                   <SymptomChip
@@ -203,7 +237,7 @@ export function SymptomsTab({ selected, onChange }: SymptomsTabProps) {
                   />
                 ))}
               </Stack>
-            </Collapse>
+            </Stack>
           )
         })
       )}

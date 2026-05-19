@@ -49,7 +49,7 @@ export const notificationService = {
       await ExpoNotifications.scheduleNotificationAsync({
         content: {
           title: '🌟 Fertile window opening',
-          body:  'Your fertile window starts today. High chance of conception.',
+          body:  'Your fertile window is estimated to be starting.',
         },
         trigger: { date: prediction.fertileWindowStart } as any,
       })
@@ -60,7 +60,7 @@ export const notificationService = {
       await ExpoNotifications.scheduleNotificationAsync({
         content: {
           title: '✨ Ovulation day',
-          body:  'Today is your estimated ovulation day — peak fertility.',
+          body:  'Your estimated ovulation day — may feel peak energy.',
         },
         trigger: { date: prediction.ovulationDay } as any,
       })

@@ -47,8 +47,14 @@ const CycleHistoryCard = ({ entry, Colors }: { entry: any; Colors: any }) => {
       borderRadius={16}
       borderWidth={1}
       borderColor={Colors.border}
-      padding={14}
-      gap={10}
+      paddingHorizontal={14}
+      paddingVertical={14}
+      gap={12}
+      shadowColor="#000"
+      shadowOffset={{ width: 0, height: 1 }}
+      shadowOpacity={0.03}
+      shadowRadius={4}
+      elevation={0}
     >
       <Stack
         flexDirection="row"
@@ -57,7 +63,7 @@ const CycleHistoryCard = ({ entry, Colors }: { entry: any; Colors: any }) => {
         gap={8}
       >
         <Stack flex={1} gap={3}>
-          <Text fontSize={15} fontWeight="800" color={Colors.textPrimary}>
+          <Text fontSize={14} fontWeight="800" color={Colors.textPrimary}>
             {entry.cycleLength
               ? `${entry.cycleLength} day cycle`
               : "Cycle logged"}
@@ -85,12 +91,15 @@ const CycleHistoryCard = ({ entry, Colors }: { entry: any; Colors: any }) => {
       <Stack flexDirection="row" gap={8}>
         <Stack
           flex={1}
-          backgroundColor={Colors.surfaceAlt}
+          backgroundColor={Colors.inputBackground}
           borderRadius={12}
-          padding={10}
+          paddingVertical={10}
+          paddingHorizontal={10}
           gap={2}
+          borderWidth={1}
+          borderColor={Colors.border}
         >
-          <Text fontSize={18} fontWeight="800" color={Colors.primary}>
+          <Text fontSize={16} fontWeight="800" color={Colors.primary}>
             {entry.cycleLength ?? "—"}
           </Text>
           <Text fontSize={11} color={Colors.textTertiary}>
@@ -100,12 +109,15 @@ const CycleHistoryCard = ({ entry, Colors }: { entry: any; Colors: any }) => {
 
         <Stack
           flex={1}
-          backgroundColor={Colors.surfaceAlt}
+          backgroundColor={Colors.inputBackground}
           borderRadius={12}
-          padding={10}
+          paddingVertical={10}
+          paddingHorizontal={10}
           gap={2}
+          borderWidth={1}
+          borderColor={Colors.border}
         >
-          <Text fontSize={18} fontWeight="800" color={Colors.textPrimary}>
+          <Text fontSize={16} fontWeight="800" color={Colors.textPrimary}>
             {entry.periodLength ?? "—"}
           </Text>
           <Text fontSize={11} color={Colors.textTertiary}>
@@ -129,12 +141,18 @@ const ActiveCycleHistoryCard = ({
   return (
     <Stack
       backgroundColor={Colors.primaryFaint}
-      borderRadius={18}
-      borderWidth={1}
+      borderRadius={16}
+      borderWidth={1.2}
       borderColor={Colors.primary}
-      padding={14}
+      paddingHorizontal={14}
+      paddingVertical={14}
       gap={12}
       overflow="hidden"
+      shadowColor={Colors.primary}
+      shadowOffset={{ width: 0, height: 1 }}
+      shadowOpacity={0.08}
+      shadowRadius={4}
+      elevation={1}
     >
       <Stack
         flexDirection="row"
@@ -143,7 +161,7 @@ const ActiveCycleHistoryCard = ({
         gap={8}
       >
         <Stack flex={1} gap={3}>
-          <Text fontSize={16} fontWeight="800" color={Colors.textPrimary}>
+          <Text fontSize={15} fontWeight="800" color={Colors.textPrimary}>
             Current cycle
           </Text>
           <Text fontSize={12} color={Colors.textSecondary}>
@@ -178,12 +196,16 @@ const ActiveCycleHistoryCard = ({
           flex={1}
           backgroundColor={Colors.surface}
           borderRadius={12}
-          padding={10}
+          paddingVertical={10}
+          paddingHorizontal={10}
+          borderWidth={1}
+          borderColor={Colors.border}
+          gap={2}
         >
           <Text fontSize={11} color={Colors.textTertiary}>
             Avg cycle
           </Text>
-          <Text fontSize={14} fontWeight="800" color={Colors.textPrimary}>
+          <Text fontSize={15} fontWeight="800" color={Colors.textPrimary}>
             {prediction?.averageCycleLength ?? "—"} days
           </Text>
         </Stack>
@@ -192,12 +214,16 @@ const ActiveCycleHistoryCard = ({
           flex={1}
           backgroundColor={Colors.surface}
           borderRadius={12}
-          padding={10}
+          paddingVertical={10}
+          paddingHorizontal={10}
+          borderWidth={1}
+          borderColor={Colors.border}
+          gap={2}
         >
           <Text fontSize={11} color={Colors.textTertiary}>
             Next period
           </Text>
-          <Text fontSize={14} fontWeight="800" color={Colors.textPrimary}>
+          <Text fontSize={15} fontWeight="800" color={Colors.textPrimary}>
             {prediction?.nextPeriodStart
               ? format(prediction.nextPeriodStart, "MMM d")
               : "—"}

@@ -33,19 +33,19 @@ function MoodChip({
   return (
     <StyledPressable
       onPress={onPress}
-      backgroundColor={selected ? Colors.primaryFaint : Colors.surfaceAlt}
-      borderRadius={20}
-      paddingHorizontal={8}
-      paddingVertical={4}
-      borderWidth={selected ? 2 : 1.5}
+      backgroundColor={selected ? Colors.primaryFaint : Colors.surface}
+      borderRadius={14}
+      paddingHorizontal={12}
+      paddingVertical={8}
+      borderWidth={1.2}
       borderColor={selected ? Colors.primary : Colors.border}
       flexDirection="row"
       alignItems="center"
-      gap={6}
+      gap={8}
     >
       <Text fontSize={18}>{emoji}</Text>
-      <Text fontSize={13} fontWeight={selected ? '700' : '400'}
-        color={selected ? Colors.primaryDark : Colors.textSecondary}>
+      <Text fontSize={13} fontWeight={selected ? '700' : '500'}
+        color={selected ? Colors.primary : Colors.textSecondary}>
         {label}
       </Text>
     </StyledPressable>
@@ -57,16 +57,19 @@ function LogSection({ title, children }: { title: string; children: React.ReactN
   return (
     <Stack
       backgroundColor={Colors.surface}
-      borderRadius={20}
-      padding={20}
-      gap={14}
+      borderRadius={16}
+      paddingHorizontal={16}
+      paddingVertical={16}
+      gap={16}
+      borderWidth={1}
+      borderColor={Colors.border}
       shadowColor="#000"
       shadowOffset={{ width: 0, height: 1 }}
-      shadowOpacity={0.05}
-      shadowRadius={8}
-      elevation={1}
+      shadowOpacity={0.03}
+      shadowRadius={4}
+      elevation={0}
     >
-      <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+      <Text fontSize={14} fontWeight="700" color={Colors.textPrimary}>
         {title}
       </Text>
       {children}
@@ -96,7 +99,7 @@ export function JournalTab({ data, onChange }: JournalTabProps) {
   }
 
   return (
-    <Stack gap={14}>
+    <Stack gap={16}>
 
       {/* ── How am I feeling? (Moods) ────────────────────────────────────── */}
       <LogSection title="How am I feeling?">
@@ -147,23 +150,23 @@ export function JournalTab({ data, onChange }: JournalTabProps) {
 
       {/* ── Energy level ─────────────────────────────────────────────────── */}
       <LogSection title="Energy level">
-        <Stack gap={10}>
-          <Stack flexDirection="row" gap={8}>
+        <Stack gap={12}>
+          <Stack flexDirection="row" gap={8} justifyContent="space-between">
             {[1, 2, 3, 4, 5].map(n => (
               <StyledPressable
                 key={n}
                 flex={1}
-                height={52}
-                borderRadius={14}
-                backgroundColor={n <= data.energyLevel ? Colors.primary : Colors.surfaceAlt}
-                borderWidth={n <= data.energyLevel ? 0 : 1.5}
-                borderColor={Colors.border}
+                height={48}
+                borderRadius={12}
+                backgroundColor={n <= data.energyLevel ? Colors.primary : Colors.inputBackground}
+                borderWidth={1}
+                borderColor={n <= data.energyLevel ? Colors.primary : Colors.border}
                 alignItems="center"
                 justifyContent="center"
                 onPress={() => set({ energyLevel: n })}
               >
                 <Text
-                  fontSize={16}
+                  fontSize={15}
                   fontWeight="700"
                   color={n <= data.energyLevel ? Colors.textInverse : Colors.textTertiary}
                 >
@@ -172,9 +175,9 @@ export function JournalTab({ data, onChange }: JournalTabProps) {
               </StyledPressable>
             ))}
           </Stack>
-          <Stack flexDirection="row" justifyContent="space-between">
-            <Text fontSize={11} color={Colors.textTertiary}>😴 Low energy</Text>
-            <Text fontSize={11} color={Colors.textTertiary}>⚡ High energy</Text>
+          <Stack flexDirection="row" justifyContent="space-between" paddingHorizontal={4}>
+            <Text fontSize={11} color={Colors.textTertiary} fontWeight="500">Low</Text>
+            <Text fontSize={11} color={Colors.textTertiary} fontWeight="500">High</Text>
           </Stack>
         </Stack>
       </LogSection>
@@ -182,14 +185,23 @@ export function JournalTab({ data, onChange }: JournalTabProps) {
       {/* ── Notes ────────────────────────────────────────────────────────── */}
       <LogSection title="Notes">
         <StyledTextInput
-          variant="outline"
+          variant="filled"
           placeholder="How are you feeling today? Any observations…"
+          placeholderTextColor={Colors.textTertiary}
           multiline
           numberOfLines={6}
           value={data.notes}
           onChangeText={v => set({ notes: v })}
           focusColor={Colors.primary}
-          borderColor={Colors.border}
+          style={{
+            borderColor: Colors.border,
+            borderWidth: 1,
+            borderRadius: 12,
+            backgroundColor: Colors.inputBackground,
+            color: Colors.textPrimary,
+            padding: 12,
+            textAlignVertical: 'top',
+          }}
         />
       </LogSection>
 

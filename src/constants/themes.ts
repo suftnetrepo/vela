@@ -13,6 +13,7 @@ export interface ThemeColors {
   background:       string
   surface:          string
   surfaceAlt:       string
+  inputBackground:  string
   border:           string
   borderStrong:     string
   // Text
@@ -60,6 +61,7 @@ export const RoseTheme: ThemeColors = {
   background:       '#FFFBFC',
   surface:          '#FFFFFF',
   surfaceAlt:       '#FDF4F6',
+  inputBackground:  '#FFFFFF',
   border:           '#F3D4DA',
   borderStrong:     '#E8A0AF',
   textPrimary:      '#2D1B24',
@@ -103,6 +105,7 @@ export const LavenderTheme: ThemeColors = {
   background:       '#FAFAFF',
   surface:          '#FFFFFF',
   surfaceAlt:       '#F6F4FD',
+  inputBackground:  '#FFFFFF',
   border:           '#DDD8EF',
   borderStrong:     '#B8AFDA',
   textPrimary:      '#1E1830',
@@ -146,6 +149,7 @@ export const SageTheme: ThemeColors = {
   background:       '#FAFCFB',
   surface:          '#FFFFFF',
   surfaceAlt:       '#F3F8F5',
+  inputBackground:  '#FFFFFF',
   border:           '#C8E0D0',
   borderStrong:     '#96C4A8',
   textPrimary:      '#1A2E24',
@@ -178,7 +182,7 @@ export const SageTheme: ThemeColors = {
 }
 
 export const MidnightTheme: ThemeColors = {
-  primary:          '#C084FC',
+  primary:          '#C17AFF',
   primaryLight:     '#DDB6FE',
   primaryDark:      '#9333EA',
   primaryFaint:     '#1E1230',
@@ -186,14 +190,15 @@ export const MidnightTheme: ThemeColors = {
   fertileLight:     '#3D1530',
   ovulation:        '#EC4899',
   ovulationLight:   '#2D0F22',
-  background:       '#0F0A1A',
-  surface:          '#1A1128',
-  surfaceAlt:       '#251840',
-  border:           '#3D2F5C',
+  background:       '#090014',
+  surface:          '#160B28',
+  surfaceAlt:       '#211238',
+  inputBackground:  '#1B1030',
+  border:           'rgba(255, 255, 255, 0.08)',
   borderStrong:     '#6B4FA0',
-  textPrimary:      '#F4EEFF',
-  textSecondary:    '#C4B0E0',
-  textTertiary:     '#8A7AAA',
+  textPrimary:      '#F7F0FF',
+  textSecondary:    '#C9B3EA',
+  textTertiary:     '#8B78A8',
   textInverse:      '#0F0A1A',
   success:          '#4ADE80',
   successLight:     '#0F2A1C',
@@ -215,9 +220,9 @@ export const MidnightTheme: ThemeColors = {
   dayDefault:       '#1A1128',
   dayDefaultText:   '#F4EEFF',
   dayMuted:         '#140E20',
-  tabActive:        '#C084FC',
-  tabInactive:      '#8A7AAA',
-  tabBackground:    '#1A1128',
+  tabActive:        '#C17AFF',
+  tabInactive:      '#8B78A8',
+  tabBackground:    '#160B28',
 }
 
 export const THEMES = {

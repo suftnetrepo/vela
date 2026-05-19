@@ -255,19 +255,22 @@ function MetricInput({
   return (
     <Stack
       backgroundColor={Colors.surface}
-      borderRadius={20}
-      padding={20}
-      gap={14}
+      borderRadius={16}
+      paddingHorizontal={16}
+      paddingVertical={16}
+      gap={16}
+      borderWidth={1}
+      borderColor={Colors.border}
       shadowColor="#000"
-      shadowOffset={{ width: 0, height: 2 }}
-      shadowOpacity={0.06}
-      shadowRadius={10}
-      elevation={2}
+      shadowOffset={{ width: 0, height: 1 }}
+      shadowOpacity={0.03}
+      shadowRadius={4}
+      elevation={0}
     >
-      <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+      <Text fontSize={14} fontWeight="700" color={Colors.textPrimary}>
         {label}
       </Text>
-      <Stack flexDirection="row" alignItems="center" gap={10}>
+      <Stack flexDirection="row" alignItems="center" gap={12}>
         <Stack flex={1}>
           <StyledInput
             variant="outline"
@@ -278,26 +281,39 @@ function MetricInput({
             }}
             keyboardType="decimal-pad"
             placeholder={placeholder}
+            placeholderTextColor={Colors.textTertiary}
             focusColor={Colors.primary}
             borderColor={Colors.border}
+            borderRadius={12}
+            borderWidth={1}
+            backgroundColor={Colors.inputBackground}
+            color={Colors.textPrimary}
+            padding={12}
           />
         </Stack>
         <Stack
-          backgroundColor={Colors.surfaceAlt}
+          backgroundColor={Colors.inputBackground}
           borderRadius={12}
           paddingHorizontal={14}
           paddingVertical={12}
+          borderWidth={1}
+          borderColor={Colors.border}
         >
-          <Text fontSize={14} fontWeight="600" color={Colors.textSecondary}>
+          <Text fontSize={13} fontWeight="600" color={Colors.textSecondary}>
             {unit}
           </Text>
         </Stack>
         <StyledPressable
           backgroundColor={justSaved ? Colors.success : Colors.primary}
           borderRadius={12}
-          paddingHorizontal={16}
+          paddingHorizontal={14}
           paddingVertical={12}
           onPress={handleSave}
+          shadowColor={justSaved ? Colors.success : Colors.primary}
+          shadowOffset={{ width: 0, height: 2 }}
+          shadowOpacity={0.15}
+          shadowRadius={6}
+          elevation={2}
         >
           <VelaIcon
             name={justSaved ? "check-circle" : "check"}
@@ -307,7 +323,7 @@ function MetricInput({
         </StyledPressable>
       </Stack>
       {hint && (
-        <Text fontSize={12} color={Colors.textTertiary}>
+        <Text fontSize={12} color={Colors.textTertiary} lineHeight={16}>
           {hint}
         </Text>
       )}
@@ -328,17 +344,20 @@ function StatRow({
         <Stack
           key={s.label}
           flex={1}
-          backgroundColor={Colors.surfaceAlt}
+          backgroundColor={Colors.inputBackground}
           borderRadius={12}
-          padding={12}
+          paddingVertical={12}
+          paddingHorizontal={12}
           alignItems="center"
-          gap={3}
+          gap={4}
+          borderWidth={1}
+          borderColor={Colors.border}
         >
-          <Text fontSize={17} fontWeight="800" color={s.color}>
+          <Text fontSize={16} fontWeight="800" color={s.color}>
             {s.value}
           </Text>
-          <Text fontSize={10} color={Colors.textTertiary} fontWeight="600">
-            {s.label.toUpperCase()}
+          <Text fontSize={10} color={Colors.textTertiary} fontWeight="600" letterSpacing={0.5}>
+            {s.label}
           </Text>
         </Stack>
       ))}
@@ -476,14 +495,17 @@ export default function TrackerScreen() {
             {tracker.weightData.length >= 2 ? (
               <Stack
                 backgroundColor={Colors.surface}
-                borderRadius={20}
-                padding={20}
-                gap={14}
+                borderRadius={16}
+                paddingHorizontal={16}
+                paddingVertical={16}
+                gap={16}
+                borderWidth={1}
+                borderColor={Colors.border}
                 shadowColor="#000"
-                shadowOffset={{ width: 0, height: 2 }}
-                shadowOpacity={0.06}
-                shadowRadius={10}
-                elevation={2}
+                shadowOffset={{ width: 0, height: 1 }}
+                shadowOpacity={0.03}
+                shadowRadius={4}
+                elevation={0}
               >
                 <Stack
                   flexDirection="row"
@@ -491,7 +513,7 @@ export default function TrackerScreen() {
                   justifyContent="space-between"
                 >
                   <Text
-                    fontSize={16}
+                    fontSize={14}
                     fontWeight="700"
                     color={Colors.textPrimary}
                   >
@@ -500,15 +522,19 @@ export default function TrackerScreen() {
                   <Stack
                     backgroundColor={Colors.primaryFaint}
                     borderRadius={10}
-                    paddingHorizontal={10}
-                    paddingVertical={4}
+                    paddingHorizontal={12}
+                    paddingVertical={6}
+                    borderWidth={1}
+                    borderColor={Colors.primary}
+                    opacity={0.9}
                   >
                     <Text
                       fontSize={11}
-                      color={Colors.primaryDark}
-                      fontWeight="600"
+                      color={Colors.primary}
+                      fontWeight="700"
+                      letterSpacing={0.3}
                     >
-                      Last {tracker.weightData.length} entries
+                      {tracker.weightData.length} entries
                     </Text>
                   </Stack>
                 </Stack>
@@ -516,6 +542,11 @@ export default function TrackerScreen() {
                   flexDirection="row"
                   alignItems="center"
                   justifyContent="center"
+                  backgroundColor={Colors.inputBackground}
+                  borderRadius={12}
+                  paddingVertical={12}
+                  borderWidth={1}
+                  borderColor={Colors.border}
                 >
                   <SparkChart
                     data={tracker.weightData}
@@ -555,10 +586,12 @@ export default function TrackerScreen() {
             ) : (
               <Stack
                 backgroundColor={Colors.surface}
-                borderRadius={20}
+                borderRadius={18}
                 padding={32}
                 alignItems="center"
-                gap={12}
+                gap={14}
+                borderWidth={1}
+                borderColor={Colors.border}
                 shadowColor="#000"
                 shadowOffset={{ width: 0, height: 1 }}
                 shadowOpacity={0.04}
@@ -572,6 +605,8 @@ export default function TrackerScreen() {
                   backgroundColor={Colors.primaryFaint}
                   alignItems="center"
                   justifyContent="center"
+                  borderWidth={1}
+                  borderColor={Colors.primary}
                 >
                   <VelaIcon name="activity" size={28} color={Colors.primary} />
                 </Stack>
@@ -582,6 +617,7 @@ export default function TrackerScreen() {
                   fontSize={13}
                   color={Colors.textSecondary}
                   textAlign="center"
+                  lineHeight={18}
                 >
                   Log your weight daily to see trends over time.
                 </Text>
@@ -604,18 +640,21 @@ export default function TrackerScreen() {
 
             <Stack
               backgroundColor={Colors.surface}
-              borderRadius={20}
-              padding={20}
-              gap={8}
+              borderRadius={16}
+              paddingHorizontal={16}
+              paddingVertical={16}
+              gap={12}
               alignItems="center"
+              borderWidth={1}
+              borderColor={Colors.border}
               shadowColor="#000"
-              shadowOffset={{ width: 0, height: 2 }}
-              shadowOpacity={0.06}
-              shadowRadius={10}
-              elevation={2}
+              shadowOffset={{ width: 0, height: 1 }}
+              shadowOpacity={0.03}
+              shadowRadius={4}
+              elevation={0}
             >
               <Text
-                fontSize={16}
+                fontSize={14}
                 fontWeight="700"
                 color={Colors.textPrimary}
                 alignSelf="flex-start"
@@ -628,7 +667,7 @@ export default function TrackerScreen() {
               />
               <Stack
                 flexDirection="row"
-                gap={10}
+                gap={12}
                 flexWrap="wrap"
                 justifyContent="center"
               >
@@ -664,31 +703,40 @@ export default function TrackerScreen() {
             {tracker.tempData.length >= 2 && (
               <Stack
                 backgroundColor={Colors.surface}
-                borderRadius={20}
-                padding={20}
-                gap={14}
+                borderRadius={16}
+                paddingHorizontal={16}
+                paddingVertical={16}
+                gap={16}
+                borderWidth={1}
+                borderColor={Colors.border}
                 shadowColor="#000"
-                shadowOffset={{ width: 0, height: 2 }}
-                shadowOpacity={0.06}
-                shadowRadius={10}
-                elevation={2}
+                shadowOffset={{ width: 0, height: 1 }}
+                shadowOpacity={0.03}
+                shadowRadius={4}
+                elevation={0}
                 flex={1}
               >
                 <Stack
-                  horizontal
-                  flex={1}
+                  flexDirection="row"
                   justifyContent="flex-start"
-                  alignItems="flex-start"
                 >
                   <Text
-                    fontSize={16}
+                    fontSize={14}
                     fontWeight="700"
                     color={Colors.textPrimary}
                   >
                     BBT chart
                   </Text>
                 </Stack>
-                <Stack justifyContent="center" alignItems="center">
+                <Stack
+                  justifyContent="center"
+                  alignItems="center"
+                  backgroundColor={Colors.inputBackground}
+                  borderRadius={12}
+                  paddingVertical={12}
+                  borderWidth={1}
+                  borderColor={Colors.border}
+                >
                   <SparkChart
                     data={tracker.tempData}
                     color={Colors.fertile}
@@ -732,21 +780,25 @@ export default function TrackerScreen() {
         {tab === "notes" && (
           <Stack
             backgroundColor={Colors.surface}
-            borderRadius={20}
-            padding={20}
-            gap={12}
+            borderRadius={16}
+            paddingHorizontal={16}
+            paddingVertical={16}
+            gap={14}
+            borderWidth={1}
+            borderColor={Colors.border}
             shadowColor="#000"
-            shadowOffset={{ width: 0, height: 2 }}
-            shadowOpacity={0.06}
-            shadowRadius={10}
-            elevation={2}
+            shadowOffset={{ width: 0, height: 1 }}
+            shadowOpacity={0.03}
+            shadowRadius={4}
+            elevation={0}
           >
-            <Text fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+            <Text fontSize={14} fontWeight="700" color={Colors.textPrimary}>
               Today's notes
             </Text>
             <StyledInput
               variant="outline"
               placeholder="How's your body feeling? Any observations about energy, mood, or symptoms…"
+              placeholderTextColor={Colors.textTertiary}
               multiline
               numberOfLines={7}
               value={notes}
@@ -756,13 +808,18 @@ export default function TrackerScreen() {
               }}
               focusColor={Colors.primary}
               borderColor={Colors.border}
+              borderRadius={12}
+              borderWidth={1}
+              backgroundColor={Colors.inputBackground}
+              color={Colors.textPrimary}
+              padding={12}
             />
             <Stack
               flexDirection="row"
               alignItems="center"
               justifyContent="space-between"
             >
-              <Text fontSize={11} color={Colors.textTertiary}>
+              <Text fontSize={11} color={Colors.textTertiary} fontWeight="500">
                 Private journal for your cycle
               </Text>
               {noteDirty && (
@@ -770,11 +827,16 @@ export default function TrackerScreen() {
                   onPress={handleSaveNotes}
                   backgroundColor={Colors.primary}
                   borderRadius={12}
-                  paddingHorizontal={14}
-                  paddingVertical={8}
+                  paddingHorizontal={16}
+                  paddingVertical={10}
                   flexDirection="row"
                   alignItems="center"
-                  gap={6}
+                  gap={8}
+                  shadowColor={Colors.primary}
+                  shadowOffset={{ width: 0, height: 2 }}
+                  shadowOpacity={0.2}
+                  shadowRadius={6}
+                  elevation={2}
                 >
                   <VelaIcon name="check" size={14} color={Colors.textInverse} />
                   <Text

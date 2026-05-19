@@ -17,37 +17,42 @@ const SECTIONS = [
   {
     title: "The short version",
     content:
-      "Vela collects nothing. Zero. Your cycle data lives exclusively on your device. We have no servers, no accounts, no analytics SDKs, and no ability to access your data — even if we wanted to.",
+      "Your cycle data is private. Vela stores your period, symptom, mood, and journal data locally on your device. We do not sell your data, share your health data, or use it for advertising.",
   },
   {
     title: "What data do we collect?",
     content:
-      "None. Vela operates entirely offline. The app has no internet permissions and makes zero network requests. Every piece of information you log — periods, symptoms, moods, notes — is stored only in a SQLite database on your device.",
+      "Vela does not require an account. Your personal cycle tracking data is stored locally on your device using the app’s local database. We do not operate a server that receives or stores your cycle history, symptoms, moods, notes, or temperature logs.",
   },
   {
     title: "Do we share your data?",
     content:
-      "No. There is no mechanism by which we could share your data even if required to. We have never received, and cannot receive, any user data.",
+      "No. We do not sell, rent, or share your personal cycle or wellness data with advertisers, data brokers, or marketing platforms.",
   },
   {
-    title: "Third-party SDKs",
+    title: "Third-party services",
     content:
-      "Vela contains zero analytics SDKs. We do not use Firebase, Facebook SDK, Mixpanel, Amplitude, Sentry, or any other data-collecting library. The only third-party code we use is open-source UI and utility libraries that contain no data collection.",
+      "Vela may use Apple services for in-app purchases and subscription management. These services are handled by Apple and are used only to process purchases, restore purchases, and manage premium access.",
   },
   {
     title: "Why we built it this way",
     content:
-      "Period tracking data is among the most sensitive personal data that exists. Following the 2025 data scandal where period tracking apps were found to be sharing menstrual data with advertisers, we built Vela on a simple principle: your cycle is yours alone.",
+      "Period tracking data is highly sensitive. Vela is designed around a simple principle: your cycle data should stay under your control.",
   },
   {
     title: "Backups",
     content:
-      "Your data may be included in your device's standard backup (iCloud/Google Backup) if you have that enabled — this is encrypted and controlled entirely by you and your device OS, not by Vela.",
+      "Your data may be included in your device’s standard backup, such as iCloud backup, if you have that enabled. This is controlled by your device settings, not by Vela.",
   },
+  {
+  title: "Wellness disclaimer",
+  content:
+    "Vela is intended for wellness and personal tracking purposes only and is not a medical device. The app does not provide medical advice, diagnosis, or treatment.",
+},
   {
     title: "Contact",
     content:
-      "Questions about privacy? Since we have no servers and collect no data, there's nothing for us to tell you about — but we're happy to discuss our approach. The source code is open for inspection.",
+      "If you have questions about privacy or how Vela works, please contact us through the support information provided in the App Store listing.",
   },
 ];
 

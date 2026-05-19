@@ -1,14 +1,23 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSettingsStore } from '../stores/settings.store'
 import {
-  purchaseMonthly, purchaseYearly, purchaseLifetime,
-  restorePurchases, getEntitlement,
+  purchaseMonthly,
+  purchaseYearly,
+  purchaseLifetime,
+  restorePurchases,
+  getEntitlement,
+  getPremiumPrices,
 } from '../services/premium.service'
 import { toastService, loaderService } from 'fluent-styles'
 import { PREMIUM_THEMES, FREE_THEMES } from '../constants/premium'
 
 export function usePremium() {
   const { isPremium, premiumPlan, setPremiumEntitlement } = useSettingsStore()
+  const [prices, setPrices] = useState({
+    monthlyPrice: null as string | null,
+    yearlyPrice: null as string | null,
+    lifetimePrice: null as string | null,
+  })
 
   const refresh = useCallback(async () => {
     const info = await getEntitlement()
@@ -79,6 +88,15 @@ export function usePremium() {
     }
   }, [refresh])
 
+  // Fetch live prices from RevenueCat on mount
+  useEffect(() => {
+    getPremiumPrices()
+      .then(setPrices)
+      .catch(() => {
+        // Prices will remain null if fetch fails, UI will use fallbacks
+      })
+  }, [])
+
   // ─── Vela-specific feature gates ──────────────────────────────────────────────
 
   return {
@@ -89,6 +107,16 @@ export function usePremium() {
     buyYearly,
     buyLifetime,
     restore,
+
+    // ─── Pricing (from RevenueCat) ────────────────────────────────────────────────
+    monthlyPrice: prices.monthlyPrice,
+    yearlyPrice: prices.yearlyPrice,
+    lifetimePrice: prices.lifetimePrice,
+
+    // ─── Purchase manager status (for UI control) ────────────────────────────────
+    purchaseManagerLoading: false,
+    purchaseManagerReady: true,
+    purchaseManagerError: null,
 
     // ─── Feature gates (callable from anywhere) ────────────────────────────────────────
     canUseAdvancedInsights: () => isPremium,

@@ -35,8 +35,8 @@ export function PrivacyBadge({ compact }: PrivacyBadgeProps) {
         </Text>
       </Stack>
       <Text fontSize={13} color={Colors.textSecondary} lineHeight={20}>
-        Vela never connects to the internet. No accounts, no analytics, no data sharing — ever.
-        Your cycle data belongs to you, and only you.
+       Your personal cycle data stays private on your device.
+       Vela does not sell or share your personal health data.
       </Text>
     </Stack>
   )

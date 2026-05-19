@@ -31,38 +31,42 @@ function SelectTile({
   size?:   'sm' | 'md' | 'lg'
 }) {
   const Colors = useColors()
-  const tileSize = size === 'lg' ? 100 : size === 'sm' ? 72 : 86
+  const tileSize = size === 'lg' ? 88 : size === 'sm' ? 70 : 80
 
   return (
     <StyledPressable
       onPress={onPress}
       alignItems="center"
-      gap={8}
+      gap={10}
       padding={0}
+      flex={1}
       backgroundColor="transparent"
     >
       <Stack
         width={tileSize}
         height={tileSize}
-        borderRadius={20}
-        backgroundColor={selected ? Colors.primaryFaint : Colors.surfaceAlt}
-        borderWidth={selected ? 2 : 1.5}
+        borderRadius={16}
+        backgroundColor={selected ? Colors.primaryFaint : Colors.surface}
+        borderWidth={1.2}
         borderColor={selected ? Colors.primary : Colors.border}
         alignItems="center"
         justifyContent="center"
         shadowColor={selected ? Colors.primary : '#000'}
-        shadowOffset={{ width: 0, height: selected ? 3 : 1 }}
-        shadowOpacity={selected ? 0.15 : 0.04}
-        shadowRadius={selected ? 8 : 4}
-        elevation={selected ? 3 : 1}
+        shadowOffset={{ width: 0, height: selected ? 2 : 0 }}
+        shadowOpacity={selected ? 0.1 : 0}
+        shadowRadius={selected ? 6 : 0}
+        elevation={selected ? 2 : 0}
       >
         {icon}
       </Stack>
       <Text
         variant="subLabel"
-        fontWeight={selected ? '700' : '500'}
-        color={selected ? Colors.primaryDark : Colors.textSecondary}
+        fontSize={12}
+        fontWeight={selected ? '600' : '500'}
+        color={selected ? Colors.primary : Colors.textSecondary}
         textAlign="center"
+        lineHeight={14}
+        numberOfLines={2}
       >
         {label}
       </Text>
@@ -76,16 +80,19 @@ function LogSection({ title, children }: { title: string; children: React.ReactN
   return (
     <Stack
       backgroundColor={Colors.surface}
-      borderRadius={20}
-      padding={20}
+      borderRadius={18}
+      paddingHorizontal={16}
+      paddingVertical={16}
       gap={16}
+      borderWidth={1}
+      borderColor={Colors.border}
       shadowColor="#000"
       shadowOffset={{ width: 0, height: 1 }}
-      shadowOpacity={0.05}
-      shadowRadius={8}
-      elevation={1}
+      shadowOpacity={0.03}
+      shadowRadius={4}
+      elevation={0}
     >
-      <Text variant="subtitle" fontSize={15} fontWeight="700" color={Colors.textPrimary}>
+      <Text variant="subtitle" fontSize={14} fontWeight="700" color={Colors.textPrimary}>
         {title}
       </Text>
       {children}

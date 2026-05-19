@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import {
@@ -96,13 +95,6 @@ export default function RootLayout() {
       SplashScreen.hideAsync()
     }
   }, [fontsLoaded, appReady])
-
-  // CRITICAL: Always render <Slot /> so the root navigator mounts immediately.
-  // Returning null here is what causes "Attempted to navigate before mounting
-  // the Root Layout component" — index.tsx tries to navigate before Slot exists.
-  // Instead we hide the content via opacity=0 until boot is complete, then
-  // the navigator is already mounted and ready to receive router.replace().
-  const isReady = fontsLoaded && appReady
 
   return (
     <GlobalPortalProvider>

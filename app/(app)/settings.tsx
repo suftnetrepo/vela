@@ -24,22 +24,23 @@ function MenuRow({
   return (
     <StyledPressable onPress={onPress} flexDirection="row" alignItems="center"
       paddingVertical={14} paddingHorizontal={16} gap={14} backgroundColor="transparent">
-      <Stack width={38} height={38} borderRadius={11}
-        backgroundColor={iconBg ?? Colors.primaryFaint} alignItems="center" justifyContent="center">
+      <Stack width={38} height={38} borderRadius={12}
+        backgroundColor={iconBg ?? Colors.primaryFaint} borderWidth={1} borderColor={Colors.border}
+        alignItems="center" justifyContent="center">
         <VelaIcon name={icon} size={19} color={destructive ? Colors.error : Colors.primary} />
       </Stack>
       <Stack flex={1} gap={2}>
         <Text fontSize={15} fontWeight="600"
           color={destructive ? Colors.error : Colors.textPrimary}>{label}</Text>
-        {subtitle && <Text fontSize={12} color={Colors.textTertiary}>{subtitle}</Text>}
+        {subtitle && <Text fontSize={12} color={Colors.textSecondary} opacity={0.8}>{subtitle}</Text>}
       </Stack>
       {badge && (
-        <Stack backgroundColor={Colors.primary} borderRadius={10}
-          paddingHorizontal={8} paddingVertical={3} marginRight={6}>
+        <Stack backgroundColor={Colors.primary} borderRadius={8}
+          paddingHorizontal={8} paddingVertical={4} marginRight={6}>
           <Text fontSize={10} fontWeight="700" color={Colors.textInverse}>{badge}</Text>
         </Stack>
       )}
-      {onPress && <VelaIcon name="chevron-right" size={16} color={Colors.textTertiary} />}
+      {onPress && <Stack opacity={0.6}><VelaIcon name="chevron-right" size={16} color={Colors.textTertiary} /></Stack>}
     </StyledPressable>
   )
 }
@@ -47,12 +48,13 @@ function MenuRow({
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   const Colors = useColors()
   return (
-    <Stack gap={8}>
-      <Text fontSize={12} fontWeight="700" color={Colors.textTertiary}
-        letterSpacing={0.6} paddingHorizontal={4}>{title}</Text>
-      <Stack backgroundColor={Colors.surface} borderRadius={20} overflow="hidden"
-        shadowColor="#000" shadowOffset={{ width: 0, height: 1 }}
-        shadowOpacity={0.05} shadowRadius={8} elevation={1}>
+    <Stack gap={10}>
+      <Text fontSize={11} fontWeight="700" color={Colors.textTertiary}
+        letterSpacing={0.8} paddingHorizontal={4} opacity={0.7}>{title}</Text>
+      <Stack backgroundColor={Colors.surface} borderRadius={18} overflow="hidden"
+        borderWidth={1} borderColor={Colors.border}
+        shadowColor="#000" shadowOffset={{ width: 0, height: 2 }}
+        shadowOpacity={0.06} shadowRadius={10} elevation={2}>
         {children}
       </Stack>
     </Stack>
@@ -76,46 +78,49 @@ export default function SettingsScreen() {
 
         {/* Profile card */}
         <StyledPressable onPress={() => router.push('/(app)/(settings)/profile')}
-          backgroundColor={Colors.surface} borderRadius={24} padding={20}
+          backgroundColor={Colors.surface} borderRadius={20} padding={20}
+          borderWidth={1} borderColor={Colors.border}
           shadowColor="#000" shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.07} shadowRadius={12} elevation={3}
+          shadowOpacity={0.08} shadowRadius={12} elevation={3}
           flexDirection="row" alignItems="center" gap={16}>
           <Stack width={60} height={60} borderRadius={30} backgroundColor={Colors.primaryFaint}
-            alignItems="center" justifyContent="center" borderWidth={3} borderColor={Colors.border}>
+            alignItems="center" justifyContent="center" borderWidth={1.5} borderColor={Colors.border}>
             <VelaIcon name="flower" size={28} color={Colors.primary} />
           </Stack>
           <Stack flex={1} gap={4}>
             <Text fontSize={17} fontWeight="800" color={Colors.textPrimary}>My Account</Text>
-            <Text fontSize={13} color={Colors.textSecondary}>Preferences · Units · Privacy</Text>
+            <Text fontSize={13} color={Colors.textSecondary} opacity={0.8}>Preferences · Units · Privacy</Text>
             {settings.isPremium ? (
               <Stack horizontal alignItems="center" gap={5} backgroundColor={Colors.primaryFaint}
-                borderRadius={8} paddingHorizontal={8} paddingVertical={3} alignSelf="flex-start">
+                borderRadius={8} paddingHorizontal={10} paddingVertical={4} alignSelf="flex-start" borderWidth={1} borderColor={Colors.primary}>
                 <VelaIcon name="crown" size={11} color={Colors.primary} />
-                <Text fontSize={11} fontWeight="700" color={Colors.primaryDark}>Premium</Text>
+                <Text fontSize={11} fontWeight="700" color={Colors.primary}>Premium</Text>
               </Stack>
             ) : (
-              <Text fontSize={12} color={Colors.textTertiary}>Free plan</Text>
+              <Text fontSize={12} color={Colors.textSecondary} opacity={0.7}>Free plan</Text>
             )}
           </Stack>
-          <VelaIcon name="chevron-right" size={18} color={Colors.textTertiary} />
+          <Stack opacity={0.6}><VelaIcon name="chevron-right" size={18} color={Colors.textTertiary} /></Stack>
         </StyledPressable>
 
         {/* Premium banner */}
         {!settings.isPremium && (
           <StyledPressable onPress={() => router.push('/(app)/(settings)/premium')}
-            backgroundColor={Colors.primary} borderRadius={20} padding={18}
-            shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 4 }}
-            shadowOpacity={0.3} shadowRadius={12} elevation={6}
+            backgroundColor="#A960DA" borderRadius={18} padding={18}
+            borderWidth={1} borderColor="rgba(255,255,255,0.12)"
+            shadowColor="#A960DA" shadowOffset={{ width: 0, height: 3 }}
+            shadowOpacity={0.18} shadowRadius={12} elevation={4}
             flexDirection="row" alignItems="center" gap={14}>
             <Stack width={46} height={46} borderRadius={23}
-              backgroundColor="rgba(255,255,255,0.22)" alignItems="center" justifyContent="center">
+              backgroundColor="rgba(255,255,255,0.2)" borderWidth={1} borderColor="rgba(255,255,255,0.25)"
+              alignItems="center" justifyContent="center">
               <VelaIcon name="crown" size={24} color={Colors.textInverse} />
             </Stack>
             <Stack flex={1} gap={3}>
               <Text fontSize={16} fontWeight="800" color={Colors.textInverse}>Unlock Premium</Text>
-              <Text fontSize={12} color="rgba(255,255,255,0.8)">Partner sharing · Reports · All themes</Text>
+              <Text fontSize={12} color="rgba(255,255,255,0.7)">Partner sharing · Reports · All themes</Text>
             </Stack>
-            <Stack backgroundColor="rgba(255,255,255,0.22)" borderRadius={12}
+            <Stack backgroundColor="rgba(255,255,255,0.2)" borderWidth={1} borderColor="rgba(255,255,255,0.25)" borderRadius={10}
               paddingHorizontal={12} paddingVertical={6}>
               <Text fontSize={11} fontWeight="700" color={Colors.textInverse}>Free trial</Text>
             </Stack>
@@ -125,18 +130,15 @@ export default function SettingsScreen() {
         <Section title="CYCLE">
           <MenuRow icon="cycle" label="Cycle Settings" subtitle={`${settings.avgCycleLength}-day average`}
             onPress={() => router.push('/(app)/(settings)/cycle-settings')} />
-          <StyledDivider borderBottomColor={Colors.border} marginHorizontal={16} />
+          <StyledDivider borderBottomColor={Colors.border} opacity={0.25} marginHorizontal={16} />
           <MenuRow icon="bell" label="Notifications" subtitle="Period, ovulation & fertile reminders"
             onPress={() => router.push('/(app)/(settings)/notifications')} />
-          <StyledDivider borderBottomColor={Colors.border} marginHorizontal={16} />
-          <MenuRow icon="baby" label="Pregnancy Mode" subtitle="Track pregnancy & postpartum"
-            onPress={() => router.push('/(app)/(settings)/pregnancy')} badge={!settings.isPremium ? 'PRO' : undefined} />
-        </Section>
+          </Section>
 
         <Section title="LOGGING">
           <MenuRow icon="heart" label="Manage Moods" subtitle="Choose which moods appear when logging"
             onPress={() => router.push('/(app)/(settings)/moods')} />
-          <StyledDivider borderBottomColor={Colors.border} marginHorizontal={16} />
+          <StyledDivider borderBottomColor={Colors.border} opacity={0.25} marginHorizontal={16} />
           <MenuRow icon="activity" label="Manage Symptoms" subtitle="Choose which symptoms appear when logging"
             onPress={() => router.push('/(app)/(settings)/symptoms')} />
         </Section>
@@ -155,7 +157,7 @@ export default function SettingsScreen() {
         <Section title="DATA">
           <MenuRow icon="download" label="Export Data" subtitle="Backup or share your cycle data"
             onPress={() => actionSheetService.present(<ExportDataContent />, { theme : 'light' })} />
-          <StyledDivider borderBottomColor={Colors.border} marginHorizontal={16} />
+          <StyledDivider borderBottomColor={Colors.border} opacity={0.25} marginHorizontal={16} />
           <MenuRow icon="upload" label="Import Data" subtitle="Restore from backup code or file"
             onPress={() => actionSheetService.present(<ImportDataContent onDone={() => {}} />, { theme : 'light' })} />
         </Section>
@@ -163,7 +165,7 @@ export default function SettingsScreen() {
         <Section title="LEARN">
           <MenuRow icon="phase-fertile" label="Articles" subtitle="Cycle, fertility & wellness guides"
             onPress={() => router.push('/(app)/(settings)/articles')} badge="NEW" />
-          <StyledDivider borderBottomColor={Colors.border} marginHorizontal={16} />
+          <StyledDivider borderBottomColor={Colors.border} opacity={0.25} marginHorizontal={16} />
           <MenuRow icon="help" label="FAQ" subtitle="Common questions answered"
             onPress={() => router.push('/(app)/(settings)/faq')} />
         </Section>
@@ -171,7 +173,7 @@ export default function SettingsScreen() {
         <Section title="ABOUT">
           <MenuRow icon="shield-check" label="Privacy Policy"
             onPress={() => router.push('/(app)/(settings)/privacy')} />
-          <StyledDivider borderBottomColor={Colors.border} marginHorizontal={16} />
+          <StyledDivider borderBottomColor={Colors.border} opacity={0.25} marginHorizontal={16} />
           <MenuRow icon="info" label="About Vela" subtitle="Version 1.0.0" />
         </Section>
 

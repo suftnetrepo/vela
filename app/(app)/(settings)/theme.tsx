@@ -28,16 +28,16 @@ export default function ThemeScreen() {
         titleAlignment="left"
         marginHorizontal={16}
         shapeProps={{
-          size: 48,
+          size: 42,
           backgroundColor: Colors.primaryFaint,
         }}
         backArrowProps={{
-          color: Colors.textPrimary,
+          color: Colors.textSecondary,
         }}
         showBackArrow
         onBackPress={() => router.push("/(app)/settings")}
         backgroundColor={Colors.background}
-        titleProps={{ fontWeight: "700", color: Colors.textPrimary, fontFamily: "PlusJakartaSans_700Bold" }}
+        titleProps={{ fontWeight: "800", fontSize: 28, color: Colors.textPrimary, fontFamily: "PlusJakartaSans_700Bold" }}
       />
       <StyledScrollView contentContainerStyle={{ padding: 20, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
         <ThemePreview onSelect={handleSelect} />

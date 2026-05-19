@@ -132,6 +132,28 @@ export default function HomeScreen() {
         )}
       </Stack>
 
+      {/* Overdue indicator (shown if period is late) */}
+      {prediction && prediction.daysUntilNextPeriod < 0 && (
+        <Stack
+          marginHorizontal={20}
+          marginBottom={12}
+          paddingHorizontal={14}
+          paddingVertical={10}
+          backgroundColor={Colors.surface}
+          borderRadius={14}
+          borderWidth={1}
+          borderColor={Colors.border}
+          flexDirection="row"
+          alignItems="center"
+          gap={8}
+        >
+          <VelaIcon name="info-circle" size={16} color={Colors.textTertiary} />
+          <Text fontSize={12} fontWeight="500" color={Colors.textSecondary}>
+            Your cycle appears later than usual ({Math.abs(prediction.daysUntilNextPeriod)} day{Math.abs(prediction.daysUntilNextPeriod) !== 1 ? 's' : ''})
+          </Text>
+        </Stack>
+      )}
+
       <StyledScrollView
         contentContainerStyle={{ paddingBottom: 80 }}
         showsVerticalScrollIndicator={false}
@@ -179,6 +201,25 @@ export default function HomeScreen() {
             />
           </Stack>
         </Stack>
+
+        {/* Trust messaging based on cycle history */}
+        {prediction && cycles.length < 3 && (
+          <Stack
+            marginHorizontal={20}
+            marginBottom={12}
+            paddingHorizontal={12}
+            paddingVertical={8}
+            backgroundColor={Colors.surface}
+            borderRadius={12}
+            borderWidth={1}
+            borderColor={Colors.border}
+            alignItems="flex-start"
+          >
+            <Text fontSize={11} fontWeight="500" color={Colors.textTertiary}>
+              💡 Predictions improve as you log more cycles. Keep tracking to see patterns.
+            </Text>
+          </Stack>
+        )}
 
         {/* 3. Cycle trends card */}
         {prediction && (

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Stack, StyledText, StyledScrollView, StyledPage, StyledPressable, StyledDivider, theme } from 'fluent-styles'
 import { Text } from '@/components/text'
 import { router } from 'expo-router'
+import { Linking } from 'react-native'
 import { useColors } from '../../../src/hooks/useColors'
 import { usePremium } from '../../../src/hooks/usePremium'
 import { VelaIcon } from '../../../src/components/shared/VelaIcon'
@@ -9,6 +10,9 @@ import type { VelaIconName } from '../../../src/components/shared/VelaIcon'
 import { PREMIUM_FEATURES, PREMIUM_PRICING } from '../../../src/constants/premium'
 
 type PlanKey = 'MONTHLY' | 'YEARLY' | 'LIFETIME'
+
+const PRIVACY_POLICY_URL = 'https://suftnetrepo.github.io/vela/privacy-policy.html'
+const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/'
 
 const FEATURE_MAPPING: Record<number, VelaIconName> = {
   0: 'activity',
@@ -23,6 +27,18 @@ export default function PremiumScreen() {
   const Colors = useColors()
   const premium = usePremium()
   const [selected, setSelected] = useState<PlanKey>('YEARLY')
+
+  const getPlanPrice = (key: PlanKey) => {
+    if (key === 'MONTHLY') {
+      return premium.monthlyPrice ?? PREMIUM_PRICING.MONTHLY.price
+    }
+
+    if (key === 'YEARLY') {
+      return premium.yearlyPrice ?? PREMIUM_PRICING.YEARLY.price
+    }
+
+    return premium.lifetimePrice ?? PREMIUM_PRICING.LIFETIME.price
+  }
 
   const handlePurchasePress = async () => {
     let success = false
@@ -98,31 +114,33 @@ export default function PremiumScreen() {
           <Text fontSize={28} fontWeight="800" color={Colors.textPrimary} textAlign="center">
             Vela Premium
           </Text>
-          <Text fontSize={15} color={Colors.textSecondary} textAlign="center" lineHeight={22}>
+          <Text fontSize={15} color={Colors.textSecondary} textAlign="center" lineHeight={22} opacity={0.8}>
             Unlock advanced insights, exports, themes, and more. Support independent, privacy-first development.
           </Text>
-          <Stack backgroundColor={Colors.successLight} borderRadius={20}
-            paddingHorizontal={16} paddingVertical={8} horizontal alignItems="center" gap={6}>
+          <Stack backgroundColor={Colors.successLight} borderRadius={16}
+            paddingHorizontal={10} paddingVertical={8} horizontal alignItems="center" gap={6} borderWidth={1} borderColor={Colors.success} opacity={0.85}>
             <VelaIcon name="gift" size={14} color={Colors.success} />
-            <Text fontSize={13} fontWeight="700" color={Colors.success}>
+            <Text fontSize={13} fontWeight="600" color={Colors.success}>
               7-day free trial
             </Text>
           </Stack>
         </Stack>
 
         {/* Features */}
-        <Stack paddingHorizontal={20} gap={10} marginBottom={28}>
+        <Stack paddingHorizontal={20} gap={12} marginBottom={28}>
           {PREMIUM_FEATURES.map((f, i) => (
             <Stack key={f.title} horizontal alignItems="flex-start" gap={14}
-              backgroundColor={Colors.surface} borderRadius={16} padding={14}
-              shadowColor="#000" shadowOffset={{ width: 0, height: 1 }} shadowOpacity={0.04} shadowRadius={6} elevation={1}>
+              backgroundColor={Colors.surface} borderRadius={16} padding={16}
+              borderWidth={1} borderColor={Colors.border}
+              shadowColor="#000" shadowOffset={{ width: 0, height: 1 }} shadowOpacity={0.05} shadowRadius={6} elevation={1}>
               <Stack width={40} height={40} borderRadius={12} backgroundColor={Colors.primaryFaint}
+                borderWidth={1} borderColor={Colors.border}
                 alignItems="center" justifyContent="center">
                 <VelaIcon name={FEATURE_MAPPING[i] || 'gift'} size={20} color={Colors.primary} />
               </Stack>
               <Stack flex={1} gap={2}>
                 <Text fontSize={14} fontWeight="700" color={Colors.textPrimary}>{f.title}</Text>
-                <Text fontSize={12} color={Colors.textSecondary}>{f.description}</Text>
+                <Text fontSize={12} color={Colors.textSecondary} opacity={0.8}>{f.description}</Text>
               </Stack>
             </Stack>
           ))}
@@ -137,12 +155,17 @@ export default function PremiumScreen() {
             return (
               <StyledPressable key={key} onPress={() => setSelected(key)}
                 backgroundColor={isSelected ? Colors.primaryFaint : Colors.surface}
-                borderRadius={18} padding={18} borderWidth={isSelected ? 2 : 1}
+                borderRadius={16} padding={18} borderWidth={1.5}
                 borderColor={isSelected ? Colors.primary : Colors.border}
-                flexDirection="row" alignItems="center" gap={14}>
+                flexDirection="row" alignItems="center" gap={14}
+                shadowColor={isSelected ? Colors.primary : '#000'}
+                shadowOffset={{ width: 0, height: isSelected ? 2 : 1 }}
+                shadowOpacity={isSelected ? 0.1 : 0.04}
+                shadowRadius={isSelected ? 8 : 4}
+                elevation={isSelected ? 2 : 1}>
                 <Stack width={24} height={24} borderRadius={12}
                   backgroundColor={isSelected ? Colors.primary : 'transparent'}
-                  borderWidth={isSelected ? 0 : 2} borderColor={Colors.border}
+                  borderWidth={isSelected ? 0 : 1.5} borderColor={Colors.border}
                   alignItems="center" justifyContent="center">
                   {isSelected && <VelaIcon name="check" size={13} color={Colors.textInverse} />}
                 </Stack>
@@ -150,13 +173,13 @@ export default function PremiumScreen() {
                   <Stack horizontal alignItems="center" gap={8} flexWrap="wrap">
                     <Text fontSize={16} fontWeight="700" color={Colors.textPrimary}>{p.label}</Text>
                     {'saving' in p && (
-                      <Stack backgroundColor={Colors.primary} borderRadius={8}
+                      <Stack backgroundColor={Colors.primary} borderRadius={6}
                         paddingHorizontal={8} paddingVertical={3}>
                         <Text fontSize={10} fontWeight="800" color={Colors.textInverse}>{(p as any).saving}</Text>
                       </Stack>
                     )}
                     {isBestValue && (
-                      <Stack backgroundColor="#F59E0B" borderRadius={8}
+                      <Stack backgroundColor="#F59E0B" borderRadius={6}
                         paddingHorizontal={8} paddingVertical={3}>
                         <Text fontSize={10} fontWeight="800" color="#fff">BEST VALUE</Text>
                       </Stack>
@@ -168,17 +191,17 @@ export default function PremiumScreen() {
                     </Text>
                   )}
                   {key === 'LIFETIME' && (
-                    <Text fontSize={12} color={Colors.textTertiary}>
+                    <Text fontSize={12} color={Colors.textSecondary} opacity={0.8}>
                       Pay once, use forever
                     </Text>
                   )}
                   {key === 'MONTHLY' && (
-                    <Text fontSize={12} color={Colors.textTertiary}>
+                    <Text fontSize={12} color={Colors.textSecondary} opacity={0.8}>
                       Billed monthly, cancel anytime
                     </Text>
                   )}
                 </Stack>
-                <Text fontSize={16} fontWeight="800" color={isSelected ? Colors.primaryDark : Colors.textPrimary}>
+                <Text fontSize={16} fontWeight="800" color={isSelected ? Colors.primary : Colors.textPrimary}>
                   {p.price}
                 </Text>
               </StyledPressable>
@@ -188,27 +211,95 @@ export default function PremiumScreen() {
 
         {/* CTA */}
         <Stack paddingHorizontal={20} gap={12}>
-          <StyledPressable backgroundColor={Colors.primary} borderRadius={30}
-            paddingVertical={18} alignItems="center" onPress={handlePurchasePress}
-            flexDirection="row" justifyContent="center" gap={10}
-            shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 4 }}
-            shadowOpacity={0.35} shadowRadius={12} elevation={6}>
+          <StyledPressable backgroundColor={Colors.primary} borderRadius={28}
+            paddingVertical={16} paddingHorizontal={32} alignItems="center" onPress={handlePurchasePress}
+            flexDirection="row" justifyContent="center" gap={12}
+            shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 6 }}
+            shadowOpacity={0.28} shadowRadius={14} elevation={6}>
             <VelaIcon name="crown" size={18} color={Colors.textInverse} />
-            <Text fontSize={17} fontWeight="800" color={Colors.textInverse}>
+            <Text fontSize={16} fontWeight="800" color={Colors.textInverse} letterSpacing={0.2}>
               {selected === 'YEARLY'   ? '🎉 Start Free Trial' :
                selected === 'LIFETIME' ? '⚡ Buy Lifetime'    :
                '🚀 Start Monthly'}
             </Text>
           </StyledPressable>
-          <StyledPressable onPress={premium.restore}>
-            <Text fontSize={12} color={Colors.primary} textAlign="center">
-              Restore purchases
+
+          {/* Subscription wording (Apple compliance) */}
+          {selected === 'YEARLY' && (
+            <Text
+              fontSize={11}
+              color={Colors.textTertiary}
+              textAlign="center"
+              lineHeight={16}
+              opacity={0.75}
+            >
+              7-day free trial, then {getPlanPrice('YEARLY')}/year.{'\n'}
+              Subscription automatically renews unless cancelled at least 24 hours before the end of the trial.
             </Text>
-          </StyledPressable>
-          <StyledDivider borderBottomColor={Colors.border} />
-          <Text fontSize={11} color={Colors.textTertiary} textAlign="center" lineHeight={16}>
-            Subscriptions renew automatically. Cancel anytime. Payment charged to your Apple ID at confirmation.
-          </Text>
+          )}
+
+          {selected === 'MONTHLY' && (
+            <Text
+              fontSize={11}
+              color={Colors.textTertiary}
+              textAlign="center"
+              lineHeight={16}
+              opacity={0.75}
+            >
+              {getPlanPrice('MONTHLY')}/month. Subscription automatically renews unless cancelled at least 24 hours before renewal.
+            </Text>
+          )}
+
+          {selected === 'LIFETIME' && (
+            <Text
+              fontSize={11}
+              color={Colors.textTertiary}
+              textAlign="center"
+              lineHeight={16}
+              opacity={0.75}
+            >
+              One-time purchase. Lifetime access to premium features.
+            </Text>
+          )}
+
+          {/* Restore & Legal Links */}
+          <Stack alignItems="center" gap={8}>
+            <StyledPressable onPress={premium.restore}>
+              <Text fontSize={12} color={Colors.primary} fontWeight="600">
+                Restore purchases
+              </Text>
+            </StyledPressable>
+
+            <Text fontSize={11} color={Colors.textTertiary} textAlign="center" opacity={0.75}>
+              Payment charged to your Apple ID at confirmation.
+            </Text>
+
+            <Stack
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="center"
+              gap={10}
+              flexWrap="wrap"
+            >
+              <StyledPressable
+                onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}
+              >
+                <Text fontSize={11} color={Colors.primary}>
+                  Privacy Policy
+                </Text>
+              </StyledPressable>
+
+              <Text fontSize={11} color={Colors.textTertiary} opacity={0.6}>
+                •
+              </Text>
+
+              <StyledPressable onPress={() => Linking.openURL(TERMS_URL)}>
+                <Text fontSize={11} color={Colors.primary}>
+                  Terms of Use
+                </Text>
+              </StyledPressable>
+            </Stack>
+          </Stack>
         </Stack>
       </StyledScrollView>
     </StyledPage>

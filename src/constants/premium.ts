@@ -25,7 +25,7 @@ export const PREMIUM_FEATURES = [
   { icon: '📊', title: 'Advanced insights',  description: 'Personalised trends in your cycle patterns' },
   { icon: '📄', title: 'Export data',        description: 'PDF & CSV exports for your records' },
   { icon: '🔔', title: 'Smart reminders',    description: 'Pill reminders and custom notifications' },
-  { icon: '🤰', title: 'Pregnancy mode',     description: 'Track pregnancy and postpartum health' },
+  // { icon: '🤰', title: 'Pregnancy mode',     description: 'Track pregnancy and postpartum health' },
   { icon: '🎨', title: 'Premium themes',     description: 'More beautiful, personalizable themes' },
   { icon: '🔐', title: 'Future features',    description: 'Health integrations & sync coming soon' },
 ] as const
