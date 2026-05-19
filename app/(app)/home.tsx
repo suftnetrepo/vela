@@ -136,7 +136,7 @@ export default function HomeScreen() {
       {prediction && prediction.daysUntilNextPeriod < 0 && (
         <Stack
           marginHorizontal={20}
-          marginBottom={12}
+          marginVertical={8}
           paddingHorizontal={14}
           paddingVertical={10}
           backgroundColor={Colors.surface}
