@@ -18,7 +18,7 @@ import { useCycles } from "../../src/hooks/useCycles";
 import { FlowTab } from "../../src/components/log/FlowTab";
 import { SymptomsTab } from "../../src/components/log/SymptomsTab";
 import { JournalTab } from "../../src/components/log/JournalTab";
-import type { FlowData } from "../../src/components/log/FlowTab";
+import type { FlowData, FlowLevel, DischargeType } from "../../src/components/log/FlowTab";
 import type { JournalData } from "../../src/components/log/JournalTab";
 import { VelaIcon } from "../../src/components/shared/VelaIcon";
 import { formatDisplayDate, todayStr, fromDateStr } from "../../src/utils/date";
@@ -88,11 +88,54 @@ export default function LogScreen() {
       return;
     }
     const flow = log.flow ?? null;
+    
+    // Parse compound flow values like "light_spotting" into level and discharge
+    let level: FlowLevel = null;
+    let discharge: DischargeType = null;
+    
+    if (flow) {
+      // Check if it's a discharge type (spotting, sticky, eggwhite)
+      if (flow === "spotting" || flow === "sticky" || flow === "eggwhite") {
+        discharge = flow;
+        // Default to light if no level specified
+        level = "light";
+      } else if (flow.includes("_")) {
+        // Compound value like "light_spotting"
+        const parts = flow.split("_");
+        if (parts.length >= 2) {
+          const potentialLevel = parts[0];
+          const potentialDischarge = parts[1];
+          
+          if (potentialLevel === "light" || potentialLevel === "medium" || potentialLevel === "heavy") {
+            level = potentialLevel as FlowLevel;
+          }
+          if (potentialDischarge === "spotting" || potentialDischarge === "sticky" || potentialDischarge === "eggwhite") {
+            discharge = potentialDischarge as DischargeType;
+          }
+        }
+      } else if (flow === "light" || flow === "medium" || flow === "heavy") {
+        level = flow;
+      } else if (flow === "none") {
+        // No flow selected
+      }
+    }
+    
+    // Determine hasFlow based on flow value
+    // flow can be: "none", "none_spotting", "light", "light_spotting", etc.
+    // Check for "none" prefix first (handles both "none" and "none_*" patterns)
+    let hasFlow: boolean | null;
+    if (!flow) {
+      hasFlow = null;
+    } else if (flow.startsWith("none")) {
+      hasFlow = false;
+    } else {
+      hasFlow = true;
+    }
+
     setFlowData({
-      hasFlow: flow ? true : log.flow === "none" ? false : null,
-      level:
-        flow && flow !== "none" && flow !== "spotting" ? (flow as any) : null,
-      discharge: log.flow === "spotting" ? "spotting" : null,
+      hasFlow,
+      level,
+      discharge,
     });
 
     // Separate symptom keys and mood keys from DB
@@ -123,11 +166,27 @@ export default function LogScreen() {
     try {
       // Resolve flow string
       let flowStr: string | undefined;
-      if (flowData.hasFlow === false) flowStr = "none";
-      else if (flowData.hasFlow === true) {
-        if (flowData.discharge === "spotting") flowStr = "spotting";
-        else flowStr = flowData.level ?? "light";
+      if (flowData.hasFlow === false) {
+        // No flow - but still check for discharge
+        // Discharge is independent from menstrual flow
+        if (flowData.discharge === "spotting" || flowData.discharge === "sticky" || flowData.discharge === "eggwhite") {
+          flowStr = `none_${flowData.discharge}`;
+        } else {
+          flowStr = "none";
+        }
+      } else if (flowData.hasFlow === true) {
+        // Had flow - flow level is required
+        const level = flowData.level ?? "light";
+        
+        // Combine flow level with discharge if discharge is selected
+        if (flowData.discharge === "spotting" || flowData.discharge === "sticky" || flowData.discharge === "eggwhite") {
+          flowStr = `${level}_${flowData.discharge}`;
+        } else {
+          // If no discharge selected, just use flow level
+          flowStr = level;
+        }
       }
+      // If hasFlow is null, flowStr remains undefined (no period data logged)
 
       // Combine symptoms and moods for persistence
       // Moods are stored with mood_ prefix in the symptoms array
@@ -140,14 +199,16 @@ export default function LogScreen() {
       const legacyMood =
         journalData.moods.length > 0 ? journalData.moods[0] : undefined;
 
-      await saveLog({
+      const payload = {
         flow: flowStr,
         mood: legacyMood,
         energyLevel: journalData.energyLevel,
         notes: journalData.notes || undefined,
         cycleId: active?.id,
         symptoms: allKeys.map((k) => ({ key: k })),
-      });
+      };
+
+      await saveLog(payload);
       loaderService.hide(id);
       toastService.success(
         "Saved",
@@ -261,6 +322,11 @@ export default function LogScreen() {
           <FlowTab
             data={flowData}
             onChange={(d) => {
+              // When flow status changes, clear discharge to avoid stale state
+              // This ensures user consciously chooses discharge again after switching
+              if (d.hasFlow !== flowData.hasFlow) {
+                d = { ...d, discharge: null };
+              }
               setFlowData(d);
               markDirty();
             }}
@@ -292,6 +358,7 @@ export default function LogScreen() {
         bottom={0}
         left={0}
         right={0}
+        marginHorizontal={16}
        
       >
         <StyledPressable
