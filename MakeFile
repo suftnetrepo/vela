@@ -1,0 +1,9 @@
+.PHONY: ios-local-build ios-submit ios-local-release
+
+ios-local-build:
+	eas build --platform ios --profile production --local
+
+ios-submit:
+	eas submit --platform ios
+
+ios-local-release: ios-local-build ios-submit
