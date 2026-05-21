@@ -23,7 +23,7 @@ import {
 type PlanKey = "MONTHLY" | "YEARLY" | "LIFETIME";
 
 const PRIVACY_POLICY_URL =
-  "https://suftnetrepo.github.io/vela/privacy-policy.html";
+  "https://suftnetrepo.github.io/vela";
 const TERMS_URL =
   "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/";
 
@@ -40,18 +40,6 @@ export default function PremiumScreen() {
   const Colors = useColors();
   const premium = usePremium();
   const [selected, setSelected] = useState<PlanKey>("YEARLY");
-
-  const getPlanPrice = (key: PlanKey) => {
-    if (key === "MONTHLY") {
-      return premium.monthlyPrice ?? PREMIUM_PRICING.MONTHLY.price;
-    }
-
-    if (key === "YEARLY") {
-      return premium.yearlyPrice ?? PREMIUM_PRICING.YEARLY.price;
-    }
-
-    return premium.lifetimePrice ?? PREMIUM_PRICING.LIFETIME.price;
-  };
 
   const handlePurchasePress = async () => {
     let success = false;
