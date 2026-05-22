@@ -19,32 +19,18 @@
 
   <!-- Centered content -->
   <g>
-    <!-- Flower mark (stylized 6-petal bloom) -->
-    <!-- Positioned vertically centered with adequate top margin -->
-    <g transform="translate(256, 180)">
-      <!-- Petals using circles (soft, organic flower shape) -->
-      <!-- Primary color: Rose #E8748A -->
-      
-      <!-- Top petal -->
-      <circle cx="0" cy="-30" r="18" fill="#E8748A" opacity="0.9"/>
-      <!-- Top-right petal -->
-      <circle cx="26" cy="-15" r="18" fill="#E8748A" opacity="0.9"/>
-      <!-- Bottom-right petal -->
-      <circle cx="26" cy="15" r="18" fill="#E8748A" opacity="0.9"/>
-      <!-- Bottom petal -->
-      <circle cx="0" cy="30" r="18" fill="#E8748A" opacity="0.9"/>
-      <!-- Bottom-left petal -->
-      <circle cx="-26" cy="15" r="18" fill="#E8748A" opacity="0.9"/>
-      <!-- Top-left petal -->
-      <circle cx="-26" cy="-15" r="18" fill="#E8748A" opacity="0.9"/>
-      
-      <!-- Center circle (solid filled) -->
-      <circle cx="0" cy="0" r="14" fill="#E8748A" opacity="1"/>
-    </g>
+    <image
+      x="168"
+      y="92"
+      width="176"
+      height="176"
+      href="./vela-app-icon.svg"
+      preserveAspectRatio="xMidYMid meet"
+    />
 
     <!-- "Vela" wordmark -->
     <!-- Font: Plus Jakarta Sans Bold (700-weight) -->
-    <!-- Positioned below flower with proper spacing -->
+    <!-- Positioned below icon with proper spacing -->
     <text 
       x="256"
       y="300"

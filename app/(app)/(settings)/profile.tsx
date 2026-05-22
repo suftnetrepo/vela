@@ -233,7 +233,7 @@ export default function ProfileScreen() {
               borderWidth={3}
               borderColor={Colors.border}
             >
-              <VelaIcon name="flower" size={30} color={Colors.primary} />
+              <VelaIcon name="vela" size={30} color={Colors.primary} />
             </Stack>
             <Stack flex={1} gap={4}>
               <Text
@@ -554,7 +554,7 @@ export default function ProfileScreen() {
             alignItems="center"
             justifyContent="center"
           >
-            <VelaIcon name="flower" size={20} color={Colors.primary} />
+            <VelaIcon name="vela" size={20} color={Colors.primary} />
           </Stack>
           <Text fontSize={12} color={Colors.textTertiary}>
             Vela v1.0.0

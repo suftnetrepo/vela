@@ -12,7 +12,42 @@
 
 import React from 'react'
 import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import Svg, { Defs, G, LinearGradient, Path, Rect, Stop } from 'react-native-svg'
 import { SvgSymptomIcon, isSvgSymptomIcon } from './SvgSymptomIcon'
+
+function VelaBrandIcon({ size, style }: { size: number; style?: object }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 1024 1024" style={style}>
+      <Defs>
+        <LinearGradient id="vela-bg" x1="128" y1="96" x2="896" y2="928" gradientUnits="userSpaceOnUse">
+          <Stop stopColor="#9C4DFF" />
+          <Stop offset="0.48" stopColor="#D94AAE" />
+          <Stop offset="1" stopColor="#F47C91" />
+        </LinearGradient>
+        <LinearGradient id="vela-petal" x1="512" y1="205" x2="512" y2="820" gradientUnits="userSpaceOnUse">
+          <Stop stopColor="#FFFFFF" />
+          <Stop offset="0.55" stopColor="#FFE1EC" />
+          <Stop offset="1" stopColor="#F7A5BE" />
+        </LinearGradient>
+        <LinearGradient id="vela-petal-soft" x1="512" y1="332" x2="512" y2="798" gradientUnits="userSpaceOnUse">
+          <Stop stopColor="#FFFFFF" stopOpacity="0.95" />
+          <Stop offset="1" stopColor="#F6A0B9" stopOpacity="0.68" />
+        </LinearGradient>
+      </Defs>
+
+      <Rect width="1024" height="1024" rx="224" fill="url(#vela-bg)" />
+
+      <G>
+        <Path d="M512 718C409 613 387 448 512 258C637 448 615 613 512 718Z" fill="url(#vela-petal)" opacity="0.96" />
+        <Path d="M390 737C290 647 281 501 391 346C481 487 475 629 390 737Z" fill="url(#vela-petal-soft)" opacity="0.88" />
+        <Path d="M634 737C734 647 743 501 633 346C543 487 549 629 634 737Z" fill="url(#vela-petal-soft)" opacity="0.88" />
+        <Path d="M298 754C257 654 295 536 417 466C434 595 393 694 298 754Z" fill="#F89AB8" opacity="0.55" />
+        <Path d="M726 754C767 654 729 536 607 466C590 595 631 694 726 754Z" fill="#F89AB8" opacity="0.55" />
+        <Path d="M512 770C459 720 449 641 512 548C575 641 565 720 512 770Z" fill="#FFFFFF" opacity="0.98" />
+      </G>
+    </Svg>
+  )
+}
 
 // ─── Icon catalogue ──────────────────────────────────────────────────────────
 // All icon names used anywhere in Vela, mapped to their family + glyph.
@@ -140,16 +175,20 @@ const ICON_MAP: Record<string, IconDef> = {
 
 // ─── Props ───────────────────────────────────────────────────────────────────
 export interface VelaIconProps {
-  name:    keyof typeof ICON_MAP | string
+  name:    VelaIconName | string
   size?:   number
   color?:  string
   style?:  object
 }
 
-export type VelaIconName = keyof typeof ICON_MAP
+export type VelaIconName = keyof typeof ICON_MAP | 'vela'
 
 // ─── Component ───────────────────────────────────────────────────────────────
 export function VelaIcon({ name, size = 20, color = '#2D1B24', style }: VelaIconProps) {
+  if (name === 'vela') {
+    return <VelaBrandIcon size={size} style={style} />
+  }
+
   // Check if this is an SVG symptom icon first
   if (typeof name === 'string' && isSvgSymptomIcon(name)) {
     try {

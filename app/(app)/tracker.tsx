@@ -490,7 +490,7 @@ export default function TrackerScreen() {
               onSave={handleSaveWeight}
             />
 
-            {tracker.weightData.length >= 2 ? (
+            {tracker.weightData.length > 0 ? (
               <Stack
                 backgroundColor={Colors.surface}
                 borderRadius={16}
@@ -536,50 +536,80 @@ export default function TrackerScreen() {
                     </Text>
                   </Stack>
                 </Stack>
-                <Stack
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="center"
-                  backgroundColor={Colors.inputBackground}
-                  borderRadius={12}
-                  paddingVertical={12}
-                  borderWidth={1}
-                  borderColor={Colors.border}
-                >
-                  <SparkChart
-                    data={tracker.weightData}
-                    color={Colors.primary}
-                    unit="kg"
-                    minY={Math.min(...wVals) - 1}
-                    maxY={Math.max(...wVals) + 1}
-                  />
-                </Stack>
+                {tracker.weightData.length >= 2 ? (
+                  <>
+                    <Stack
+                      flexDirection="row"
+                      alignItems="center"
+                      justifyContent="center"
+                      backgroundColor={Colors.inputBackground}
+                      borderRadius={12}
+                      paddingVertical={12}
+                      borderWidth={1}
+                      borderColor={Colors.border}
+                    >
+                      <SparkChart
+                        data={tracker.weightData}
+                        color={Colors.primary}
+                        unit="kg"
+                        minY={Math.min(...wVals) - 1}
+                        maxY={Math.max(...wVals) + 1}
+                      />
+                    </Stack>
 
-                <StatRow
-                  items={[
-                    {
-                      label: "Current",
-                      value: formatMeasurement(
-                        wVals[wVals.length - 1],
-                        "weight",
-                      ),
-                      color: Colors.textPrimary,
-                    },
-                    {
-                      label: "Change",
-                      value: `${wVals[wVals.length - 1] - wVals[0] >= 0 ? "+" : ""}${formatMeasurement(wVals[wVals.length - 1] - wVals[0], "weight")}`,
-                      color:
-                        wVals[wVals.length - 1] - wVals[0] <= 0
-                          ? Colors.success
-                          : Colors.warning,
-                    },
-                    {
-                      label: "Entries",
-                      value: `${wVals.length}`,
-                      color: Colors.textSecondary,
-                    },
-                  ]}
-                />
+                    <StatRow
+                      items={[
+                        {
+                          label: "Current",
+                          value: formatMeasurement(
+                            wVals[wVals.length - 1],
+                            "weight",
+                          ),
+                          color: Colors.textPrimary,
+                        },
+                        {
+                          label: "Change",
+                          value: `${wVals[wVals.length - 1] - wVals[0] >= 0 ? "+" : ""}${formatMeasurement(wVals[wVals.length - 1] - wVals[0], "weight")}`,
+                          color:
+                            wVals[wVals.length - 1] - wVals[0] <= 0
+                              ? Colors.success
+                              : Colors.warning,
+                        },
+                        {
+                          label: "Entries",
+                          value: `${wVals.length}`,
+                          color: Colors.textSecondary,
+                        },
+                      ]}
+                    />
+                  </>
+                ) : (
+                  <StatRow
+                    items={[
+                      {
+                        label: "Current",
+                        value: formatMeasurement(
+                          wVals[wVals.length - 1],
+                          "weight",
+                        ),
+                        color: Colors.textPrimary,
+                      },
+                      {
+                        label: "Logged",
+                        value: format(
+                          parseISO(tracker.weightData[0].date),
+                          "MMM d",
+                        ),
+                        color: Colors.textSecondary,
+                      },
+                      {
+                        label: "Entries",
+                        value: `${wVals.length}`,
+                        color: Colors.textSecondary,
+                      },
+                    ]}
+                  />
+                )}
               </Stack>
             ) : (
               <Stack

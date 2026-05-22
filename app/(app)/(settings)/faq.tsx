@@ -321,7 +321,7 @@ export default function FAQScreen() {
               alignItems="center"
               justifyContent="center"
             >
-              <VelaIcon name="flower" size={20} color={Colors.primary} />
+              <VelaIcon name="vela" size={20} color={Colors.primary} />
             </Stack>
             <Text
               fontSize={15}

@@ -1,7 +1,7 @@
 /**
  * BrandHeader — Premium branding component for app header
  *
- * Combines Vela's flower mark + wordmark in a cohesive,
+ * Combines Vela's app mark + wordmark in a cohesive,
  * intentional layout. Used on home screen and splash screens.
  *
  * Design principles:
@@ -49,7 +49,7 @@ export function BrandHeader({
         alignItems="center"
         gap={horizontalGap}
       >
-        <VelaIcon name="flower" size={iconSize} color={color} />
+        <VelaIcon name="vela" size={iconSize} color={color} />
         <Text
           fontSize={fontSize}
           fontWeight={fontWeight}
@@ -65,7 +65,7 @@ export function BrandHeader({
   // Vertical stack (splash/centered layouts)
   return (
     <Stack alignItems="center" gap={spacing}>
-      <VelaIcon name="flower" size={iconSize} color={color} />
+      <VelaIcon name="vela" size={iconSize} color={color} />
       <Text
         fontSize={fontSize}
         fontWeight={fontWeight}

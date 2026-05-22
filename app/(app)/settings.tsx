@@ -113,7 +113,7 @@ export default function SettingsScreen() {
           flexDirection="row" alignItems="center" gap={16}>
           <Stack width={60} height={60} borderRadius={30} backgroundColor={Colors.primaryFaint}
             alignItems="center" justifyContent="center" borderWidth={1.5} borderColor={Colors.border}>
-            <VelaIcon name="flower" size={28} color={Colors.primary} />
+            <VelaIcon name="vela" size={28} color={Colors.primary} />
           </Stack>
           <Stack flex={1} gap={4}>
             <Text fontSize={17} fontWeight="800" color={Colors.textPrimary}>My Account</Text>
@@ -139,11 +139,11 @@ export default function SettingsScreen() {
             shadowColor="#A960DA" shadowOffset={{ width: 0, height: 3 }}
             shadowOpacity={0.18} shadowRadius={12} elevation={4}
             flexDirection="row" alignItems="center" gap={14}>
-            <Stack width={46} height={46} borderRadius={23}
+            {/* <Stack width={46} height={46} borderRadius={23}
               backgroundColor="rgba(255,255,255,0.2)" borderWidth={1} borderColor="rgba(255,255,255,0.25)"
               alignItems="center" justifyContent="center">
-              <VelaIcon name="crown" size={24} color={Colors.textInverse} />
-            </Stack>
+              <VelaIcon name="vela" size={24} color={Colors.textInverse} />
+            </Stack> */}
             <Stack flex={1} gap={3}>
               <Text fontSize={16} fontWeight="800" color={Colors.textInverse}>Unlock Premium</Text>
               <Text fontSize={12} color="rgba(255,255,255,0.7)">Partner sharing · Reports · All themes</Text>

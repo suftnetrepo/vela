@@ -19,7 +19,7 @@ interface PageDef {
 
 const PAGES: PageDef[] = [
   {
-    icon: 'flower',
+    icon: 'vela',
     headline: 'Welcome',
     title: 'Your cycle, privately.',
     subtitle:

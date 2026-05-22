@@ -85,7 +85,7 @@ export default function PremiumScreen() {
             borderWidth={2}
             borderColor={Colors.border}
           >
-            <VelaIcon name="check-circle" size={44} color={Colors.primary} />
+            <VelaIcon name="vela" size={44} color={Colors.primary} />
           </Stack>
           <Text
             fontSize={22}
@@ -149,7 +149,7 @@ export default function PremiumScreen() {
             borderWidth={2}
             borderColor={Colors.border}
           >
-            <VelaIcon name="crown" size={44} color={Colors.primary} />
+            <VelaIcon name="vela" size={44} color={Colors.primary} />
           </Stack>
           <Text
             fontSize={28}

@@ -52,7 +52,7 @@ export function PremiumGate({ children, feature, description, compact = false }:
     <Stack gap={20} alignItems="center" padding={32}>
       <Stack width={72} height={72} borderRadius={36} backgroundColor={Colors.primaryFaint}
         alignItems="center" justifyContent="center" borderWidth={2} borderColor={Colors.border}>
-        <VelaIcon name="crown" size={36} color={Colors.primary} />
+        <VelaIcon name="vela" size={36} color={Colors.primary} />
       </Stack>
       <Stack gap={8} alignItems="center">
         <Text fontSize={20} fontWeight="800" color={Colors.textPrimary} textAlign="center">

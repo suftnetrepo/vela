@@ -15,6 +15,9 @@
 const path = require('path')
 const fs = require('fs')
 
+const ICON_SVG = fs.readFileSync(path.join(__dirname, '../assets/images/vela-app-icon.svg'), 'utf8')
+const ICON_DATA_URI = `data:image/svg+xml;base64,${Buffer.from(ICON_SVG).toString('base64')}`
+
 // Configuration
 const SPLASH_SIZE = 512
 const ICON_SIZE = 88
@@ -48,27 +51,11 @@ try {
 }
 
 /**
- * Generate SVG for splash screen with embedded flower icon
+ * Generate SVG for splash screen with the Vela app icon
  */
 function generateSplashSvg(themeName) {
   const primaryColor = THEMES[themeName]
   const backgroundColor = BACKGROUNDS[themeName]
-
-  // Flower icon path (simplified flower/bloom icon)
-  // This is a stylized flower with petals and center
-  const flowerPath = `
-    <!-- Outer petals -->
-    <g fill="${primaryColor}" opacity="0.8">
-      <circle cx="0" cy="-30" r="18"/>
-      <circle cx="26" cy="-15" r="18"/>
-      <circle cx="26" cy="15" r="18"/>
-      <circle cx="0" cy="30" r="18"/>
-      <circle cx="-26" cy="15" r="18"/>
-      <circle cx="-26" cy="-15" r="18"/>
-    </g>
-    <!-- Center circle -->
-    <circle cx="0" cy="0" r="14" fill="${primaryColor}"/>
-  `
 
   return `
     <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -86,10 +73,14 @@ function generateSplashSvg(themeName) {
 
       <!-- Centered content group -->
       <g transform="translate(256, 230)">
-        <!-- Flower icon (large, centered) -->
-        <g transform="translate(0, -50)">
-          ${flowerPath}
-        </g>
+        <image
+          x="-${ICON_SIZE / 2}"
+          y="-138"
+          width="${ICON_SIZE}"
+          height="${ICON_SIZE}"
+          href="${ICON_DATA_URI}"
+          preserveAspectRatio="xMidYMid meet"
+        />
 
         <!-- Vela wordmark text -->
         <text x="0" y="80"

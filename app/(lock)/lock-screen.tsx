@@ -70,7 +70,7 @@ export default function LockScreen() {
       <Stack alignItems="center" paddingTop={60} gap={8}>
         <Stack width={68} height={68} borderRadius={34} backgroundColor={Colors.primaryFaint}
           alignItems="center" justifyContent="center" borderWidth={2} borderColor={Colors.border}>
-          <VelaIcon name="flower" size={34} color={Colors.primary} />
+          <VelaIcon name="vela" size={34} color={Colors.primary} />
         </Stack>
         <Text fontSize={22} fontWeight="800" color={Colors.textPrimary}>Vela</Text>
       </Stack>

@@ -58,17 +58,20 @@ export function useTracker(): TrackerData & {
   const saveWeight = useCallback(async (kg: number) => {
     await logService.upsertLog(todayStr(), { weight: kg })
     invalidateData()
-  }, [invalidateData])
+    await load()
+  }, [invalidateData, load])
 
   const saveTemperature = useCallback(async (celsius: number) => {
     await logService.upsertLog(todayStr(), { temperature: celsius })
     invalidateData()
-  }, [invalidateData])
+    await load()
+  }, [invalidateData, load])
 
   const saveNotes = useCallback(async (notes: string) => {
     await logService.upsertLog(todayStr(), { notes })
     invalidateData()
-  }, [invalidateData])
+    await load()
+  }, [invalidateData, load])
 
   return {
     todayLog,
