@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
+import { AppState } from 'react-native'
 import {
   useFonts,
   PlusJakartaSans_300Light,
@@ -15,7 +16,7 @@ import { initDatabase } from '../src/db/client'
 import { seedDatabase } from '../src/db/seed'
 import { settingsService } from '../src/services/settings.service'
 import { securityService } from '../src/services/security.service'
-import { getEntitlement, initializeRevenueCat } from '../src/services/premium.service'
+import { getEntitlement, initializeRevenueCat, refreshEntitlement, subscribeToEntitlementUpdates } from '../src/services/premium.service'
 import { useSettingsStore } from '../src/stores/settings.store'
 import { useAuthStore } from '../src/stores/auth.store'
 import { SETTINGS_KEYS } from '../src/constants/config'
@@ -47,7 +48,7 @@ export default function RootLayout() {
         await initializeRevenueCat()
 
         await initDatabase()
-        await seedDatabase()
+        // await seedDatabase()
 
         const all = await settingsService.getAll()
         
@@ -89,6 +90,31 @@ export default function RootLayout() {
     }
     boot()
   }, [])
+
+  useEffect(() => {
+    const unsubscribe = subscribeToEntitlementUpdates((info) => {
+      console.log('[Premium] Root entitlement update', info)
+      setPremiumEntitlement(info.isActive, info.plan)
+    })
+
+    const appStateSubscription = AppState.addEventListener('change', (nextState) => {
+      if (nextState !== 'active') return
+
+      refreshEntitlement('app-foreground')
+        .then((info) => {
+          console.log('[Premium] Foreground refresh', info)
+          setPremiumEntitlement(info.isActive, info.plan)
+        })
+        .catch((error) => {
+          console.error('[Premium] Foreground refresh failed:', error)
+        })
+    })
+
+    return () => {
+      unsubscribe()
+      appStateSubscription.remove()
+    }
+  }, [setPremiumEntitlement])
 
   useEffect(() => {
     if (fontsLoaded && appReady) {

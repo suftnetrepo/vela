@@ -30,6 +30,7 @@
 import * as SecureStore from "expo-secure-store";
 import Purchases from "react-native-purchases";
 import { PREMIUM_STORAGE_KEY } from "../constants/premium";
+import { PREMIUM_PRODUCTS } from "../constants/premium";
 
 // ─── RevenueCat Configuration ─────────────────────────────────────────────────
 // Same product IDs across all environments: vela_premium_monthly/yearly/lifetime
@@ -38,6 +39,9 @@ import { PREMIUM_STORAGE_KEY } from "../constants/premium";
 const REVENUECAT_API_KEY = __DEV__
   ? "test_CUwZEYKAHnjpWzNGwwjrKCEILNM"
   : "appl_DLDmelsrlWRjyPwWCSVYXFouVDP";
+
+const PREMIUM_ENTITLEMENT_ID = "premium";
+const PREMIUM_PRODUCT_IDS = new Set(Object.values(PREMIUM_PRODUCTS));
 
 // ─── Helper: Determine plan type from product ID ──────────────────────────────
 
@@ -53,6 +57,84 @@ const getPlanFromProductId = (productId: string): PremiumPlan => {
 
 // ─── RevenueCat Initialization ────────────────────────────────────────────────
 let isRevenueCatInitialized = false;
+const entitlementListeners = new Set<(info: EntitlementInfo) => void>();
+
+const emitEntitlementUpdate = (info: EntitlementInfo) => {
+  for (const listener of entitlementListeners) {
+    listener(info);
+  }
+};
+
+const clearLocalEntitlementCache = async (): Promise<void> => {
+  await SecureStore.deleteItemAsync(PREMIUM_STORAGE_KEY);
+};
+
+const syncEntitlementFromCustomerInfo = async (
+  customerInfo: any,
+  source: string,
+): Promise<EntitlementInfo> => {
+  const entitlement = customerInfo?.entitlements?.active?.[PREMIUM_ENTITLEMENT_ID];
+  const activeEntitlements = Object.keys(customerInfo?.entitlements?.active ?? {});
+
+  console.log("[Premium] Customer info sync", {
+    source,
+    appUserId: customerInfo?.originalAppUserId ?? null,
+    activeEntitlements,
+    activeSubscriptions: customerInfo?.activeSubscriptions ?? [],
+  });
+
+  if (!entitlement) {
+    const inactiveInfo: EntitlementInfo = {
+      isActive: false,
+      plan: null,
+      expiresAt: null,
+      purchasedAt: null,
+    };
+
+    await clearLocalEntitlementCache();
+    emitEntitlementUpdate(inactiveInfo);
+    return inactiveInfo;
+  }
+
+  const productId = entitlement.productIdentifier || "";
+  const plan = getPlanFromProductId(productId);
+  const expiresAt = entitlement.expirationDate || null;
+  const purchasedAt =
+    entitlement.latestPurchaseDate ??
+    entitlement.originalPurchaseDate ??
+    null;
+
+  const nextInfo: EntitlementInfo = {
+    isActive: true,
+    plan,
+    expiresAt,
+    purchasedAt,
+  };
+
+  await SecureStore.setItemAsync(PREMIUM_STORAGE_KEY, JSON.stringify(nextInfo));
+  emitEntitlementUpdate(nextInfo);
+
+  console.log("[Premium] Entitlement active", {
+    source,
+    entitlementId: PREMIUM_ENTITLEMENT_ID,
+    productId,
+    knownProductId: PREMIUM_PRODUCT_IDS.has(productId),
+    plan,
+    expiresAt,
+  });
+
+  return nextInfo;
+};
+
+const registerCustomerInfoListener = () => {
+  Purchases.addCustomerInfoUpdateListener((customerInfo) => {
+    syncEntitlementFromCustomerInfo(customerInfo, "customer-info-listener").catch(
+      (error) => {
+        console.error("[Premium] Customer info listener sync failed:", error);
+      },
+    );
+  });
+};
 
 export const initializeRevenueCat = async (): Promise<void> => {
   if (isRevenueCatInitialized) return;
@@ -64,8 +146,14 @@ export const initializeRevenueCat = async (): Promise<void> => {
       appUserID: undefined,
     });
 
+    registerCustomerInfoListener();
+
     isRevenueCatInitialized = true;
-    console.log("[RevenueCat] Initialized successfully");
+    console.log("[RevenueCat] Initialized successfully", {
+      entitlementId: PREMIUM_ENTITLEMENT_ID,
+      apiKeyPrefix: REVENUECAT_API_KEY.slice(0, 4),
+      expectedProductIds: Array.from(PREMIUM_PRODUCT_IDS),
+    });
   } catch (err) {
     console.error("[RevenueCat] Initialization failed:", err);
     throw err;
@@ -80,6 +168,26 @@ export interface EntitlementInfo {
   expiresAt: string | null;
   purchasedAt: string | null;
 }
+
+export const subscribeToEntitlementUpdates = (
+  listener: (info: EntitlementInfo) => void,
+): (() => void) => {
+  entitlementListeners.add(listener);
+  return () => {
+    entitlementListeners.delete(listener);
+  };
+};
+
+export const refreshEntitlement = async (
+  source = "manual-refresh",
+): Promise<EntitlementInfo> => {
+  if (!isRevenueCatInitialized) {
+    await initializeRevenueCat();
+  }
+
+  const customerInfo = await Purchases.getCustomerInfo();
+  return syncEntitlementFromCustomerInfo(customerInfo, source);
+};
 
 // ─── Read entitlement (from SecureStore cache + RevenueCat) ──────────────────
 
@@ -100,7 +208,7 @@ export const getEntitlement = async (): Promise<EntitlementInfo> => {
         info = JSON.parse(raw);
         // Check if cached entitlement has expired
         if (info && info.expiresAt && new Date(info.expiresAt) < new Date()) {
-          await clearEntitlement();
+          await clearLocalEntitlementCache();
           return {
             isActive: false,
             plan: null,
@@ -119,46 +227,7 @@ export const getEntitlement = async (): Promise<EntitlementInfo> => {
     }
 
     try {
-      const customerInfo = await Purchases.getCustomerInfo();
-      const isActive = !!customerInfo.entitlements.active["premium"];
-
-      if (isActive) {
-        const entitlement = customerInfo.entitlements.active["premium"];
-
-        // Determine plan from product ID
-        const productId = entitlement.productIdentifier || "";
-        const plan = getPlanFromProductId(productId);
-
-        // Build expiry date and purchase date
-        const expiresAt = entitlement.expirationDate || null;
-        const purchasedAt =
-          entitlement.latestPurchaseDate ??
-          entitlement.originalPurchaseDate ??
-          null;
-
-        const newInfo: EntitlementInfo = {
-          isActive: true,
-          plan,
-          expiresAt,
-          purchasedAt,
-        };
-
-        // Cache the entitlement
-        await SecureStore.setItemAsync(
-          PREMIUM_STORAGE_KEY,
-          JSON.stringify(newInfo),
-        );
-        return newInfo;
-      } else {
-        // No active entitlement in RevenueCat
-        await clearEntitlement();
-        return {
-          isActive: false,
-          plan: null,
-          expiresAt: null,
-          purchasedAt: null,
-        };
-      }
+      return await refreshEntitlement("get-entitlement");
     } catch (err: any) {
       // RevenueCat error; return cached info if available
       if (info?.isActive) {
@@ -214,9 +283,13 @@ export const grantEntitlement = async (
 
 export const clearEntitlement = async (): Promise<void> => {
   try {
-    // Clear both RevenueCat user and local cache
-    await Purchases.logOut();
-    await SecureStore.deleteItemAsync(PREMIUM_STORAGE_KEY);
+    await clearLocalEntitlementCache();
+    emitEntitlementUpdate({
+      isActive: false,
+      plan: null,
+      expiresAt: null,
+      purchasedAt: null,
+    });
   } catch {
     // Ignore errors if item doesn't exist
   }
@@ -245,11 +318,14 @@ export const purchaseMonthly = async (): Promise<boolean> => {
       throw new Error("Monthly package not found in offerings");
     }
 
-    console.log("[Premium] Purchasing:", pkg.identifier);
-    await Purchases.purchasePackage(pkg);
+    console.log("[Premium] Purchasing monthly:", pkg.identifier);
+    const purchaseResult = await Purchases.purchasePackage(pkg);
 
-    // After successful purchase, validate entitlement
-    const result = await getEntitlement();
+    // After successful purchase, use the returned customer info as source of truth
+    const result = await syncEntitlementFromCustomerInfo(
+      purchaseResult.customerInfo,
+      "purchase-monthly",
+    );
     return result.isActive;
   } catch (err: any) {
     if (err?.code === "PurchaseCancelledError") {
@@ -281,10 +357,13 @@ export const purchaseYearly = async (): Promise<boolean> => {
       throw new Error("Yearly package not found in offerings");
     }
 
-    console.log("[Premium] Purchasing:", pkg.identifier);
-    await Purchases.purchasePackage(pkg);
+    console.log("[Premium] Purchasing yearly:", pkg.identifier);
+    const purchaseResult = await Purchases.purchasePackage(pkg);
 
-    const result = await getEntitlement();
+    const result = await syncEntitlementFromCustomerInfo(
+      purchaseResult.customerInfo,
+      "purchase-yearly",
+    );
     return result.isActive;
   } catch (err: any) {
     if (err?.code === "PurchaseCancelledError") {
@@ -322,10 +401,13 @@ export const purchaseLifetime = async (): Promise<boolean> => {
       throw new Error("Lifetime package not found in offerings");
     }
 
-    console.log("[Premium] Purchasing:", pkg.identifier);
-    await Purchases.purchasePackage(pkg);
+    console.log("[Premium] Purchasing lifetime:", pkg.identifier);
+    const purchaseResult = await Purchases.purchasePackage(pkg);
 
-    const result = await getEntitlement();
+    const result = await syncEntitlementFromCustomerInfo(
+      purchaseResult.customerInfo,
+      "purchase-lifetime",
+    );
     return result.isActive;
   } catch (err: any) {
     if (err?.code === "PurchaseCancelledError") {
@@ -348,9 +430,12 @@ export const restorePurchases = async (): Promise<boolean> => {
     }
 
     console.log("[Premium] Attempting to restore purchases...");
-    await Purchases.restorePurchases();
+    const customerInfo = await Purchases.restorePurchases();
 
-    const result = await getEntitlement();
+    const result = await syncEntitlementFromCustomerInfo(
+      customerInfo,
+      "restore-purchases",
+    );
     return result.isActive;
   } catch (err: any) {
     console.error("[Premium] Restore purchases failed:", err?.message);

@@ -150,7 +150,7 @@ export default function SettingsScreen() {
             </Stack>
             <Stack backgroundColor="rgba(255,255,255,0.2)" borderWidth={1} borderColor="rgba(255,255,255,0.25)" borderRadius={10}
               paddingHorizontal={12} paddingVertical={6}>
-              <Text fontSize={11} fontWeight="700" color={Colors.textInverse}>Free trial</Text>
+              <Text fontSize={11} fontWeight="700" color={Colors.textInverse}>Save 45%</Text>
             </Stack>
           </StyledPressable>
         )}

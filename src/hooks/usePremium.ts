@@ -21,16 +21,21 @@ export function usePremium() {
 
   const refresh = useCallback(async () => {
     const info = await getEntitlement()
+    console.log('[Premium] Store refresh', info)
     setPremiumEntitlement(info.isActive, info.plan)
   }, [setPremiumEntitlement])
 
   const buyMonthly = useCallback(async () => {
     try {
-      await loaderService.wrap(
+      const activated = await loaderService.wrap(
         () => purchaseMonthly(),
         { label: 'Processing…', variant: 'spinner' },
       )
       await refresh()
+      if (!activated) {
+        toastService.error('Purchase pending', 'Purchase completed but premium is not active yet. Pull to refresh or reopen the app.')
+        return false
+      }
       toastService.success('Welcome to Vela Premium! 🎉')
       return true
     } catch (err: any) {
@@ -41,11 +46,15 @@ export function usePremium() {
 
   const buyYearly = useCallback(async () => {
     try {
-      await loaderService.wrap(
+      const activated = await loaderService.wrap(
         () => purchaseYearly(),
         { label: 'Processing…', variant: 'spinner' },
       )
       await refresh()
+      if (!activated) {
+        toastService.error('Purchase pending', 'Purchase completed but premium is not active yet. Pull to refresh or reopen the app.')
+        return false
+      }
       toastService.success('Welcome to Vela Premium! 🎉')
       return true
     } catch (err: any) {
@@ -56,11 +65,15 @@ export function usePremium() {
 
   const buyLifetime = useCallback(async () => {
     try {
-      await loaderService.wrap(
+      const activated = await loaderService.wrap(
         () => purchaseLifetime(),
         { label: 'Processing…', variant: 'spinner' },
       )
       await refresh()
+      if (!activated) {
+        toastService.error('Purchase pending', 'Purchase completed but premium is not active yet. Pull to refresh or reopen the app.')
+        return false
+      }
       toastService.success('Welcome to Vela Premium! 🎉')
       return true
     } catch (err: any) {
@@ -68,6 +81,10 @@ export function usePremium() {
       return false
     }
   }, [refresh])
+
+  useEffect(() => {
+    console.log('[Premium] Store state changed', { isPremium, premiumPlan })
+  }, [isPremium, premiumPlan])
 
   const restore = useCallback(async () => {
     try {

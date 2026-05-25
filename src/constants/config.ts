@@ -7,10 +7,9 @@ export const APP_CONFIG = {
   maxPinAttempts: 5,
   lockoutMinutes: 5,
   premium: {
-    monthly:      2.99,
-    yearly:       14.99,
+    monthly:      0.99,
+    yearly:       5.99,
     lifetime:     9.99,
-    trialDays:    7,
     currency:     'GBP',
   },
   prediction: {

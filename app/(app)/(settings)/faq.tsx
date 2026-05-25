@@ -83,8 +83,8 @@ const FAQ_DATA: FAQItem[] = [
   },
   {
     category: "Premium",
-    q: "Is there a free trial?",
-    a: "Yes — Premium includes a 7-day free trial. You won't be charged until the trial ends. You can cancel at any time before the trial ends and you won't pay anything.",
+    q: "How does Premium billing work?",
+    a: "Premium offers monthly, yearly, and lifetime purchase options. Monthly and yearly plans auto-renew until cancelled in Apple ID Settings. Lifetime is a one-time purchase.",
   },
   {
     category: "Premium",

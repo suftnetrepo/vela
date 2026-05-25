@@ -16,7 +16,7 @@ export const PREMIUM_PRODUCTS = {
 // ─── Pricing display (update to match App Store prices) ───────────────────────
 export const PREMIUM_PRICING = {
   MONTHLY:  { price: '£0.99', period: 'per month', label: 'Monthly' },
-  YEARLY:   { price: '£5.99', period: 'per year',  label: 'Yearly',  saving: 'Save 45%', trial: '7-day free trial' },
+  YEARLY:   { price: '£5.99', period: 'per year',  label: 'Yearly',  saving: 'Save 45%' },
   LIFETIME: { price: '£9.99', period: 'one-time',  label: 'Lifetime' },
 } as const
 

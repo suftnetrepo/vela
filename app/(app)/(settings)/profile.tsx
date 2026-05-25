@@ -517,7 +517,7 @@ export default function ProfileScreen() {
           <SectionCard title="DEVELOPMENT">
             <PrefRow
               icon="shield-check"
-              label="Grant Premium (7 days)"
+              label="Grant Premium Access"
               subtitle="Test premium features locally"
               onPress={async () => {
                 await grantEntitlement('monthly', 1)

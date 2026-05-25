@@ -17,6 +17,10 @@ export function PremiumGate({ children, feature, description, compact = false }:
   const Colors = useColors()
   const { isPremium } = usePremium()
 
+  React.useEffect(() => {
+    console.log('[PremiumGate] Render state', { feature, isPremium })
+  }, [feature, isPremium])
+
   if (isPremium) return <>{children}</>
 
   if (compact) {
@@ -76,7 +80,7 @@ export function PremiumGate({ children, feature, description, compact = false }:
         </Text>
       </StyledPressable>
       <Text fontSize={12} color={Colors.textTertiary}>
-        7-day free trial · From £2.99/month
+        Premium subscription required
       </Text>
     </Stack>
   )

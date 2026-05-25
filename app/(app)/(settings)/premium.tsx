@@ -169,23 +169,7 @@ export default function PremiumScreen() {
             Unlock advanced insights, exports, themes, and more. Support
             independent, privacy-first development.
           </Text>
-          <Stack
-            backgroundColor={Colors.successLight}
-            borderRadius={16}
-            paddingHorizontal={10}
-            paddingVertical={8}
-            horizontal
-            alignItems="center"
-            gap={6}
-            borderWidth={1}
-            borderColor={Colors.success}
-            opacity={0.85}
-          >
-            <VelaIcon name="gift" size={14} color={Colors.success} />
-            <Text fontSize={13} fontWeight="600" color={Colors.success}>
-              7-day trial, then yearly billing
-            </Text>
-          </Stack>
+         
         </Stack>
 
         {/* Features */}
@@ -240,7 +224,6 @@ export default function PremiumScreen() {
           {(["YEARLY", "LIFETIME", "MONTHLY"] as PlanKey[]).map((key) => {
             const p = PREMIUM_PRICING[key];
             const isSelected = selected === key;
-            const isBestValue = key === "LIFETIME";
             return (
               <StyledPressable
                 key={key}
@@ -288,7 +271,7 @@ export default function PremiumScreen() {
                     >
                       {p.label}
                     </Text>
-                    {"saving" in p && (
+                    {key === "YEARLY" && "saving" in p && (
                       <Stack
                         backgroundColor={Colors.primary}
                         borderRadius={6}
@@ -304,22 +287,10 @@ export default function PremiumScreen() {
                         </Text>
                       </Stack>
                     )}
-                    {isBestValue && (
-                      <Stack
-                        backgroundColor="#F59E0B"
-                        borderRadius={6}
-                        paddingHorizontal={8}
-                        paddingVertical={3}
-                      >
-                        <Text fontSize={10} fontWeight="800" color="#fff">
-                          BEST VALUE
-                        </Text>
-                      </Stack>
-                    )}
                   </Stack>
-                  {"trial" in p && (
-                    <Text fontSize={12} color={Colors.primary} fontWeight="600">
-                      {(p as any).trial}
+                  {key === "YEARLY" && (
+                    <Text fontSize={12} color={Colors.textSecondary} opacity={0.8}>
+                      Billed yearly, cancel anytime
                     </Text>
                   )}
                   {key === "LIFETIME" && (
@@ -346,7 +317,7 @@ export default function PremiumScreen() {
                   fontWeight="800"
                   color={isSelected ? Colors.primary : Colors.textPrimary}
                 >
-                  {p.price}
+                         {p.price}
                 </Text>
               </StyledPressable>
             );
@@ -379,7 +350,7 @@ export default function PremiumScreen() {
               letterSpacing={0.2}
             >
               {selected === "YEARLY"
-                ? "Start 7-Day Free Trial"
+                ? "Unlock Premium"
                 : selected === "LIFETIME"
                   ? "Unlock Lifetime"
                   : "Subscribe Monthly"}
@@ -395,9 +366,8 @@ export default function PremiumScreen() {
               lineHeight={18}
               opacity={0.78}
             >
-              7-day free trial, then {PREMIUM_PRICING.YEARLY.price} per year.{"\n"}
-              Auto-renewing subscription. Cancel anytime in Apple ID Settings at
-              least 24 hours before renewal.
+              {PREMIUM_PRICING.YEARLY.price} per year.{"\n"}
+              Auto-renewing subscription. Cancel anytime in Apple ID Settings.
             </Text>
           )}
 
