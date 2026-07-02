@@ -24,10 +24,13 @@ import Svg, {
 import { useColors } from "../../src/hooks/useColors";
 import { useTracker } from "../../src/hooks/useTracker";
 import { VelaIcon } from "../../src/components/shared/VelaIcon";
+import { useSettingsStore } from "../../src/stores/settings.store";
 import {
-  formatMeasurement,
-  getMeasurementErrorMessage,
-  TRACKER_UNITS,
+  validateDisplayMeasurement,
+  getMeasurementErrorMessageDisplay,
+  toDisplayValue,
+  getDisplayRange,
+  celsiusToFahrenheit,
 } from "../../src/constants/tracker";
 import { format, parseISO } from "date-fns";
 import { loaderService, toastService } from "fluent-styles";
@@ -143,7 +146,17 @@ function SparkChart({
 }
 
 // ─── BBT circular gauge ───────────────────────────────────────────────────────
-function TempGauge({ value, colors }: { value: number | null; colors: any }) {
+function TempGauge({
+  value,
+  colors,
+  displayUnit,
+  displayValue,
+}: {
+  value: number | null; // canonical °C — used for math/color thresholds
+  colors: any;
+  displayUnit: string;
+  displayValue: number | null; // value converted to the user's chosen unit, for the label
+}) {
   const r = 68,
     cx = 90,
     cy = 90,
@@ -196,7 +209,7 @@ function TempGauge({ value, colors }: { value: number | null; colors: any }) {
         fontWeight="800"
         fill={colors.textPrimary}
       >
-        {value != null ? value.toFixed(1) : "—"}
+        {displayValue != null ? displayValue.toFixed(1) : "—"}
       </SvgText>
       <SvgText
         x={cx}
@@ -205,7 +218,7 @@ function TempGauge({ value, colors }: { value: number | null; colors: any }) {
         fontSize={13}
         fill={colors.textSecondary}
       >
-        °C BBT
+        {displayUnit} BBT
       </SvgText>
       <SvgText
         x={cx}
@@ -370,6 +383,11 @@ export default function TrackerScreen() {
   const [tab, setTab] = useState<TrackerTab>("weight");
   const [notes, setNotes] = useState("");
   const [noteDirty, setNoteDirty] = useState(false);
+  // Subscribing directly to the shared store (not local state loaded once on
+  // mount) means this updates live the instant the unit is changed in
+  // Profile — even without leaving/reopening the Tracker tab.
+  const weightUnit = useSettingsStore((s) => s.weightUnit);
+  const tempUnit = useSettingsStore((s) => s.tempUnit);
 
   // Sync notes from loaded log
   React.useEffect(() => {
@@ -378,19 +396,14 @@ export default function TrackerScreen() {
   }, [tracker.todayLog?.notes]);
 
   const handleSaveWeight = async (raw: string) => {
-    const n = parseFloat(raw);
-    if (
-      isNaN(n) ||
-      n <= 0 ||
-      n < TRACKER_UNITS.weight.min ||
-      n > TRACKER_UNITS.weight.max
-    ) {
-      toastService.error(getMeasurementErrorMessage("weight"));
+    const canonicalKg = validateDisplayMeasurement(raw, "weight", weightUnit, tempUnit);
+    if (canonicalKg === null || canonicalKg <= 0) {
+      toastService.error(getMeasurementErrorMessageDisplay("weight", weightUnit, tempUnit));
       return;
     }
     const id = loaderService.show({ variant: "dots", label: "Saving…" });
     try {
-      await tracker.saveWeight(n);
+      await tracker.saveWeight(canonicalKg);
       loaderService.hide(id);
       toastService.success("Weight saved");
     } catch {
@@ -400,18 +413,14 @@ export default function TrackerScreen() {
   };
 
   const handleSaveTemp = async (raw: string) => {
-    const n = parseFloat(raw);
-    if (
-      isNaN(n) ||
-      n < TRACKER_UNITS.temperature.min ||
-      n > TRACKER_UNITS.temperature.max
-    ) {
-      toastService.error(getMeasurementErrorMessage("temperature"));
+    const canonicalCelsius = validateDisplayMeasurement(raw, "temperature", weightUnit, tempUnit);
+    if (canonicalCelsius === null) {
+      toastService.error(getMeasurementErrorMessageDisplay("temperature", weightUnit, tempUnit));
       return;
     }
     const id = loaderService.show({ variant: "dots", label: "Saving…" });
     try {
-      await tracker.saveTemperature(n);
+      await tracker.saveTemperature(canonicalCelsius);
       loaderService.hide(id);
       toastService.success("Temperature saved");
     } catch {
@@ -433,8 +442,19 @@ export default function TrackerScreen() {
     }
   };
 
-  const wVals = tracker.weightData.map((d) => d.value);
-  const tVals = tracker.tempData.map((d) => d.value);
+  const weightDisplayData = tracker.weightData.map((d) => ({
+    date: d.date,
+    value: Math.round(toDisplayValue(d.value, "weight", weightUnit, tempUnit) * 10) / 10,
+  }));
+  const tempDisplayData = tracker.tempData.map((d) => ({
+    date: d.date,
+    value: Math.round(toDisplayValue(d.value, "temperature", weightUnit, tempUnit) * 10) / 10,
+  }));
+  const wVals = weightDisplayData.map((d) => d.value);
+  const tVals = tempDisplayData.map((d) => d.value);
+  const weightUnitLabel = getDisplayRange("weight", weightUnit, tempUnit).unit;
+  const tempUnitLabel = getDisplayRange("temperature", weightUnit, tempUnit).unit;
+  const formatVal = (v: number, unit: string) => `${v.toFixed(1)}${unit}`;
 
   const TABS = [
     { value: "weight" as TrackerTab, label: "Weight" },
@@ -483,9 +503,13 @@ export default function TrackerScreen() {
           <>
             <MetricInput
               label="Log today's weight"
-              current={tracker.todayLog?.weight?.toString() ?? ""}
-              unit={TRACKER_UNITS.weight.display}
-              placeholder="e.g. 62.5"
+              current={
+                tracker.todayLog?.weight != null
+                  ? toDisplayValue(tracker.todayLog.weight, "weight", weightUnit, tempUnit).toFixed(1)
+                  : ""
+              }
+              unit={weightUnitLabel}
+              placeholder={weightUnit === "lbs" ? "e.g. 137.8" : "e.g. 62.5"}
               hint="Weigh yourself each morning for consistent readings"
               onSave={handleSaveWeight}
             />
@@ -549,9 +573,9 @@ export default function TrackerScreen() {
                       borderColor={Colors.border}
                     >
                       <SparkChart
-                        data={tracker.weightData}
+                        data={weightDisplayData}
                         color={Colors.primary}
-                        unit="kg"
+                        unit={weightUnitLabel}
                         minY={Math.min(...wVals) - 1}
                         maxY={Math.max(...wVals) + 1}
                       />
@@ -561,15 +585,12 @@ export default function TrackerScreen() {
                       items={[
                         {
                           label: "Current",
-                          value: formatMeasurement(
-                            wVals[wVals.length - 1],
-                            "weight",
-                          ),
+                          value: formatVal(wVals[wVals.length - 1], weightUnitLabel),
                           color: Colors.textPrimary,
                         },
                         {
                           label: "Change",
-                          value: `${wVals[wVals.length - 1] - wVals[0] >= 0 ? "+" : ""}${formatMeasurement(wVals[wVals.length - 1] - wVals[0], "weight")}`,
+                          value: `${wVals[wVals.length - 1] - wVals[0] >= 0 ? "+" : ""}${formatVal(wVals[wVals.length - 1] - wVals[0], weightUnitLabel)}`,
                           color:
                             wVals[wVals.length - 1] - wVals[0] <= 0
                               ? Colors.success
@@ -588,10 +609,7 @@ export default function TrackerScreen() {
                     items={[
                       {
                         label: "Current",
-                        value: formatMeasurement(
-                          wVals[wVals.length - 1],
-                          "weight",
-                        ),
+                        value: formatVal(wVals[wVals.length - 1], weightUnitLabel),
                         color: Colors.textPrimary,
                       },
                       {
@@ -659,9 +677,13 @@ export default function TrackerScreen() {
           <>
             <MetricInput
               label="Log basal body temperature"
-              current={tracker.todayLog?.temperature?.toString() ?? ""}
-              unit={TRACKER_UNITS.temperature.display}
-              placeholder="e.g. 36.8"
+              current={
+                tracker.todayLog?.temperature != null
+                  ? toDisplayValue(tracker.todayLog.temperature, "temperature", weightUnit, tempUnit).toFixed(1)
+                  : ""
+              }
+              unit={tempUnitLabel}
+              placeholder={tempUnit === "fahrenheit" ? "e.g. 98.2" : "e.g. 36.8"}
               hint="Take your temperature before getting up, same time each morning"
               onSave={handleSaveTemp}
             />
@@ -691,6 +713,12 @@ export default function TrackerScreen() {
               </Text>
               <TempGauge
                 value={tracker.todayLog?.temperature ?? null}
+                displayValue={
+                  tracker.todayLog?.temperature != null
+                    ? toDisplayValue(tracker.todayLog.temperature, "temperature", weightUnit, tempUnit)
+                    : null
+                }
+                displayUnit={tempUnitLabel}
                 colors={Colors}
               />
               <Stack
@@ -700,13 +728,24 @@ export default function TrackerScreen() {
                 justifyContent="center"
               >
                 {[
-                  { label: "Low", color: Colors.info, range: "<36.5°C" },
+                  {
+                    label: "Low",
+                    color: Colors.info,
+                    range: `<${tempUnit === "fahrenheit" ? celsiusToFahrenheit(36.5).toFixed(1) : "36.5"}${tempUnitLabel}`,
+                  },
                   {
                     label: "Normal",
                     color: Colors.success,
-                    range: "36.5–37.5°C",
+                    range:
+                      tempUnit === "fahrenheit"
+                        ? `${celsiusToFahrenheit(36.5).toFixed(1)}–${celsiusToFahrenheit(37.5).toFixed(1)}${tempUnitLabel}`
+                        : `36.5–37.5${tempUnitLabel}`,
                   },
-                  { label: "High", color: Colors.error, range: ">37.5°C" },
+                  {
+                    label: "High",
+                    color: Colors.error,
+                    range: `>${tempUnit === "fahrenheit" ? celsiusToFahrenheit(37.5).toFixed(1) : "37.5"}${tempUnitLabel}`,
+                  },
                 ].map((i) => (
                   <Stack
                     key={i.label}
@@ -766,9 +805,9 @@ export default function TrackerScreen() {
                   borderColor={Colors.border}
                 >
                   <SparkChart
-                    data={tracker.tempData}
+                    data={tempDisplayData}
                     color={Colors.fertile}
-                    unit={TRACKER_UNITS.temperature.display}
+                    unit={tempUnitLabel}
                     minY={Math.min(...tVals) - 0.3}
                     maxY={Math.max(...tVals) + 0.3}
                   />
@@ -778,17 +817,14 @@ export default function TrackerScreen() {
                   items={[
                     {
                       label: "Today",
-                      value: formatMeasurement(
-                        tVals[tVals.length - 1],
-                        "temperature",
-                      ),
+                      value: formatVal(tVals[tVals.length - 1], tempUnitLabel),
                       color: Colors.textPrimary,
                     },
                     {
                       label: "Average",
-                      value: formatMeasurement(
+                      value: formatVal(
                         tVals.reduce((a, b) => a + b, 0) / tVals.length,
-                        "temperature",
+                        tempUnitLabel,
                       ),
                       color: Colors.fertile,
                     },

@@ -169,10 +169,13 @@ export function buildCalendarMap(
     let isPeriod = false
     for (const c of confirmedCycles) {
       const start = startOfDay(parseISO(c.startDate))
-      const end   = c.endDate
-        ? startOfDay(parseISO(c.endDate))
-        : addDays(start, (c.periodLength ?? 5) - 1)
-      if (cursor >= start && cursor <= end) { isPeriod = true; break }
+      // Period highlighting must always be based on how long the actual
+      // period lasted (periodLength), never on cycle.endDate — endDate marks
+      // the end of the WHOLE cycle (right up until the next period starts),
+      // not the end of the bleeding days. Using endDate here would light up
+      // the entire cycle span as "period" once a cycle is closed.
+      const periodEnd = addDays(start, (c.periodLength ?? 5) - 1)
+      if (cursor >= start && cursor <= periodEnd) { isPeriod = true; break }
     }
 
     const isFertile   = isFuture && cursor >= prediction.fertileWindowStart && cursor <= prediction.fertileWindowEnd
@@ -215,7 +218,7 @@ export function phaseDescription(phase: CyclePhase): string {
     ovulation:        'Peak energy day. You may feel your best today.',
     fertile:          'You may be entering your fertile window.',
     luteal:           'Winding down. You may notice some changes in how you feel.',
-    predicted_period: '',
+    predicted_period: 'Your period is expected any day now. Log your flow when it starts to keep predictions accurate.',
   }
   return desc[phase] ?? ''
 }

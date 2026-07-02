@@ -47,18 +47,24 @@ export default function NotificationsScreen() {
 
   const handleMasterToggle = async (val: boolean) => {
     await settings.setNotificationsEnabled(val);
-    if (!val) await notificationService.cancelAll();
+    if (!val) {
+      await notificationService.cancelAll();
+    } else {
+      await notificationService.refreshScheduledNotifications();
+    }
     toastService.info(val ? "Notifications on" : "Notifications off");
   };
 
   const handleFertileToggle = async (val: boolean) => {
     await settingsService.set(SETTINGS_KEYS.NOTIFY_FERTILE, val);
     setFertileNotif(val);
+    await notificationService.refreshScheduledNotifications();
   };
 
   const handleOvulationToggle = async (val: boolean) => {
     await settingsService.set(SETTINGS_KEYS.NOTIFY_OVULATION, val);
     setOvulationNotif(val);
+    await notificationService.refreshScheduledNotifications();
   };
 
   const NotifRow = ({
@@ -66,11 +72,13 @@ export default function NotificationsScreen() {
     subtitle,
     value,
     onChange,
+    disabled,
   }: {
     label: string;
     subtitle?: string;
     value: boolean;
     onChange: (v: boolean) => void;
+    disabled?: boolean;
   }) => (
     <Stack
       horizontal
@@ -95,6 +103,7 @@ export default function NotificationsScreen() {
         activeColor={Colors.primary}
         inactiveColor={Colors.border}
         size="sm"
+        disabled={disabled}
       />
     </Stack>
   );
@@ -172,6 +181,7 @@ export default function NotificationsScreen() {
                 subtitle={`${daysBefore} days before your next period`}
                 value={settings.notificationsEnabled}
                 onChange={() => {}}
+                disabled
               />
               <StyledDivider
                 borderBottomColor={Colors.border}

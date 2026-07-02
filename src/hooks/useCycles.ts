@@ -27,8 +27,9 @@ export function useCycles() {
   useEffect(() => { load() }, [version, load])
 
   const startCycle = useCallback(async (date: Date) => {
-    await cycleService.startNewCycle(date)
+    const cycle = await cycleService.startNewCycle(date)
     invalidateData()
+    return cycle
   }, [invalidateData])
 
   const endCycle = useCallback(async (endDate: Date, periodLength: number) => {
@@ -36,5 +37,10 @@ export function useCycles() {
     invalidateData()
   }, [invalidateData])
 
-  return { cycles, active, loading, startCycle, endCycle, refresh: load }
+  const deleteCycle = useCallback(async (id: number) => {
+    await cycleService.deleteCycle(id)
+    invalidateData()
+  }, [invalidateData])
+
+  return { cycles, active, loading, startCycle, endCycle, deleteCycle, refresh: load }
 }

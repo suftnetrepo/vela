@@ -10,6 +10,7 @@ interface AuthState {
   addAttempt:  () => void
   resetAttempts: () => void
   lockout:     (until: Date) => void
+  hydrateLockout: (attempts: number, lockedUntil: Date | null) => void
 }
 
 export const useAuthStore = create<AuthState>(set => ({
@@ -23,4 +24,5 @@ export const useAuthStore = create<AuthState>(set => ({
   addAttempt:  ()     => set(s => ({ attempts: s.attempts + 1 })),
   resetAttempts: ()   => set({ attempts: 0, lockedUntil: null }),
   lockout:     until  => set({ lockedUntil: until }),
+  hydrateLockout: (attempts, lockedUntil) => set({ attempts, lockedUntil }),
 }))

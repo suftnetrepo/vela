@@ -21,9 +21,11 @@ import { JournalTab } from "../../src/components/log/JournalTab";
 import type { FlowData, FlowLevel, DischargeType } from "../../src/components/log/FlowTab";
 import type { JournalData } from "../../src/components/log/JournalTab";
 import { VelaIcon } from "../../src/components/shared/VelaIcon";
-import { formatDisplayDate, todayStr, fromDateStr } from "../../src/utils/date";
+import { formatDisplayDate, todayStr, fromDateStr, toDateStr, subDays, differenceInDays } from "../../src/utils/date";
+import { APP_CONFIG } from "../../src/constants/config";
 import { toastService, loaderService, dialogueService } from "fluent-styles";
 import { logService } from "../../src/services/log.service";
+import { notificationService } from "../../src/services/notification.service";
 import { useRecordsStore } from "../../src/stores/records.store";
 
 // Mood keys are stored with this prefix in the symptoms table for persistence
@@ -38,7 +40,7 @@ export default function LogScreen() {
   const isToday = date === todayStr();
 
   const { log, loading, saveLog } = useDailyLog(date);
-  const { active } = useCycles();
+  const { active, startCycle, endCycle } = useCycles();
   const invalidateData = useRecordsStore((s) => s.invalidateData);
 
   const [activeTab, setActiveTab] = useState<LogTab>(
@@ -160,6 +162,119 @@ export default function LogScreen() {
     setDirty(false);
   }, [log]);
 
+  // Estimate how long the period was for the cycle that's about to be closed,
+  // by counting the actual flow-logged days between its start and the day
+  // before the new period begins. Falls back to the app default if nothing
+  // was logged (shouldn't normally happen).
+  const computePeriodLength = async (
+    cycleStartStr: string,
+    beforeDateStr: string,
+  ): Promise<number> => {
+    const logs = await logService.getRange(cycleStartStr, beforeDateStr);
+    const flowDates = Array.from(
+      new Set(
+        logs
+          .filter((l) => l.flow && !l.flow.startsWith("none"))
+          .map((l) => l.date),
+      ),
+    ).sort();
+
+    if (flowDates.length === 0) {
+      return APP_CONFIG.prediction.defaultPeriodLength;
+    }
+
+    // Walk forward from the first logged flow day, tolerating single-day
+    // gaps (e.g. light spotting that pauses for a day) but stopping the
+    // moment there's a real gap. This prevents a stray/accidental flow log
+    // much later in the cycle from inflating the period length — a period
+    // is the actual bleeding run, not the full span between the first and
+    // last day flow was ever logged.
+    let runStart = fromDateStr(flowDates[0]);
+    let runEnd = runStart;
+    let longestRun = 1;
+    let cursor = runStart;
+
+    for (let i = 1; i < flowDates.length; i++) {
+      const d = fromDateStr(flowDates[i]);
+      const gap = differenceInDays(d, cursor);
+
+      if (gap <= 2) {
+        // Same day, next day, or a single skipped day — still the same run
+        runEnd = d;
+        cursor = d;
+        const runLength = differenceInDays(runEnd, runStart) + 1;
+        if (runLength > longestRun) longestRun = runLength;
+      } else {
+        // A real gap — start tracking a fresh run from here
+        runStart = d;
+        runEnd = d;
+        cursor = d;
+      }
+    }
+
+    return Math.min(
+      Math.max(longestRun, APP_CONFIG.prediction.minPeriodLength),
+      APP_CONFIG.prediction.maxPeriodLength,
+    );
+  };
+
+  // Keep the `cycles` table (which Insights, History, Patterns and the
+  // prediction algorithm all read from) in sync with what's actually being
+  // logged on the Flow tab. This is what turns a logged period into a new
+  // tracked cycle instead of just a daily_logs row.
+  const syncCycleForFlowLog = async (
+    logDateStr: string,
+    hasFlow: boolean | null,
+  ): Promise<number | undefined> => {
+    // Not a period day (or flow wasn't touched) — leave cycle assignment as-is
+    if (hasFlow !== true) {
+      return active?.id;
+    }
+
+    const logDate = fromDateStr(logDateStr);
+
+    // First period ever logged — nothing to compare against
+    if (!active) {
+      const created = await startCycle(logDate);
+      return created.id;
+    }
+
+    const activeStart = fromDateStr(active.startDate);
+
+    // Backfilling a date on/before the current cycle's recorded start —
+    // treat it as part of that same cycle rather than fabricating a new one
+    if (logDate <= activeStart) {
+      return active.id;
+    }
+
+    // If flow was logged yesterday too, this is just a continuation of the
+    // period that's already in progress
+    const prevLog = await logService.getByDate(toDateStr(subDays(logDate, 1)));
+    const hadFlowYesterday = !!prevLog?.flow && !prevLog.flow.startsWith("none");
+    if (hadFlowYesterday) {
+      return active.id;
+    }
+
+    const daysSinceStart = differenceInDays(logDate, activeStart);
+
+    // A gap shortly after the cycle started is more likely an off day or
+    // spotting within the same period than a brand-new cycle
+    if (daysSinceStart < APP_CONFIG.prediction.minCycleLength) {
+      return active.id;
+    }
+
+    // Enough time has passed with a real gap in flow logging — this is a new
+    // period. Close out the previous cycle (recording its period length) and
+    // start tracking the new one.
+    const periodLength = await computePeriodLength(
+      active.startDate,
+      toDateStr(subDays(logDate, 1)),
+    );
+    await endCycle(subDays(logDate, 1), periodLength);
+    const created = await startCycle(logDate);
+    return created.id;
+  };
+
   const handleSave = async () => {
     setSaving(true);
     const id = loaderService.show({ label: "Saving…", variant: "dots" });
@@ -199,12 +314,16 @@ export default function LogScreen() {
       const legacyMood =
         journalData.moods.length > 0 ? journalData.moods[0] : undefined;
 
+      // Sync the cycles table BEFORE writing the daily log, so the log gets
+      // stamped with the correct (possibly newly-created) cycle id
+      const cycleId = await syncCycleForFlowLog(date, flowData.hasFlow);
+
       const payload = {
         flow: flowStr,
         mood: legacyMood,
         energyLevel: journalData.energyLevel,
         notes: journalData.notes || undefined,
-        cycleId: active?.id,
+        cycleId,
         symptoms: allKeys.map((k) => ({ key: k })),
       };
 
@@ -215,6 +334,11 @@ export default function LogScreen() {
         `${formatDisplayDate(fromDateStr(date))} logged.`,
       );
       setDirty(false);
+
+      // Predictions may have shifted (e.g. a new period just started) —
+      // fire-and-forget refresh so reminder notifications stay accurate
+      // without needing to wait for the next app launch.
+      notificationService.refreshScheduledNotifications();
     } catch {
       loaderService.hide(id);
       toastService.error("Could not save", "Please try again.");

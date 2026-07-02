@@ -19,10 +19,11 @@ import { format, parseISO, differenceInDays } from 'date-fns'
 interface CycleTrendsCardProps {
   prediction:  CyclePrediction
   activeCycle: Cycle | null
+  cyclesUsed?: number
   onPress?:    () => void
 }
 
-export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrendsCardProps) {
+export function CycleTrendsCard({ prediction, activeCycle, cyclesUsed, onPress }: CycleTrendsCardProps) {
   const Colors = useColors()
 
   const currentDay = prediction.currentCycleDay
@@ -41,7 +42,9 @@ export function CycleTrendsCard({ prediction, activeCycle, onPress }: CycleTrend
             Cycle trends
           </Text>
           <Text variant="body" color={Colors.textSecondary}>
-            Average of the last 7 cycles
+            {cyclesUsed
+              ? `Average of the last ${cyclesUsed} cycle${cyclesUsed === 1 ? '' : 's'}`
+              : 'Average of your recent cycles'}
           </Text>
         </Stack>
         {onPress && (

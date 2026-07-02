@@ -4,6 +4,7 @@ import {
   StyledText,
   StyledScrollView,
   StyledPage,
+  StyledPressable,
   TabBar,
   StyledTimeline,
   type TimelineItem,
@@ -28,6 +29,8 @@ import {
   differenceInDays,
 } from "../../src/utils/date";
 import { format } from "date-fns";
+import { dialogueService, toastService } from "fluent-styles";
+import { APP_CONFIG } from "../../src/constants/config";
 
 const getCycleBadge = (cycleLength: number | null) => {
   if (!cycleLength) return null;
@@ -38,7 +41,15 @@ const getCycleBadge = (cycleLength: number | null) => {
   return { label: "Regular", color: "#6E8E7B", bg: "#EDF7F0" };
 };
 
-const CycleHistoryCard = ({ entry, Colors }: { entry: any; Colors: any }) => {
+const CycleHistoryCard = ({
+  entry,
+  Colors,
+  onDelete,
+}: {
+  entry: any;
+  Colors: any;
+  onDelete?: (entry: any) => void;
+}) => {
   const badge = getCycleBadge(entry.cycleLength);
 
   return (
@@ -74,18 +85,31 @@ const CycleHistoryCard = ({ entry, Colors }: { entry: any; Colors: any }) => {
           </Text>
         </Stack>
 
-        {badge && (
-          <Stack
-            paddingHorizontal={10}
-            paddingVertical={5}
-            borderRadius={999}
-            backgroundColor={badge.bg}
-          >
-            <Text fontSize={11} fontWeight="700" color={badge.color}>
-              {badge.label}
-            </Text>
-          </Stack>
-        )}
+        <Stack flexDirection="row" alignItems="center" gap={6}>
+          {badge && (
+            <Stack
+              paddingHorizontal={10}
+              paddingVertical={5}
+              borderRadius={999}
+              backgroundColor={badge.bg}
+            >
+              <Text fontSize={11} fontWeight="700" color={badge.color}>
+                {badge.label}
+              </Text>
+            </Stack>
+          )}
+
+          {onDelete && (
+            <StyledPressable
+              onPress={() => onDelete(entry)}
+              padding={6}
+              borderRadius={8}
+              hitSlop={8}
+            >
+              <VelaIcon name="trash" size={16} color={Colors.textTertiary} />
+            </StyledPressable>
+          )}
+        </Stack>
       </Stack>
 
       <Stack flexDirection="row" gap={8}>
@@ -373,7 +397,7 @@ function getMotivationMessage(cycles: any[], prediction: any): string {
 
 export default function InsightsScreen() {
   const Colors = useColors();
-  const { cycles, loading } = useCycles();
+  const { cycles, loading, deleteCycle } = useCycles();
   const prediction = usePrediction(cycles);
   const [tab, setTab] = useState<InsightTab>("overview");
 
@@ -392,6 +416,24 @@ export default function InsightsScreen() {
     const entries = buildHistoryEntries(cycles as CycleLike[]);
     return groupEntriesByMonth(entries);
   }, [cycles]);
+
+  const handleDeleteCycle = async (entry: HistoryEntry) => {
+    const ok = await dialogueService.confirm({
+      title: "Delete this cycle?",
+      message: `This removes the ${entry.cycleLength ?? ""} day cycle started ${entry.fullDate} from your history. Your daily logs for those dates are kept — only the cycle record is removed. This can't be undone.`,
+      confirmLabel: "Delete",
+      cancelLabel: "Cancel",
+      destructive: true,
+    });
+    if (!ok) return;
+
+    try {
+      await deleteCycle(Number(entry.cycle.id));
+      toastService.success("Cycle deleted");
+    } catch (err: any) {
+      toastService.error("Couldn't delete cycle", err?.message || "Please try again");
+    }
+  };
 
   const TABS = [
     { value: "overview" as InsightTab, label: "Overview" },
@@ -446,6 +488,10 @@ export default function InsightsScreen() {
                 <CycleTrendsCard
                   prediction={prediction}
                   activeCycle={activeCycle}
+                  cyclesUsed={Math.min(
+                    cycles.filter((c: any) => c.cycleLength != null).length,
+                    APP_CONFIG.prediction.maxCyclesUsed,
+                  )}
                 />
               ) : (
                 <Stack
@@ -558,7 +604,10 @@ export default function InsightsScreen() {
                     {
                       icon: "phase-menstrual" as VelaIconName,
                       label: "Next period",
-                      date: `${safeDate(prediction.nextPeriodStart)} · ±${prediction.confidenceDays}d`,
+                      date:
+                        prediction.daysUntilNextPeriod < 0
+                          ? `${Math.abs(prediction.daysUntilNextPeriod)} day${Math.abs(prediction.daysUntilNextPeriod) === 1 ? "" : "s"} late`
+                          : `${safeDate(prediction.nextPeriodStart)} · ±${prediction.confidenceDays}d`,
                       bg: Colors.primaryFaint,
                       color: Colors.primary,
                     },
@@ -759,7 +808,13 @@ export default function InsightsScreen() {
                         );
                       }
 
-                      return <CycleHistoryCard entry={entry} Colors={Colors} />;
+                      return (
+                        <CycleHistoryCard
+                          entry={entry}
+                          Colors={Colors}
+                          onDelete={handleDeleteCycle}
+                        />
+                      );
                     }}
                   />
                 </Stack>

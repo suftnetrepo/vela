@@ -20,6 +20,7 @@ import { CycleTrendsCard } from "../../src/components/insights/CycleTrendsCard";
 import { BrandHeader } from "../../src/components/shared/BrandHeader";
 import { VelaIcon } from "../../src/components/shared/VelaIcon";
 import { todayStr } from "../../src/utils/date";
+import { APP_CONFIG } from "../../src/constants/config";
 import { dialogueService, toastService, loaderService } from "fluent-styles";
 import { cycleService } from "../../src/services/cycle.service";
 import { useRecordsStore } from "../../src/stores/records.store";
@@ -227,6 +228,10 @@ export default function HomeScreen() {
             <CycleTrendsCard
               prediction={prediction}
               activeCycle={activeCycle}
+              cyclesUsed={Math.min(
+                cycles.filter((c: any) => c.cycleLength != null).length,
+                APP_CONFIG.prediction.maxCyclesUsed,
+              )}
               onPress={() => router.push("/(app)/insights")}
             />
           </Stack>

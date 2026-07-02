@@ -130,6 +130,8 @@ function SectionCard({
 export default function ProfileScreen() {
   const Colors = useColors();
   const isPremium = useSettingsStore((s) => s.isPremium);
+  const setWeightUnitGlobal = useSettingsStore((s) => s.setWeightUnit);
+  const setTempUnitGlobal = useSettingsStore((s) => s.setTempUnit);
 
   const [weightUnit, setWeightUnit] = useState<WeightUnit>("kg");
   const [tempUnit, setTempUnit] = useState<TempUnit>("celsius");
@@ -146,8 +148,14 @@ export default function ProfileScreen() {
         SETTINGS_KEYS.FIRST_DAY_OF_WEEK,
       );
       const bmi = await settingsService.get<boolean>("bmi_enabled");
-      if (wu) setWeightUnit(wu);
-      if (tu) setTempUnit(tu);
+      if (wu) {
+        setWeightUnit(wu);
+        setWeightUnitGlobal(wu as any);
+      }
+      if (tu) {
+        setTempUnit(tu);
+        setTempUnitGlobal(tu as any);
+      }
       if (fd) setFirstDay(fd);
       if (bmi != null) setBmiEnabled(bmi);
     };
@@ -163,10 +171,12 @@ export default function ProfileScreen() {
     options: string[],
     key: string,
     setter: (v: any) => void,
+    globalSetter?: (v: any) => void,
   ) => {
     const next = options[(options.indexOf(current) + 1) % options.length];
     await settingsService.set(key, next);
     setter(next as any);
+    globalSetter?.(next as any);
     toastService.info(`Changed to ${next}`);
   };
 
@@ -306,6 +316,7 @@ export default function ProfileScreen() {
                     ["kg", "lbs"],
                     "weight_unit",
                     setWeightUnit,
+                    setWeightUnitGlobal,
                   )
                 }
                 backgroundColor={Colors.primaryFaint}
@@ -342,6 +353,7 @@ export default function ProfileScreen() {
                     ["celsius", "fahrenheit"],
                     SETTINGS_KEYS.TEMPERATURE_UNIT,
                     setTempUnit,
+                    setTempUnitGlobal,
                   )
                 }
                 backgroundColor={Colors.primaryFaint}

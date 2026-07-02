@@ -44,6 +44,7 @@ export default function SecurityScreen() {
     });
     if (!ok) return;
     await securityService.clearPin();
+    await securityService.setBiometricEnabled(false);
     setHasPin(false);
     toastService.info("PIN removed");
   };
@@ -348,8 +349,8 @@ export default function SecurityScreen() {
             color={Colors.textSecondary}
             lineHeight={18}
           >
-            Even without a PIN, your data never leaves your phone. Vela has no
-            internet access.
+            Even without a PIN, your cycle data never leaves your phone. It's
+            stored locally and never sent to any server.
           </Text>
         </Stack>
       </StyledScrollView>

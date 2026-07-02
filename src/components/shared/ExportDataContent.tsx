@@ -12,6 +12,7 @@ import { useCycles } from '../../hooks/useCycles'
 import { useDailyLogs } from '../../hooks/useDailyLogs'
 import { useSettings } from '../../hooks/useSettings'
 import { VelaIcon } from './VelaIcon'
+import { ErrorBoundary } from './ErrorBoundary'
 import {
   exportSettings,
   exportBackup,
@@ -24,6 +25,13 @@ import type { SymptomLog } from '../../db/schema'
 interface ExportDataContentProps {
   onDone?: () => void
 }
+
+// A QR code can only hold so much data — even at max size/lowest error
+// correction, byte-mode capacity tops out around ~2953 bytes. Full backups
+// with more than a few weeks of logs blow way past that, so instead of
+// letting the QR library throw (and crash the screen), we simply don't
+// attempt to render a QR above this length and show Copy/Share instead.
+const MAX_QR_PAYLOAD_LENGTH = 2000
 
 export function ExportDataContent({ onDone }: ExportDataContentProps) {
   const Colors = useColors()
@@ -109,6 +117,8 @@ export function ExportDataContent({ onDone }: ExportDataContentProps) {
       return null
     }
   }, [code])
+
+  const canRenderQr = !!code && code.length <= MAX_QR_PAYLOAD_LENGTH
 
   const handleCopyCode = async () => {
     if (!code) return
@@ -296,27 +306,65 @@ export function ExportDataContent({ onDone }: ExportDataContentProps) {
       {code ? (
         <>
           <Stack alignItems="center" marginBottom={24}>
-            <Stack
-              padding={16}
-              borderRadius={20}
-              backgroundColor="#fff"
-              borderWidth={1}
-              borderColor={Colors.border}
-              style={{
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.08,
-                shadowRadius: 12,
-                elevation: 4,
-              }}
-            >
-              <QRCode
-                value={code}
-                size={200}
-                color="#111827"
-                backgroundColor="#fff"
-              />
-            </Stack>
+            {canRenderQr ? (
+              <ErrorBoundary
+                fallback={
+                  <Stack
+                    padding={20}
+                    borderRadius={20}
+                    backgroundColor={Colors.surfaceAlt}
+                    borderWidth={1}
+                    borderColor={Colors.border}
+                    alignItems="center"
+                    gap={6}
+                    maxWidth={260}
+                  >
+                    <VelaIcon name="download" size={22} color={Colors.textTertiary} />
+                    <Text fontSize={12} color={Colors.textSecondary} textAlign="center">
+                      Couldn't generate a QR code for this export. Use Copy code or Share file below instead.
+                    </Text>
+                  </Stack>
+                }
+              >
+                <Stack
+                  padding={16}
+                  borderRadius={20}
+                  backgroundColor="#fff"
+                  borderWidth={1}
+                  borderColor={Colors.border}
+                  style={{
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.08,
+                    shadowRadius: 12,
+                    elevation: 4,
+                  }}
+                >
+                  <QRCode
+                    value={code}
+                    size={200}
+                    color="#111827"
+                    backgroundColor="#fff"
+                  />
+                </Stack>
+              </ErrorBoundary>
+            ) : (
+              <Stack
+                padding={20}
+                borderRadius={20}
+                backgroundColor={Colors.surfaceAlt}
+                borderWidth={1}
+                borderColor={Colors.border}
+                alignItems="center"
+                gap={6}
+                maxWidth={260}
+              >
+                <VelaIcon name="download" size={22} color={Colors.textTertiary} />
+                <Text fontSize={12} color={Colors.textSecondary} textAlign="center">
+                  Your backup has too much data to fit in a QR code. Use Copy code or Share file below instead.
+                </Text>
+              </Stack>
+            )}
           </Stack>
 
           <Stack

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type { ThemeName } from '../constants/themes'
 import type { PremiumPlan } from '../services/premium.service'
+import type { WeightUnit, TempUnitPref } from '../constants/tracker'
 
 interface SettingsState {
   theme:              ThemeName
@@ -11,6 +12,8 @@ interface SettingsState {
   notificationsEnabled: boolean
   avgCycleLength:     number
   avgPeriodLength:    number
+  weightUnit:         WeightUnit
+  tempUnit:           TempUnitPref
   bootReady:          boolean
   setTheme:           (t: ThemeName) => void
   setIsPremium:       (v: boolean)   => void
@@ -20,6 +23,8 @@ interface SettingsState {
   setNotificationsEnabled: (v: boolean) => void
   setAvgCycleLength:  (n: number)    => void
   setAvgPeriodLength: (n: number)    => void
+  setWeightUnit:      (u: WeightUnit) => void
+  setTempUnit:        (u: TempUnitPref) => void
   setBootReady:       (v: boolean)   => void
   hydrate: (data: Partial<SettingsState>) => void
 }
@@ -33,6 +38,8 @@ export const useSettingsStore = create<SettingsState>(set => ({
   notificationsEnabled: true,
   avgCycleLength:      28,
   avgPeriodLength:     5,
+  weightUnit:          'kg',
+  tempUnit:            'celsius',
   bootReady:           false,
 
   setTheme:                t  => set({ theme: t }),
@@ -43,6 +50,8 @@ export const useSettingsStore = create<SettingsState>(set => ({
   setNotificationsEnabled: v  => set({ notificationsEnabled: v }),
   setAvgCycleLength:       n  => set({ avgCycleLength: n }),
   setAvgPeriodLength:      n  => set({ avgPeriodLength: n }),
+  setWeightUnit:           u  => set({ weightUnit: u }),
+  setTempUnit:             u  => set({ tempUnit: u }),
   setBootReady:            v  => set({ bootReady: v }),
   hydrate:                 d  => set(d),
 }))

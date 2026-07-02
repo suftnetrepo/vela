@@ -65,6 +65,10 @@ export function CyclePhasePillBar({
   const Colors  = useColors()
   const W       = Dimensions.get('window').width
   const cycle   = totalDays ?? prediction.averageCycleLength
+  // If the current cycle has run longer than average (e.g. an overdue period),
+  // make sure we render enough pills to actually show the current day —
+  // otherwise `currentDay` falls outside the array and never gets highlighted.
+  const totalPillDays = Math.max(cycle, currentDay)
 
   // Calculate ovulation + fertile window as cycle-day numbers
   const ovulDay    = cycle - 14                              // luteal is always 14
@@ -76,10 +80,10 @@ export function CyclePhasePillBar({
   const radius     = compact ? 6  : 8
   const pillW      = Math.max(
     compact ? 6 : 8,
-    Math.floor((W - 80 - gap * (cycle - 1)) / cycle),
+    Math.floor((W - 80 - gap * (totalPillDays - 1)) / totalPillDays),
   )
 
-  const pills = Array.from({ length: cycle }, (_, i) => {
+  const pills = Array.from({ length: totalPillDays }, (_, i) => {
     const day        = i + 1
     const phase      = getPhaseForDay(day, prediction.averagePeriodLength, cycle, ovulDay, fertStart, fertEnd)
     const isPast     = day <= currentDay
