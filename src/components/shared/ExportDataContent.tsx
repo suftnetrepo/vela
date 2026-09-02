@@ -160,6 +160,16 @@ export function ExportDataContent({ onDone }: ExportDataContentProps) {
             title: 'My Vela Cycle Data',
           })
         }
+
+        // Best-effort cleanup: this file is a plaintext-readable copy of the
+        // user's cycle/symptom history — don't leave it sitting in the app
+        // cache once the share sheet has done its job. Never let a cleanup
+        // failure surface as an export failure.
+        try {
+          await FileSystem.deleteAsync(path, { idempotent: true })
+        } catch {
+          // Non-fatal — the OS will eventually reclaim the cache directory.
+        }
       }, { label: 'Preparing…', variant: 'spinner' })
     } catch (err: any) {
       toastService.error('Share failed', err?.message || 'Could not share file')
@@ -418,6 +428,21 @@ export function ExportDataContent({ onDone }: ExportDataContentProps) {
                 Share file
               </Text>
             </StyledPressable>
+          </Stack>
+
+          <Stack
+            marginTop={20}
+            paddingHorizontal={14}
+            paddingVertical={12}
+            borderRadius={12}
+            backgroundColor={Colors.surface}
+          >
+            <Stack horizontal gap={8} alignItems="flex-start">
+              <VelaIcon name="alert-circle" size={16} color={Colors.warning} style={{ marginTop: 2 }} />
+              <Text fontSize={12} color={Colors.textPrimary} lineHeight={18} flex={1}>
+                <Text color={Colors.textPrimary} variant="label">Not encrypted</Text>: this code, QR, and file contain your cycle, symptom, and journal history in readable form. Store and share it only somewhere private.
+              </Text>
+            </Stack>
           </Stack>
         </>
       ) : null}

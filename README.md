@@ -23,8 +23,8 @@ Vela is a beautifully designed React Native app for iOS that helps users track t
 ### Privacy & Security
 - **Local-First Storage** — All data stored on-device (SQLite)
 - **PIN Protection** — Secure your data with a PIN lock
-- **Export/Import** — Backup your data in encrypted format
-- **No Cloud Sync** — Your data never leaves your device
+- **Export/Import** — Back up and restore your cycle data (not currently encrypted — see below)
+- **No Cloud Sync** — Your cycle data never leaves your device
 
 ### Premium Features
 - **Advanced Analytics** — Deep wellness insights
@@ -53,7 +53,6 @@ Vela is a beautifully designed React Native app for iOS that helps users track t
 
 ### Services
 - **RevenueCat** for subscription management
-- **Sentry** for error tracking
 - **eas-cli** for managed builds
 
 ---
@@ -169,9 +168,9 @@ All data is stored locally on-device with no cloud synchronization.
 
 ## 🔐 Security & Privacy
 
-- ✅ **Local-First** — All data stored in encrypted SQLite on device
+- ✅ **Local-First** — Cycle/wellness data stored only in on-device SQLite (not currently encrypted)
 - ✅ **PIN Protected** — Optional PIN lock for app access
-- ✅ **No Tracking** — No analytics or user data collection (except anonymized crash reports)
+- ✅ **No Tracking** — No analytics or health-data collection. RevenueCat handles purchases/subscriptions and only ever sees purchase information
 - ✅ **No Ads** — Ad-free experience
 - ✅ **Export Control** — Users can export their data in CSV format
 

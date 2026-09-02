@@ -57,7 +57,14 @@ export function PinPad({ title, subtitle, onComplete, error, loading }: PinPadPr
       </Stack>
 
       {/* PIN dots */}
-      <Stack flexDirection="row" gap={20} alignItems="center">
+      <Stack
+        flexDirection="row"
+        gap={20}
+        alignItems="center"
+        accessible
+        accessibilityLabel={`${pin.length} of ${len} digits entered`}
+        accessibilityLiveRegion="polite"
+      >
         {Array.from({ length: len }).map((_, i) => (
           <Stack
             key={i}
@@ -97,6 +104,13 @@ export function PinPad({ title, subtitle, onComplete, error, loading }: PinPadPr
                   justifyContent="center"
                   onPress={() => handleKey(key)}
                   disabled={isEmpty || loading}
+                  {...(isEmpty
+                    ? { accessibilityElementsHidden: true, importantForAccessibility: 'no-hide-descendants' as const }
+                    : {
+                        accessibilityRole: 'button' as const,
+                        accessibilityLabel: isBackspace ? 'Delete last digit' : `Digit ${key}`,
+                        accessibilityState: { disabled: loading },
+                      })}
                 >
                   {isBackspace ? (
                     <VelaIcon name="close" size={22} color={Colors.textPrimary} />

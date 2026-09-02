@@ -17,5 +17,12 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
+  ],
+  // Pure-logic test scripts under __tests__ are run directly with
+  // `node --experimental-strip-types`, which requires explicit `.ts`
+  // extensions on relative imports — excluded here rather than enabling
+  // allowImportingTsExtensions app-wide for one folder's sake.
+  "exclude": [
+    "src/**/__tests__/**"
   ]
 }

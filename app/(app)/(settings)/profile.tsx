@@ -12,6 +12,7 @@ import {
   theme,
 } from "fluent-styles";
 import { router } from "expo-router";
+import Constants from "expo-constants";
 import { Text } from "@/components/text";
 import { useColors } from "../../../src/hooks/useColors";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
@@ -44,15 +45,28 @@ function PrefRow({
   destructive?: boolean;
 }) {
   const Colors = useColors();
+  // Rows that only host a `right` control (a Switch, a unit-cycling button)
+  // aren't themselves pressable — don't disable them (that would also block
+  // touches reaching the inner control) and don't give them a label that
+  // would fight with that inner control's own accessible name.
+  const rowIsInert = !onPress && right === undefined;
   return (
     <StyledPressable
       onPress={onPress}
+      disabled={rowIsInert}
       flexDirection="row"
       alignItems="center"
       paddingVertical={14}
       paddingHorizontal={16}
       gap={14}
       backgroundColor="transparent"
+      {...(onPress
+        ? {
+            accessibilityRole: 'button' as const,
+            accessibilityLabel: [label, subtitle].filter(Boolean).join(', '),
+            accessibilityHint: destructive ? 'This action cannot be undone' : undefined,
+          }
+        : {})}
     >
       <Stack
         width={38}
@@ -287,6 +301,9 @@ export default function ProfileScreen() {
                   paddingHorizontal={10}
                   paddingVertical={4}
                   alignSelf="flex-start"
+                  hitSlop={8}
+                  accessibilityRole="button"
+                  accessibilityLabel="Upgrade to Premium"
                 >
                   <VelaIcon name="crown" size={12} color={Colors.primary} />
                   <Text
@@ -323,6 +340,9 @@ export default function ProfileScreen() {
                 borderRadius={10}
                 paddingHorizontal={12}
                 paddingVertical={6}
+                accessibilityRole="button"
+                accessibilityLabel={`Weight unit: ${weightUnit === "kg" ? "kilograms" : "pounds"}`}
+                accessibilityHint="Double tap to switch units"
               >
                 <Text
                   fontSize={13}
@@ -360,6 +380,9 @@ export default function ProfileScreen() {
                 borderRadius={10}
                 paddingHorizontal={12}
                 paddingVertical={6}
+                accessibilityRole="button"
+                accessibilityLabel={`Temperature unit: ${tempUnit === "celsius" ? "degrees Celsius" : "degrees Fahrenheit"}`}
+                accessibilityHint="Double tap to switch units"
               >
                 <Text
                   fontSize={13}
@@ -394,6 +417,9 @@ export default function ProfileScreen() {
                 borderRadius={10}
                 paddingHorizontal={12}
                 paddingVertical={6}
+                accessibilityRole="button"
+                accessibilityLabel={`First day of week: ${firstDay === "monday" ? "Monday" : "Sunday"}`}
+                accessibilityHint="Double tap to switch"
               >
                 <Text
                   fontSize={13}
@@ -569,10 +595,10 @@ export default function ProfileScreen() {
             <VelaIcon name="vela" size={20} color={Colors.primary} />
           </Stack>
           <Text fontSize={12} color={Colors.textTertiary}>
-            Vela v1.0.0
+            Vela v{Constants.expoConfig?.version ?? "1.0.0"}
           </Text>
           <Text fontSize={11} color={Colors.textTertiary}>
-            No internet · No tracking · Your data only
+            Your cycle data stays on this device
           </Text>
         </Stack>
       </StyledScrollView>

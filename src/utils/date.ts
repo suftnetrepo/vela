@@ -35,6 +35,11 @@ export function formatShortDate(date: Date | string): string {
   return format(d, 'MMM d')
 }
 
+export function formatWeekdayDate(date: Date | string): string {
+  const d = typeof date === 'string' ? parseISO(date) : date
+  return format(d, 'EEE, MMM d')
+}
+
 // Returns calendar grid for a month — always 6 rows of 7 days
 // firstDayOfWeek: 0 = Sunday, 1 = Monday
 export function buildMonthGrid(date: Date, firstDayOfWeek: 0 | 1 = 1): (Date | null)[][] {

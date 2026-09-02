@@ -148,6 +148,28 @@ function resolvePhase(p: {
   return 'luteal'
 }
 
+// Classify a specific day-of-cycle (1-based) into a phase, given that cycle's
+// own period/cycle length. Unlike resolvePhase() above (which is relative to
+// "today" and the *next* predicted period), this is used to classify a fixed,
+// already-known cycle day — e.g. when bucketing historical daily logs into
+// phases for insight/pattern detection. Mirrors the thresholds
+// CyclePhasePillBar uses for its per-day pill coloring, so the two agree.
+export function phaseForCycleDay(
+  day:          number,
+  periodLength: number,
+  cycleLength:  number,
+): CyclePhase {
+  const ovulationDay = cycleLength - APP_CONFIG.prediction.lutealPhaseLength
+  const fertileStart = ovulationDay - 5
+  const fertileEnd   = ovulationDay + 1
+
+  if (day <= periodLength) return 'menstrual'
+  if (day === ovulationDay) return 'ovulation'
+  if (day >= fertileStart && day <= fertileEnd) return 'fertile'
+  if (day < fertileStart) return 'follicular'
+  return 'luteal'
+}
+
 // Build a date → DayMeta map for calendar rendering
 export function buildCalendarMap(
   prediction:       CyclePrediction,
@@ -214,8 +236,8 @@ export function phaseName(phase: CyclePhase): string {
 export function phaseDescription(phase: CyclePhase): string {
   const desc: Record<CyclePhase, string> = {
     menstrual:        'Your period is estimated to be starting. Rest and care for yourself.',
-    follicular:       'Energy is building. Great time for new projects.',
-    ovulation:        'Peak energy day. You may feel your best today.',
+    follicular:       'Energy often builds during this phase. Good time for new projects.',
+    ovulation:        'Often a peak-energy day — you may feel your best.',
     fertile:          'You may be entering your fertile window.',
     luteal:           'Winding down. You may notice some changes in how you feel.',
     predicted_period: 'Your period is expected any day now. Log your flow when it starts to keep predictions accurate.',

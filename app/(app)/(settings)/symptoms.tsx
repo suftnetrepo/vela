@@ -111,6 +111,9 @@ function SymptomRow({
       paddingVertical={11}
       backgroundColor={Colors.surface}
       gap={12}
+      accessibilityRole="checkbox"
+      accessibilityLabel={symptom.label}
+      accessibilityState={{ checked }}
     >
       {/* Emoji circle */}
       <Stack
@@ -397,6 +400,8 @@ export default function SymptomsSettingsScreen() {
               backgroundColor={Colors.surfaceAlt}
               borderWidth={1}
               borderColor={Colors.border}
+              accessibilityRole="button"
+              accessibilityLabel="Reset symptoms to recommended"
             >
               <VelaIcon name="cycle" size={16} color={Colors.textSecondary} />
               <Text fontSize={14} fontWeight="600" color={Colors.textSecondary}>

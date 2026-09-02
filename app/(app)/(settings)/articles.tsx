@@ -52,7 +52,7 @@ const ARTICLES: Omit<Article, "iconBg" | "iconColor">[] = [
     icon: "phase-fertile",
     category: "Fertility",
     content: [
-      "The fertile window is the time each cycle when pregnancy is possible. You can only get pregnant from sex that happens during the 5 days before ovulation and on the day of ovulation itself.",
+      "The fertile window is the time each cycle when pregnancy is most likely. Pregnancy is most likely from sex during the 5 days before ovulation and on the day of ovulation itself — but cycle timing varies and ovulation can shift, so this window is an estimate, not a guarantee. Vela isn't a method of contraception.",
       "**Why 6 days?**\nSperm can survive in the female reproductive tract for up to 5 days. An egg, once released, is only viable for 12–24 hours. The combination means sex in the days leading up to ovulation can lead to conception.",
       "**Identifying your fertile window**\nVela calculates your fertile window based on your average cycle length, using the standard luteal phase length of 14 days. As you log more cycles, this prediction becomes more accurate.",
       "**Physical signs**\nYour body produces cervical mucus that changes throughout your cycle. During your fertile window, it becomes clear and stretchy — like raw egg white. Some women also experience mild pelvic pain (mittelschmerz) at ovulation.",
@@ -61,14 +61,14 @@ const ARTICLES: Omit<Article, "iconBg" | "iconColor">[] = [
   {
     id: "bbt-tracking",
     title: "Basal Body Temperature Tracking",
-    subtitle: "How to use BBT to understand your cycle and confirm ovulation",
+    subtitle: "How to use BBT to understand your cycle and estimate ovulation",
     readTime: "4 min read",
     icon: "thermometer",
     category: "Tracking",
     content: [
       "Basal body temperature (BBT) is your body's resting temperature, taken first thing in the morning before any activity. After ovulation, BBT typically rises by 0.2–0.5°C due to progesterone.",
       "**How to track BBT**\nUse a basal thermometer (reads to 2 decimal places). Take your temperature every morning at the same time, before getting out of bed, before eating or drinking. Log it immediately in the Tracker tab.",
-      "**What to look for**\nA sustained temperature rise of at least 0.2°C lasting 3 or more days indicates ovulation has occurred. The temperature rise confirms ovulation — it doesn't predict it in advance.",
+      "**What to look for**\nA sustained temperature rise of at least 0.2°C lasting 3 or more days is a common sign that ovulation has already occurred. On its own, a temperature reading isn't a diagnostic confirmation — think of it as one more data point alongside your other logged signs, and it doesn't predict ovulation in advance.",
       "**Using BBT with Vela**\nTap the Tracker tab and select BBT to log your daily temperature. The chart shows your pattern over time and highlights the typical biphasic pattern of a normal ovulatory cycle.",
       "**Important note**\nBBT can be affected by illness, alcohol, poor sleep, or timezone changes. Always note disruptions when logging.",
     ],
@@ -140,6 +140,8 @@ function ArticleCard({
       elevation={2}
       flexDirection="row"
       gap={14}
+      accessibilityRole="button"
+      accessibilityLabel={`${article.category}, ${article.readTime}, ${article.title}. ${article.subtitle}`}
     >
       <Stack
         width={52}
@@ -258,7 +260,7 @@ export default function ArticlesScreen() {
             color={Colors.textSecondary}
             lineHeight={20}
           >
-            Evidence-based articles written to help you understand your cycle,
+            Articles written to help you understand your cycle,
             fertility, and health. All content is stored offline.
           </Text>
         </Stack>

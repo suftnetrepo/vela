@@ -13,8 +13,6 @@
       "icon": "./assets/images/icon.png",
       "infoPlist": {
         "NSFaceIDUsageDescription": "Use Face ID to securely unlock Vela",
-        "NSCameraUsageDescription": "Camera access is not required",
-        "NSPhotoLibraryUsageDescription": "Photo access is not required",
         "ITSAppUsesNonExemptEncryption": false
       }
     },

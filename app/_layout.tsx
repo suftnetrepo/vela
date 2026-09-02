@@ -45,18 +45,20 @@ export default function RootLayout() {
 
   useEffect(() => {
     async function boot() {
+      // ── Phase 1: fully local, must never depend on network/RevenueCat ──
+      // SQLite init → settings hydration → PIN/lockout hydration. Each of
+      // these is independently offline-safe; if RevenueCat is unreachable
+      // (no network, RC outage, native module unavailable) the app must
+      // still reach its normal local UI with real onboarding/PIN state.
       try {
-        // Initialize RevenueCat first (for app lifecycle)
-        await initializeRevenueCat()
-
         await initDatabase()
         // await seedDatabase()
 
         const all = await settingsService.getAll()
-        
+
         const onboardingComplete = Boolean(all[SETTINGS_KEYS.ONBOARDING_COMPLETE])
         const pinSkipped = Boolean(all[SETTINGS_KEYS.PIN_SKIPPED])
-        
+
         hydrateSettings({
           theme: (all[SETTINGS_KEYS.THEME] as ThemeName) ?? 'rose',
           isPremium: Boolean(all[SETTINGS_KEYS.IS_PREMIUM]),
@@ -69,12 +71,8 @@ export default function RootLayout() {
           tempUnit: (all[SETTINGS_KEYS.TEMPERATURE_UNIT] as any) ?? 'celsius',
         })
 
-        // Hydrate premium entitlement state from RevenueCat
-        const entitlement = await getEntitlement()
-        setPremiumEntitlement(entitlement.isActive, entitlement.plan)
-
         const hasPin = await securityService.hasPin()
-        
+
         setHasPin(hasPin)
         if (hasPin) {
           setLocked(true)
@@ -85,23 +83,43 @@ export default function RootLayout() {
         // brute-force lockout can be bypassed just by killing the app.
         const { attempts, lockedUntil } = await securityService.getLockoutState()
         hydrateLockout(attempts, lockedUntil)
-
-        // ⚠️ CRITICAL: Mark boot as ready ONLY after ALL hydration and state setup is complete
-        // This prevents router from making decisions before persisted state is loaded
-        setBootReady(true)
-        
-        setAppReady(true)
-
-        // Fire-and-forget: recompute the prediction and (re)schedule
-        // reminder notifications to match. Not awaited so it never blocks
-        // app startup — notification permission prompts / scheduling can
-        // happen in the background after the UI is already interactive.
-        notificationService.refreshScheduledNotifications()
       } catch (err) {
-        console.error('[Vela] Boot error:', err)
-        setAppReady(true)
-        // Still mark boot ready even on error to prevent infinite wait
-        setBootReady(true)
+        // A failure here is a real local problem (disk/DB), not a network
+        // one — log it, but still let the app proceed to its normal UI
+        // rather than getting stuck on the splash screen forever.
+        console.error('[Vela] Local boot phase failed:', err)
+      }
+
+      // ⚠️ CRITICAL: Mark boot as ready as soon as the local phase is done —
+      // do NOT await the premium phase below first. A try/catch only
+      // protects against RevenueCat *throwing*; it does nothing if
+      // Purchases.configure()/getCustomerInfo() simply hangs (no network,
+      // a slow/unresponsive RC endpoint, first-launch StoreKit weirdness on
+      // a real device). If this were awaited here, a hang there would keep
+      // the splash screen up forever even though local state is already
+      // fully hydrated — exactly the failure mode this whole fix exists to
+      // prevent.
+      setBootReady(true)
+      setAppReady(true)
+
+      // Fire-and-forget: recompute the prediction and (re)schedule
+      // reminder notifications to match. Not awaited so it never blocks
+      // app startup — notification permission prompts / scheduling can
+      // happen in the background after the UI is already interactive.
+      notificationService.refreshScheduledNotifications()
+
+      // ── Phase 2: RevenueCat / premium — network-dependent, detached ──
+      // Runs after the UI is already up. A failure OR a hang here only
+      // ever affects premium state, never onboarding/PIN/database/splash.
+      // getEntitlement() already falls back to the cached entitlement when
+      // RevenueCat is unreachable, so isPremium still reflects the user's
+      // last-known purchase while offline.
+      try {
+        await initializeRevenueCat()
+        const entitlement = await getEntitlement()
+        setPremiumEntitlement(entitlement.isActive, entitlement.plan)
+      } catch (err) {
+        console.error('[Vela] Premium boot phase failed:', err)
       }
     }
     boot()
@@ -109,7 +127,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     const unsubscribe = subscribeToEntitlementUpdates((info) => {
-      console.log('[Premium] Root entitlement update', info)
+      if (__DEV__) console.log('[Premium] Root entitlement update', info)
       setPremiumEntitlement(info.isActive, info.plan)
     })
 
@@ -118,7 +136,7 @@ export default function RootLayout() {
 
       refreshEntitlement('app-foreground')
         .then((info) => {
-          console.log('[Premium] Foreground refresh', info)
+          if (__DEV__) console.log('[Premium] Foreground refresh', info)
           setPremiumEntitlement(info.isActive, info.plan)
         })
         .catch((error) => {

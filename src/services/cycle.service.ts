@@ -1,6 +1,6 @@
-import { eq, desc, asc, and, isNull } from 'drizzle-orm'
+import { eq, desc, asc } from 'drizzle-orm'
 import { db } from '../db/client'
-import { cycles } from '../db/schema'
+import { cycles, dailyLogs } from '../db/schema'
 import type { Cycle, NewCycle } from '../db/schema'
 import { nowISO, toDateStr } from '../utils/date'
 
@@ -83,8 +83,24 @@ export const cycleService = {
       .where(eq(cycles.id, id))
   },
 
+  // Deleting a cycle must keep the promise the Insights confirm-dialog
+  // already makes to the user — "your daily logs are kept, only the cycle
+  // record is removed." Because dailyLogs.cycle_id is a foreign key to
+  // cycles.id with foreign_keys=ON and no ON DELETE clause, SQLite's default
+  // NO ACTION would reject the delete outright if any log still references
+  // this cycle. So: null out the references first, then delete the cycle,
+  // both inside one transaction — if either step fails, neither happens.
+  // classifyLogs() (src/algorithm/cycleHistory.ts) already resolves a log's
+  // owning cycle by date whenever cycleId is null, so nulling these
+  // references doesn't change how Insights/Patterns/Prediction see them.
   async deleteCycle(id: number): Promise<void> {
-    await db.delete(cycles).where(eq(cycles.id, id))
+    await db.transaction(tx => {
+      tx.update(dailyLogs)
+        .set({ cycleId: null, updatedAt: nowISO() })
+        .where(eq(dailyLogs.cycleId, id))
+        .run()
+      tx.delete(cycles).where(eq(cycles.id, id)).run()
+    })
   },
 
   // Returns confirmed cycles (with a cycleLength) ordered oldest→newest

@@ -26,6 +26,7 @@ interface CyclePhasePillBarProps {
   totalDays?:      number   // override cycle length
   showLabel?:      boolean
   compact?:        boolean  // smaller pills for home screen
+  showLegend?:     boolean  // render a Period/Fertile/Ovulation/Predicted swatch legend below
 }
 
 // Phase colour map — independent of theme so the visualisation
@@ -59,8 +60,9 @@ export function CyclePhasePillBar({
   prediction,
   currentDay,
   totalDays,
-  showLabel = false,
-  compact   = false,
+  showLabel  = false,
+  compact    = false,
+  showLegend = false,
 }: CyclePhasePillBarProps) {
   const Colors  = useColors()
   const W       = Dimensions.get('window').width
@@ -110,7 +112,13 @@ export function CyclePhasePillBar({
           </Text>
         </Stack>
       )}
-      <Stack flexDirection="row" gap={gap} alignItems="center">
+      <Stack
+        flexDirection="row"
+        gap={gap}
+        alignItems="center"
+        accessible
+        accessibilityLabel={`Cycle progress: day ${currentDay} of ${cycle}`}
+      >
         {pills.map(({ day, color, isCurrent }) => (
           <Stack
             key={day}
@@ -131,6 +139,21 @@ export function CyclePhasePillBar({
           />
         ))}
       </Stack>
+      {showLegend && (
+        <Stack flexDirection="row" gap={12} flexWrap="wrap" paddingTop={2}>
+          {[
+            { color: PHASE_COLORS.menstrual,  label: 'Period' },
+            { color: PHASE_COLORS.fertile,    label: 'Fertile' },
+            { color: PHASE_COLORS.ovulation,  label: 'Ovulation' },
+            { color: PHASE_COLORS.remaining,  label: 'Predicted' },
+          ].map(({ color, label }) => (
+            <Stack key={label} flexDirection="row" alignItems="center" gap={5}>
+              <Stack width={8} height={8} borderRadius={4} backgroundColor={color} />
+              <Text fontSize={11} color={Colors.textTertiary}>{label}</Text>
+            </Stack>
+          ))}
+        </Stack>
+      )}
     </Stack>
   )
 }

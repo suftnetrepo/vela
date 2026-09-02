@@ -21,7 +21,7 @@ export function usePremium() {
 
   const refresh = useCallback(async () => {
     const info = await getEntitlement()
-    console.log('[Premium] Store refresh', info)
+    if (__DEV__) console.log('[Premium] Store refresh', info)
     setPremiumEntitlement(info.isActive, info.plan)
   }, [setPremiumEntitlement])
 
@@ -83,7 +83,7 @@ export function usePremium() {
   }, [refresh])
 
   useEffect(() => {
-    console.log('[Premium] Store state changed', { isPremium, premiumPlan })
+    if (__DEV__) console.log('[Premium] Store state changed', { isPremium, premiumPlan })
   }, [isPremium, premiumPlan])
 
   const restore = useCallback(async () => {

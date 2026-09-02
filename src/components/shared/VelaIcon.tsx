@@ -73,8 +73,11 @@ const ICON_MAP: Record<string, IconDef> = {
 
   // ── Calendar / cycle ────────────────────────────────────────────────────
   'calendar':          { family: 'feather',  glyph: 'calendar' },
+  'grid':              { family: 'feather',  glyph: 'grid' },
   'chevron-left':      { family: 'feather',  glyph: 'chevron-left' },
   'chevron-right':     { family: 'feather',  glyph: 'chevron-right' },
+  'chevron-up':        { family: 'feather',  glyph: 'chevron-up' },
+  'chevron-down':      { family: 'feather',  glyph: 'chevron-down' },
   'chevron-back':      { family: 'ionicons', glyph: 'chevron-back' },
   'cycle':             { family: 'mci',      glyph: 'sync' },
   'drop':              { family: 'mci',      glyph: 'water' },

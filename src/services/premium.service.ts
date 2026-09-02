@@ -76,12 +76,16 @@ const syncEntitlementFromCustomerInfo = async (
   const entitlement = customerInfo?.entitlements?.active?.[PREMIUM_ENTITLEMENT_ID];
   const activeEntitlements = Object.keys(customerInfo?.entitlements?.active ?? {});
 
-  console.log("[Premium] Customer info sync", {
-    source,
-    appUserId: customerInfo?.originalAppUserId ?? null,
-    activeEntitlements,
-    activeSubscriptions: customerInfo?.activeSubscriptions ?? [],
-  });
+  // Dev-only: app user id and subscription identifiers are purchase/account
+  // identifiers, not something to keep in production logs.
+  if (__DEV__) {
+    console.log("[Premium] Customer info sync", {
+      source,
+      appUserId: customerInfo?.originalAppUserId ?? null,
+      activeEntitlements,
+      activeSubscriptions: customerInfo?.activeSubscriptions ?? [],
+    });
+  }
 
   if (!entitlement) {
     const inactiveInfo: EntitlementInfo = {
@@ -114,14 +118,16 @@ const syncEntitlementFromCustomerInfo = async (
   await SecureStore.setItemAsync(PREMIUM_STORAGE_KEY, JSON.stringify(nextInfo));
   emitEntitlementUpdate(nextInfo);
 
-  console.log("[Premium] Entitlement active", {
-    source,
-    entitlementId: PREMIUM_ENTITLEMENT_ID,
-    productId,
-    knownProductId: PREMIUM_PRODUCT_IDS.has(productId),
-    plan,
-    expiresAt,
-  });
+  if (__DEV__) {
+    console.log("[Premium] Entitlement active", {
+      source,
+      entitlementId: PREMIUM_ENTITLEMENT_ID,
+      productId,
+      knownProductId: PREMIUM_PRODUCT_IDS.has(productId),
+      plan,
+      expiresAt,
+    });
+  }
 
   return nextInfo;
 };
@@ -149,11 +155,13 @@ export const initializeRevenueCat = async (): Promise<void> => {
     registerCustomerInfoListener();
 
     isRevenueCatInitialized = true;
-    console.log("[RevenueCat] Initialized successfully", {
-      entitlementId: PREMIUM_ENTITLEMENT_ID,
-      apiKeyPrefix: REVENUECAT_API_KEY.slice(0, 4),
-      expectedProductIds: Array.from(PREMIUM_PRODUCT_IDS),
-    });
+    // Never log any fragment of the API key, even in dev builds.
+    if (__DEV__) {
+      console.log("[RevenueCat] Initialized successfully", {
+        entitlementId: PREMIUM_ENTITLEMENT_ID,
+        expectedProductIds: Array.from(PREMIUM_PRODUCT_IDS),
+      });
+    }
   } catch (err) {
     console.error("[RevenueCat] Initialization failed:", err);
     throw err;
@@ -221,12 +229,14 @@ export const getEntitlement = async (): Promise<EntitlementInfo> => {
       }
     }
 
-    // Check RevenueCat for current status
-    if (!isRevenueCatInitialized) {
-      await initializeRevenueCat();
-    }
-
+    // Check RevenueCat for current status. The init call is inside this same
+    // try/catch (not before it) so that if RevenueCat can't be reached at
+    // all — offline, RC outage, native module unavailable — we still fall
+    // through to the cached entitlement below instead of discarding it.
     try {
+      if (!isRevenueCatInitialized) {
+        await initializeRevenueCat();
+      }
       return await refreshEntitlement("get-entitlement");
     } catch (err: any) {
       // RevenueCat error; return cached info if available
@@ -318,7 +328,7 @@ export const purchaseMonthly = async (): Promise<boolean> => {
       throw new Error("Monthly package not found in offerings");
     }
 
-    console.log("[Premium] Purchasing monthly:", pkg.identifier);
+    if (__DEV__) console.log("[Premium] Purchasing monthly:", pkg.identifier);
     const purchaseResult = await Purchases.purchasePackage(pkg);
 
     // After successful purchase, use the returned customer info as source of truth
@@ -357,7 +367,7 @@ export const purchaseYearly = async (): Promise<boolean> => {
       throw new Error("Yearly package not found in offerings");
     }
 
-    console.log("[Premium] Purchasing yearly:", pkg.identifier);
+    if (__DEV__) console.log("[Premium] Purchasing yearly:", pkg.identifier);
     const purchaseResult = await Purchases.purchasePackage(pkg);
 
     const result = await syncEntitlementFromCustomerInfo(
@@ -401,7 +411,7 @@ export const purchaseLifetime = async (): Promise<boolean> => {
       throw new Error("Lifetime package not found in offerings");
     }
 
-    console.log("[Premium] Purchasing lifetime:", pkg.identifier);
+    if (__DEV__) console.log("[Premium] Purchasing lifetime:", pkg.identifier);
     const purchaseResult = await Purchases.purchasePackage(pkg);
 
     const result = await syncEntitlementFromCustomerInfo(

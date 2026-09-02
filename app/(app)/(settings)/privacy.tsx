@@ -9,9 +9,18 @@ import {
   theme,
 } from "fluent-styles";
 import { router } from "expo-router";
+import Constants from "expo-constants";
 import { Text } from "@/components/text";
 import { useColors } from "../../../src/hooks/useColors";
 import { VelaIcon } from "../../../src/components/shared/VelaIcon";
+
+// Read from the real Expo/app config instead of hardcoding a second copy
+// that can drift out of sync with app.json (as the old literal footer did).
+const APP_VERSION = Constants.expoConfig?.version ?? "1.0.0";
+const APP_BUNDLE_ID =
+  Constants.expoConfig?.ios?.bundleIdentifier ??
+  Constants.expoConfig?.android?.package ??
+  "";
 
 const SECTIONS = [
   {
@@ -32,7 +41,7 @@ const SECTIONS = [
   {
     title: "Third-party services",
     content:
-      "Vela may use Apple services for in-app purchases and subscription management. These services are handled by Apple and are used only to process purchases, restore purchases, and manage premium access.",
+      "Vela uses Apple/Google for in-app purchases and RevenueCat to manage subscriptions. These services only ever receive purchase and subscription information (an anonymous purchaser ID, product and subscription status) — never your cycle history, symptoms, moods, journal entries, or any other health data, which stays only in Vela's local database on your device.",
   },
   {
     title: "Why we built it this way",
@@ -106,10 +115,10 @@ export default function PrivacyScreen() {
                 fontWeight="800"
                 color={Colors.textPrimary}
               >
-                Zero data collection
+                Your health data stays on this device
               </Text>
               <Text fontSize={13} color={Colors.textSecondary}>
-                This is not a legal disclaimer — it's a technical fact.
+                Vela has no servers for your cycle data — it's a technical fact, not a legal disclaimer.
               </Text>
             </Stack>
           </Stack>
@@ -159,7 +168,7 @@ export default function PrivacyScreen() {
             Last updated: January 2025
           </Text>
           <Text fontSize={12} color={Colors.textTertiary}>
-            Vela v1.0.0 · com.vela.cycle
+            Vela v{APP_VERSION} · {APP_BUNDLE_ID}
           </Text>
         </Stack>
       </StyledScrollView>

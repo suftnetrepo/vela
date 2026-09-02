@@ -13,6 +13,7 @@ export interface TrackerData {
   todayLog:     DailyLog | null
   weightData:   TrackerDataPoint[]
   tempData:     TrackerDataPoint[]
+  noteData:     { date: string; notes: string }[]
   loading:      boolean
 }
 
@@ -28,6 +29,7 @@ export function useTracker(): TrackerData & {
   const [todayLog, setTodayLog]       = useState<DailyLog | null>(null)
   const [weightData, setWeightData]   = useState<TrackerDataPoint[]>([])
   const [tempData, setTempData]       = useState<TrackerDataPoint[]>([])
+  const [noteData, setNoteData]       = useState<{ date: string; notes: string }[]>([])
   const [loading, setLoading]         = useState(true)
 
   const load = useCallback(async () => {
@@ -45,6 +47,11 @@ export function useTracker(): TrackerData & {
           .filter(l => l.temperature != null)
           .map(l => ({ date: l.date, value: l.temperature! }))
           .reverse()
+      )
+      setNoteData(
+        logs
+          .filter(l => typeof l.notes === 'string' && l.notes.trim().length > 0)
+          .map(l => ({ date: l.date, notes: l.notes!.trim() }))
       )
       const today = logs.find(l => l.date === todayStr()) ?? null
       setTodayLog(today)
@@ -77,6 +84,7 @@ export function useTracker(): TrackerData & {
     todayLog,
     weightData,
     tempData,
+    noteData,
     loading,
     saveWeight,
     saveTemperature,

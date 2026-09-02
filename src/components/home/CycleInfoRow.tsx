@@ -17,12 +17,15 @@ interface CycleInfoRowProps {
 export function CycleInfoRow({ prediction }: CycleInfoRowProps) {
   const Colors = useColors()
 
-  // Determine pregnancy chance based on cycle phase
-  const pregnancyChance = useMemo(() => {
-    if (!prediction) return 'Low'
-    if (prediction.currentPhase === 'fertile' || prediction.currentPhase === 'ovulation') return 'High'
-    if (prediction.currentPhase === 'follicular') return 'Medium'
-    return 'Low'
+  // Fertile-window status — a neutral description of where today falls
+  // relative to the estimated fertile window, not a pregnancy-likelihood
+  // score. Vela is a wellness tracker, not a contraceptive method, so this
+  // deliberately never presents a High/Medium/Low risk-style figure.
+  const fertileStatus = useMemo(() => {
+    if (!prediction) return 'Unknown'
+    if (prediction.currentPhase === 'ovulation') return 'Peak day'
+    if (prediction.currentPhase === 'fertile') return 'Active'
+    return 'Not now'
   }, [prediction])
 
   // Get phase display name and associated article
@@ -131,7 +134,7 @@ export function CycleInfoRow({ prediction }: CycleInfoRowProps) {
           </Text>
         </StyledPressable>
 
-        {/* Card 3: Pregnancy chance */}
+        {/* Card 3: Fertile window status (not a pregnancy-chance score) */}
         <StyledPressable
           onPress={() => handleArticleNavigation('fertile-window')}
           minWidth={100}
@@ -145,13 +148,13 @@ export function CycleInfoRow({ prediction }: CycleInfoRowProps) {
           justifyContent="space-between"
         >
           <Stack alignItems="center" gap={4}>
-            <VelaIcon name={pregnancyChance === 'High' ? 'heart' : 'activity'} size={20} color={Colors.primary} />
-            <Text fontSize={16} fontWeight="700" color={Colors.textPrimary}>
-              {pregnancyChance}
+            <VelaIcon name={fertileStatus === 'Peak day' ? 'phase-ovulation' : 'activity'} size={20} color={Colors.primary} />
+            <Text fontSize={14} fontWeight="700" color={Colors.textPrimary} textAlign="center">
+              {fertileStatus}
             </Text>
           </Stack>
           <Text fontSize={10} fontWeight="600" color={Colors.textSecondary} textAlign="center">
-            Cycle phase
+            Fertile window
           </Text>
         </StyledPressable>
 

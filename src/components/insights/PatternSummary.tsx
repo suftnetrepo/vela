@@ -31,7 +31,7 @@ export function PatternSummary({ cycles }: PatternSummaryProps) {
   const range = max - min
   const avgPeriod = periods.length > 0 ? Math.round(periods.reduce((a, b) => a + b, 0) / periods.length) : null
 
-  const regularity      = range <= 3 ? 'Very regular' : range <= 7 ? 'Mostly regular' : 'Irregular'
+  const regularity      = range <= 3 ? 'Very regular' : range <= 7 ? 'Mostly regular' : 'Variable'
   const regularityIcon: VelaIconName = range <= 3 ? 'check-circle' : range <= 7 ? 'check-circle' : 'activity'
   const regularityColor = range <= 3 ? Colors.success : range <= 7 ? Colors.warning : Colors.primary
 
@@ -42,7 +42,7 @@ export function PatternSummary({ cycles }: PatternSummaryProps) {
   } else if (range <= 7) {
     insights.push(`Your cycles are mostly regular, typically between ${min} and ${max} days.`)
   } else {
-    insights.push(`Your cycle length varies between ${min} and ${max} days. This is normal.`)
+    insights.push(`Your cycle length varies between ${min} and ${max} days. This kind of variation is common.`)
   }
   
   if (avgPeriod) {

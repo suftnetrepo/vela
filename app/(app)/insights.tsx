@@ -105,6 +105,8 @@ const CycleHistoryCard = ({
               padding={6}
               borderRadius={8}
               hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={`Delete ${entry.cycleLength ? `${entry.cycleLength}-day ` : ''}cycle started ${entry.fullDate}`}
             >
               <VelaIcon name="trash" size={16} color={Colors.textTertiary} />
             </StyledPressable>
@@ -390,9 +392,9 @@ function getMotivationMessage(cycles: any[], prediction: any): string {
   if (lengths.length < 2) return "";
   const range = Math.max(...lengths) - Math.min(...lengths);
   if (range <= 2)
-    return "Excellent! Your menstrual rhythm is perfectly stable.";
+    return "Your logged cycles have been very consistent.";
   if (range <= 5) return "Your cycle is mostly regular. Keep tracking!";
-  return "Your cycle shows some variation — this is common and normal.";
+  return "Your cycle shows some variation from month to month — that's common.";
 }
 
 export default function InsightsScreen() {
@@ -442,7 +444,7 @@ export default function InsightsScreen() {
   ];
 
   return (
-    <StyledPage flex={1} backgroundColor={Colors.background}>
+    <StyledPage showStatusBar backgroundColor={Colors.background}>
       <StyledPage.Header
         marginHorizontal={32}
         title="Insights"
@@ -589,15 +591,15 @@ export default function InsightsScreen() {
                   {[
                     {
                       icon: "phase-fertile" as VelaIconName,
-                      label: "Fertile window",
-                      date: `${safeDate(prediction.fertileWindowStart)} – ${safeDate(prediction.fertileWindowEnd)}`,
+                      label: "Estimated fertile window",
+                      date: `${safeDate(prediction.fertileWindowStart)} – ${safeDate(prediction.fertileWindowEnd)} · ±${prediction.confidenceDays}d`,
                       bg: Colors.fertileLight,
                       color: Colors.ovulation,
                     },
                     {
                       icon: "phase-ovulation" as VelaIconName,
-                      label: "Ovulation",
-                      date: safeDate(prediction.ovulationDay),
+                      label: "Estimated ovulation",
+                      date: `${safeDate(prediction.ovulationDay)} · ±${prediction.confidenceDays}d`,
                       bg: Colors.ovulationLight,
                       color: Colors.ovulation,
                     },

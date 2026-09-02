@@ -45,6 +45,8 @@ export function PremiumGate({ children, feature, description, compact = false }:
           paddingVertical={8} paddingHorizontal={14}
           borderRadius={20} backgroundColor={Colors.primary}
           onPress={() => router.push('/(app)/(settings)/premium')}
+          accessibilityRole="button"
+          accessibilityLabel={`Unlock ${feature}`}
         >
           <Text fontSize={12} fontWeight="700" color={Colors.textInverse}>Unlock</Text>
         </StyledPressable>
@@ -73,7 +75,10 @@ export function PremiumGate({ children, feature, description, compact = false }:
         onPress={() => router.push('/(app)/(settings)/premium')}
         flexDirection="row" alignItems="center" gap={8}
         shadowColor={Colors.primary} shadowOffset={{ width: 0, height: 4 }}
-        shadowOpacity={0.3} shadowRadius={12} elevation={5}>
+        shadowOpacity={0.3} shadowRadius={12} elevation={5}
+        accessibilityRole="button"
+        accessibilityLabel="Unlock Premium"
+        accessibilityHint={`Opens the premium plans screen to unlock ${feature}`}>
         <VelaIcon name="crown" size={16} color={Colors.textInverse} />
         <Text fontSize={15} fontWeight="700" color={Colors.textInverse}>
           Unlock Premium

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { KeyboardAvoidingView, Platform } from "react-native";
 import {
   Stack,
   StyledText,
@@ -18,24 +19,23 @@ import { useCycles } from "../../src/hooks/useCycles";
 import { FlowTab } from "../../src/components/log/FlowTab";
 import { SymptomsTab } from "../../src/components/log/SymptomsTab";
 import { JournalTab } from "../../src/components/log/JournalTab";
+import { LogSummaryCard } from "../../src/components/log/LogSummaryCard";
 import type { FlowData, FlowLevel, DischargeType } from "../../src/components/log/FlowTab";
 import type { JournalData } from "../../src/components/log/JournalTab";
 import { VelaIcon } from "../../src/components/shared/VelaIcon";
-import { formatDisplayDate, todayStr, fromDateStr, toDateStr, subDays, differenceInDays } from "../../src/utils/date";
+import { formatDisplayDate, todayStr, fromDateStr, toDateStr, subDays, differenceInDays, addDays } from "../../src/utils/date";
 import { APP_CONFIG } from "../../src/constants/config";
 import { toastService, loaderService, dialogueService } from "fluent-styles";
 import { logService } from "../../src/services/log.service";
 import { notificationService } from "../../src/services/notification.service";
 import { useRecordsStore } from "../../src/stores/records.store";
-
-// Mood keys are stored with this prefix in the symptoms table for persistence
-const MOOD_KEY_PREFIX = "mood_";
+import { MOOD_KEY_PREFIX } from "../../src/constants/moods";
 
 type LogTab = "flow" | "symptoms" | "journal";
 
 export default function LogScreen() {
   const Colors = useColors();
-  const params = useLocalSearchParams<{ date?: string; tab?: string }>();
+  const params = useLocalSearchParams<{ date?: string; tab?: string; category?: string }>();
   const date = params.date ?? todayStr();
   const isToday = date === todayStr();
 
@@ -383,38 +383,69 @@ export default function LogScreen() {
   ];
 
   const markDirty = () => setDirty(true);
+  const goDate = (offset: number) => {
+    const next = toDateStr(addDays(fromDateStr(date), offset));
+    router.setParams({ date: next });
+  };
 
   return (
-    <StyledPage flex={1} backgroundColor={Colors.background}>
-      {/* Header */}
-      <StyledPage.Header
-        title={formatDisplayDate(fromDateStr(date))}
-        titleAlignment="center"
-        marginHorizontal={16}
-        shapeProps={{
-          size: 48,
-          backgroundColor: Colors.surface,
-        }}
-        backArrowProps={{ color: Colors.primary }}
-        showBackArrow
-        onBackPress={() => router.back()}
-        backgroundColor={Colors.background}
-        titleProps={{
-          fontWeight: "700",
-          color: Colors.textPrimary,
-          fontFamily: "PlusJakartaSans_700Bold",
-        }}
-        rightIcon={
-          log ? (
-            <StyledPressable onPress={handleDelete} padding={8}>
-              <VelaIcon name="trash" size={18} color={Colors.error} />
-            </StyledPressable>
-          ) : null
-        }
-      />
-      <StyledSpacer marginVertical={4} />
+    <StyledPage showStatusBar backgroundColor={Colors.background}>
+      <StyledPage.Header.Full>
+ {/* Premium date navigation */}
+      <Stack paddingHorizontal={20} paddingTop={10} paddingBottom={8} flexDirection="row" alignItems="center" justifyContent="space-between">
+        <StyledPressable
+          onPress={() => router.back()}
+          width={44}
+          height={44}
+          borderRadius={22}
+          backgroundColor={Colors.surface}
+          alignItems="center"
+          justifyContent="center"
+          accessibilityRole="button"
+          accessibilityLabel="Back"
+        ><VelaIcon name="chevron-left" size={20} color={Colors.primary} /></StyledPressable>
+        <Stack flexDirection="row" alignItems="center" gap={10}>
+          <StyledPressable
+            onPress={() => goDate(-1)}
+            width={40}
+            height={40}
+            borderRadius={20}
+            backgroundColor={Colors.surface}
+            alignItems="center"
+            justifyContent="center"
+            accessibilityRole="button"
+            accessibilityLabel="Previous day"
+          ><VelaIcon name="chevron-left" size={18} color={Colors.textPrimary}/></StyledPressable>
+          <Text fontSize={20} fontWeight="800" color={Colors.textPrimary}>{isToday ? 'Today' : formatDisplayDate(fromDateStr(date))}</Text>
+          <StyledPressable
+            onPress={() => goDate(1)}
+            disabled={isToday}
+            opacity={isToday ? 0.35 : 1}
+            width={40}
+            height={40}
+            borderRadius={20}
+            backgroundColor={Colors.surface}
+            alignItems="center"
+            justifyContent="center"
+            accessibilityRole="button"
+            accessibilityLabel="Next day"
+            accessibilityState={{ disabled: isToday }}
+          ><VelaIcon name="chevron-right" size={18} color={Colors.textPrimary}/></StyledPressable>
+        </Stack>
+        <Stack width={44} height={44} />
+      </Stack>
+      </StyledPage.Header.Full>
+     
 
-      {/* Tab bar */}
+      {/* Tab bar + content + save button — wrapped so the keyboard never
+          strands the sticky Save button below the visible screen (this
+          section holds Journal's Notes field, the one free-text entry
+          on this screen). */}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+      >
       <Stack paddingHorizontal={20} paddingBottom={8}>
         <TabBar
           options={TABS}
@@ -441,7 +472,10 @@ export default function LogScreen() {
           gap: 0,
         }}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
+        <LogSummaryCard flow={flowData} journal={journalData} symptomCount={symptoms.length} onEdit={() => setActiveTab("flow")} />
+        <StyledSpacer marginVertical={8} />
         {activeTab === "flow" && (
           <FlowTab
             data={flowData}
@@ -459,6 +493,7 @@ export default function LogScreen() {
         {activeTab === "symptoms" && (
           <SymptomsTab
             selected={symptoms}
+            initialSearch={params.category}
             onChange={(v) => {
               setSymptoms(v);
               markDirty();
@@ -487,7 +522,9 @@ export default function LogScreen() {
       >
         <StyledPressable
           onPress={handleSave}
-          backgroundColor={Colors.primary}
+          backgroundColor={dirty ? Colors.primary : Colors.textTertiary}
+          opacity={dirty || saving ? 1 : 0.72}
+          disabled={!dirty || saving}
           borderRadius={26}
           paddingVertical={16}
           paddingHorizontal={32}
@@ -495,6 +532,9 @@ export default function LogScreen() {
           flexDirection="row"
           justifyContent="center"
           gap={12}
+          accessibilityRole="button"
+          accessibilityLabel={saving ? "Saving" : dirty ? "Save today's log" : "All changes saved"}
+          accessibilityState={{ disabled: !dirty || saving, busy: saving }}
         >
           <VelaIcon name="check-circle" size={20} color={Colors.textInverse} />
           <Text
@@ -503,10 +543,11 @@ export default function LogScreen() {
             color={Colors.textInverse}
             letterSpacing={0.2}
           >
-            {saving ? "Saving…" : "Save"}
+            {saving ? "Saving…" : dirty ? "Save today’s log" : "All changes saved"}
           </Text>
         </StyledPressable>
       </Stack>
+      </KeyboardAvoidingView>
     </StyledPage>
   );
 }

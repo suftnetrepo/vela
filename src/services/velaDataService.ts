@@ -28,6 +28,10 @@ export interface ExportableCycle {
   pl: number | null                  // periodLength
   cl: number | null                  // cycleLength
   n:  string | null                  // notes
+  // v2+: whether this cycle was the active cycle at export time (1) or not
+  // (0). Optional so v1 backups (which never had this field) still decode
+  // and import fine — see planCycleImport for how it's used.
+  ac?: number
 }
 
 export interface ExportableDailyLog {
@@ -58,7 +62,10 @@ export interface VelaExportPayload {
   dl: ExportableDailyLog[] | null     // daily logs (if included)
 }
 
-const SCHEMA_VERSION = 1
+const SCHEMA_VERSION = 2
+// Highest payload version this build knows how to import. v1 (no `ac` field
+// on cycles) and v2 are both supported — see decodeVelaData.
+const MAX_SUPPORTED_SCHEMA_VERSION = 2
 
 // ─── Export Functions ─────────────────────────────────────────────────────────
 
@@ -118,6 +125,7 @@ export function exportBackup(
       pl: c.periodLength ?? null,
       cl: c.cycleLength ?? null,
       n:  c.notes ?? null,
+      ac: c.isActive ? 1 : 0,
     })),
     dl: dailyLogs.map(log => ({
       d:  log.date,
@@ -128,7 +136,10 @@ export function exportBackup(
       tm: log.temperature ?? null,
       w:  log.weight ?? null,
       n:  log.notes ?? null,
-      sy: symptomsByDate[log.date]?.map(s => ({ k: s.symptomKey, i: s.intensity })) ?? null,
+      // The symptom_logs.intensity column is nullable at the schema level
+      // (defaults to 1 on insert) but should never actually be exported as
+      // null — fall back to the same default the DB itself uses.
+      sy: symptomsByDate[log.date]?.map(s => ({ k: s.symptomKey, i: s.intensity ?? 1 })) ?? null,
     })),
   }
 
@@ -177,7 +188,10 @@ export function exportSelective(
       tm: log.temperature ?? null,
       w:  log.weight ?? null,
       n:  log.notes ?? null,
-      sy: symptomsByDate[log.date]?.map(s => ({ k: s.symptomKey, i: s.intensity })) ?? null,
+      // The symptom_logs.intensity column is nullable at the schema level
+      // (defaults to 1 on insert) but should never actually be exported as
+      // null — fall back to the same default the DB itself uses.
+      sy: symptomsByDate[log.date]?.map(s => ({ k: s.symptomKey, i: s.intensity ?? 1 })) ?? null,
     })),
   }
 
@@ -207,8 +221,24 @@ export function decodeVelaData(code: string): VelaExportPayload {
       throw new Error(`Invalid export level: ${payload.l}`)
     }
 
+    // Version gate: v1 (pre-`ac` field) and v2 are both understood. A
+    // version newer than this build knows about is rejected outright
+    // rather than silently importing it with unknown fields ignored —
+    // existing v1 backups remain fully importable.
+    if (payload.v < 1) {
+      throw new Error('Invalid payload structure')
+    }
+    if (payload.v > MAX_SUPPORTED_SCHEMA_VERSION) {
+      throw new Error(
+        'NEWER_VERSION: This backup was created by a newer version of Vela. Update the app before importing it.',
+      )
+    }
+
     return payload
   } catch (err) {
+    if (err instanceof Error && err.message.startsWith('NEWER_VERSION: ')) {
+      throw new Error(err.message.slice('NEWER_VERSION: '.length))
+    }
     if (err instanceof Error && err.message.startsWith('Invalid')) {
       throw err
     }
@@ -216,61 +246,133 @@ export function decodeVelaData(code: string): VelaExportPayload {
   }
 }
 
+// ─── Restore planning (pure — no DB import, safe to unit test in isolation) ───
+//
+// These functions decide *what* to do with each backup record given the
+// destination's current state; they never touch the database themselves.
+// `restore.service.ts` reads the existing state, calls these, then executes
+// the resulting plan inside a transaction. Keeping the decision logic pure
+// like this means it can be tested with plain `tsc` + `node`, with zero
+// dependency on expo-sqlite/drizzle.
+
+export interface CycleImportPlanItem {
+  startDate:    string
+  endDate:      string | null
+  periodLength: number | null
+  cycleLength:  number | null
+  notes:        string | null
+  isActive:     0 | 1
+}
+
+export interface CycleImportPlan {
+  toInsert: CycleImportPlanItem[]
+  skipped:  number
+}
+
 /**
- * Transform payload to database insert format
+ * Decide which backed-up cycles to insert and which to skip.
+ *
+ * - A cycle whose startDate already exists in the destination — OR whose
+ *   startDate was already accepted earlier in this same payload — is
+ *   skipped (counted, not inserted). The second half matters because a
+ *   malformed/duplicated backup can otherwise contain two cycles with the
+ *   same startDate; inserting both would leave two cycle rows for one date,
+ *   and which one a given log's date resolves to (via findOwningCycle)
+ *   would depend on undefined row-return order — this makes that
+ *   impossible by construction instead of leaving it as a latent ambiguity.
+ * - An imported cycle is only ever restored *active* when the destination
+ *   has NO existing cycles at all (a genuinely empty cycle table) — this is
+ *   what makes it structurally impossible for a restore to touch the user's
+ *   real current active cycle: there is never an existing active cycle to
+ *   conflict with in that case. At most one restored cycle is ever marked
+ *   active, regardless of how many the payload claims were active.
  */
-export function payloadToCycles(payload: VelaExportPayload): Omit<Cycle, 'id' | 'createdAt' | 'updatedAt'>[] {
-  if (!payload.cy) return []
+export function planCycleImport(
+  cycles: ExportableCycle[],
+  existingStartDates: ReadonlySet<string>,
+  hasExistingCycles: boolean,
+): CycleImportPlan {
+  let skipped = 0
+  let activeAssigned = false
+  const toInsert: CycleImportPlanItem[] = []
+  const acceptedStartDates = new Set<string>()
 
-  return payload.cy.map(c => ({
-    startDate:  c.sd,
-    endDate:    c.ed,
-    periodLength: c.pl,
-    cycleLength: c.cl,
-    isActive:   0, // Imported cycles are always inactive
-    notes:      c.n,
-  }))
-}
-
-export function payloadToDailyLogs(
-  payload: VelaExportPayload
-): Omit<DailyLog, 'id' | 'createdAt' | 'updatedAt'>[] {
-  if (!payload.dl) return []
-
-  return payload.dl.map(log => ({
-    date:         log.d,
-    cycleId:      null, // Will be linked after import, user choice
-    flow:         log.f,
-    mood:         log.m,
-    energyLevel:  log.el,
-    sexualDesire: log.sd,
-    temperature:  log.tm,
-    weight:       log.w,
-    notes:        log.n,
-  }))
-}
-
-export function payloadToSymptomLogs(
-  payload: VelaExportPayload
-): Omit<SymptomLog, 'id' | 'createdAt'>[] {
-  if (!payload.dl) return []
-
-  const symptoms: Omit<SymptomLog, 'id' | 'createdAt'>[] = []
-
-  payload.dl.forEach(log => {
-    if (log.sy && Array.isArray(log.sy)) {
-      log.sy.forEach(sym => {
-        symptoms.push({
-          date:       log.d,
-          dailyLogId: null, // Will be linked after daily log inserted
-          symptomKey: sym.k,
-          intensity:  sym.i,
-        })
-      })
+  for (const c of cycles) {
+    if (existingStartDates.has(c.sd) || acceptedStartDates.has(c.sd)) {
+      skipped++
+      continue
     }
-  })
+    acceptedStartDates.add(c.sd)
 
-  return symptoms
+    const restoreActive = !hasExistingCycles && !activeAssigned && c.ac === 1
+    if (restoreActive) activeAssigned = true
+
+    toInsert.push({
+      startDate:    c.sd,
+      endDate:      c.ed,
+      periodLength: c.pl,
+      cycleLength:  c.cl,
+      notes:        c.n,
+      isActive:     restoreActive ? 1 : 0,
+    })
+  }
+
+  return { toInsert, skipped }
+}
+
+export interface DailyLogImportPlanItem {
+  date:         string
+  flow:         string | null
+  mood:         string | null
+  energyLevel:  number | null
+  sexualDesire: number | null
+  temperature:  number | null
+  weight:       number | null
+  notes:        string | null
+  symptoms:     ExportableSymptom[]
+}
+
+export interface DailyLogImportPlan {
+  toInsert: DailyLogImportPlanItem[]
+  skipped:  number
+}
+
+/**
+ * Decide which backed-up daily logs to insert and which to skip.
+ *
+ * Preserve-existing-and-skip is the safe default: a log already present for
+ * a given date is left untouched and the conflict is counted, rather than
+ * overwritten. A log's symptoms only ever travel with it — if the log is
+ * skipped, its symptoms are skipped too (the existing day's data, symptoms
+ * included, is what's preserved).
+ */
+export function planLogImport(
+  logs: ExportableDailyLog[],
+  existingDates: ReadonlySet<string>,
+): DailyLogImportPlan {
+  let skipped = 0
+  const toInsert: DailyLogImportPlanItem[] = []
+
+  for (const log of logs) {
+    if (existingDates.has(log.d)) {
+      skipped++
+      continue
+    }
+
+    toInsert.push({
+      date:         log.d,
+      flow:         log.f,
+      mood:         log.m,
+      energyLevel:  log.el,
+      sexualDesire: log.sd,
+      temperature:  log.tm,
+      weight:       log.w,
+      notes:        log.n,
+      symptoms:     log.sy ?? [],
+    })
+  }
+
+  return { toInsert, skipped }
 }
 
 export function payloadToSettings(payload: VelaExportPayload): Record<string, string> {

@@ -23,7 +23,7 @@ const PAGES: PageDef[] = [
     headline: 'Welcome',
     title: 'Your cycle, privately.',
     subtitle:
-      'A beautifully simple period tracker that works entirely offline. No accounts, no cloud, no tracking.',
+      'A beautifully simple period tracker. No accounts, and your cycle data never leaves your device.',
   },
   {
     icon: 'phase-predicted',
@@ -37,7 +37,7 @@ const PAGES: PageDef[] = [
     headline: 'Privacy',
     title: 'Your data stays with you.',
     subtitle:
-      'Everything you log stays on your device. Vela does not track, collect, or share your personal data.',
+      'Everything you log stays on your device. Vela does not track, collect, or share your health data.',
   },
 ];
 

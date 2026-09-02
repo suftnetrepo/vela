@@ -138,6 +138,9 @@ function MoodRow({
       paddingVertical={11}
       backgroundColor={Colors.surface}
       gap={12}
+      accessibilityRole="checkbox"
+      accessibilityLabel={mood.label}
+      accessibilityState={{ checked }}
     >
       {/* Emoji circle */}
       <Stack
@@ -418,6 +421,8 @@ export default function MoodsSettingsScreen() {
               backgroundColor={Colors.surfaceAlt}
               borderWidth={1}
               borderColor={Colors.border}
+              accessibilityRole="button"
+              accessibilityLabel="Reset moods to defaults"
             >
               <VelaIcon name="cycle" size={16} color={Colors.textSecondary} />
               <Text

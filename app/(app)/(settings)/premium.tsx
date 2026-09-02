@@ -220,7 +220,7 @@ export default function PremiumScreen() {
         </Stack>
 
         {/* Plans */}
-        <Stack paddingHorizontal={20} gap={10} marginBottom={24}>
+        <Stack paddingHorizontal={20} gap={10} marginBottom={24} accessibilityRole="radiogroup">
           {(["YEARLY", "LIFETIME", "MONTHLY"] as PlanKey[]).map((key) => {
             const p = PREMIUM_PRICING[key];
             const isSelected = selected === key;
@@ -243,6 +243,9 @@ export default function PremiumScreen() {
                 shadowOpacity={isSelected ? 0.1 : 0.04}
                 shadowRadius={isSelected ? 8 : 4}
                 elevation={isSelected ? 2 : 1}
+                accessibilityRole="radio"
+                accessibilityLabel={`${p.label}, ${p.price}`}
+                accessibilityState={{ selected: isSelected }}
               >
                 <Stack
                   width={24}
@@ -341,6 +344,14 @@ export default function PremiumScreen() {
             shadowOpacity={0.28}
             shadowRadius={14}
             elevation={6}
+            accessibilityRole="button"
+            accessibilityLabel={
+              selected === "YEARLY"
+                ? "Unlock Premium"
+                : selected === "LIFETIME"
+                  ? "Unlock Lifetime"
+                  : "Subscribe Monthly"
+            }
           >
             {/* <VelaIcon name="crown" size={18} color={Colors.textInverse} /> */}
             <Text
@@ -398,7 +409,13 @@ export default function PremiumScreen() {
 
           {/* Restore & Legal Links */}
           <Stack alignItems="center" gap={8}>
-            <StyledPressable onPress={premium.restore}>
+            <StyledPressable
+              onPress={premium.restore}
+              hitSlop={8}
+              paddingVertical={6}
+              accessibilityRole="button"
+              accessibilityLabel="Restore purchases"
+            >
               <Text fontSize={12} color={Colors.primary} fontWeight="600">
                 Restore purchases
               </Text>
@@ -422,6 +439,11 @@ export default function PremiumScreen() {
             >
               <StyledPressable
                 onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}
+                hitSlop={8}
+                paddingVertical={6}
+                accessibilityRole="link"
+                accessibilityLabel="Privacy Policy"
+                accessibilityHint="Opens in your browser"
               >
                 <Text fontSize={11} color={Colors.primary}>
                   Privacy Policy
@@ -432,7 +454,14 @@ export default function PremiumScreen() {
                 •
               </Text>
 
-              <StyledPressable onPress={() => Linking.openURL(TERMS_URL)}>
+              <StyledPressable
+                onPress={() => Linking.openURL(TERMS_URL)}
+                hitSlop={8}
+                paddingVertical={6}
+                accessibilityRole="link"
+                accessibilityLabel="Terms of Use"
+                accessibilityHint="Opens in your browser"
+              >
                 <Text fontSize={11} color={Colors.primary}>
                   Terms of Use
                 </Text>

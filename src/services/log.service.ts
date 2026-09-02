@@ -112,6 +112,38 @@ export const logService = {
       .limit(limit)
   },
 
+  // Full log history (with symptoms/moods joined in) for on-device analysis
+  // such as Home's insight and pattern detection. `limit` bounds how many
+  // daily_logs rows are considered — plenty for several years of daily
+  // tracking on a personal-health dataset this size.
+  async getHistoryWithSymptoms(limit = 400): Promise<DailyLogWithSymptoms[]> {
+    const logs = await db
+      .select()
+      .from(dailyLogs)
+      .orderBy(desc(dailyLogs.date))
+      .limit(limit)
+
+    if (logs.length === 0) return []
+
+    const oldestDate = logs[logs.length - 1].date
+    const symptomRows = await db
+      .select()
+      .from(symptomLogs)
+      .where(gte(symptomLogs.date, oldestDate))
+
+    const symptomsByDate = new Map<string, SymptomLog[]>()
+    for (const row of symptomRows) {
+      const existing = symptomsByDate.get(row.date) ?? []
+      existing.push(row)
+      symptomsByDate.set(row.date, existing)
+    }
+
+    return logs.map(log => ({
+      ...log,
+      symptoms: symptomsByDate.get(log.date) ?? [],
+    }))
+  },
+
   // Check if any period flow is logged for a date range
   async getFlowDates(startDate: string, endDate: string): Promise<string[]> {
     const logs = await db

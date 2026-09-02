@@ -45,6 +45,20 @@ export function CycleCalendar({ prediction, cycles, onDayPress, loggedDates }: C
   const goBack    = () => setMonthDate(d => new Date(d.getFullYear(), d.getMonth() - 1, 1))
   const goForward = () => setMonthDate(d => new Date(d.getFullYear(), d.getMonth() + 1, 1))
 
+  // Screen readers only get the bare day number from the visible Text —
+  // this composes the cycle meaning (period/fertile/ovulation/predicted/
+  // today/logged) into one label so that context isn't sighted-only.
+  const getDayAccessibilityLabel = (date: Date, meta: DayMeta | undefined, hasLog: boolean) => {
+    const parts = [format(date, 'EEEE, MMMM d')]
+    if (meta?.isPeriod) parts.push('period day')
+    if (meta?.isOvulation) parts.push('ovulation day')
+    if (meta?.isFertile) parts.push('fertile day')
+    if (meta?.isPredicted) parts.push('predicted period')
+    if (meta?.isToday) parts.push('today')
+    if (hasLog) parts.push('logged')
+    return parts.join(', ')
+  }
+
   const getDayStyle = (meta: DayMeta | undefined, date: Date) => {
     if (!meta) return { bg: 'transparent', textColor: Colors.textTertiary, ring: false }
 
@@ -65,13 +79,27 @@ export function CycleCalendar({ prediction, cycles, onDayPress, loggedDates }: C
     <Stack gap={0}>
       {/* Header */}
       <Stack horizontal alignItems="center" justifyContent="space-between" paddingHorizontal={4} paddingBottom={16}>
-        <StyledPressable onPress={goBack} padding={8} borderRadius={20}>
+        <StyledPressable
+          onPress={goBack}
+          padding={8}
+          borderRadius={20}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Previous month"
+        >
           <Text fontSize={18} color={Colors.textSecondary}>‹</Text>
         </StyledPressable>
         <Text fontSize={17} fontWeight="700" color={Colors.textPrimary}>
           {formatMonthYear(monthDate)}
         </Text>
-        <StyledPressable onPress={goForward} padding={8} borderRadius={20}>
+        <StyledPressable
+          onPress={goForward}
+          padding={8}
+          borderRadius={20}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Next month"
+        >
           <Text fontSize={18} color={Colors.textSecondary}>›</Text>
         </StyledPressable>
       </Stack>
@@ -108,6 +136,9 @@ export function CycleCalendar({ prediction, cycles, onDayPress, loggedDates }: C
                 alignItems="center"
                 justifyContent="center"
                 onPress={() => onDayPress?.(dateStr)}
+                accessibilityRole="button"
+                accessibilityLabel={getDayAccessibilityLabel(date, meta, !!hasLog)}
+                accessibilityState={{ selected: !!meta?.isToday }}
               >
                 <Stack
                   width={CELL_SIZE - 6}

@@ -42,7 +42,7 @@ const ARTICLE_CONTENT: Record<
     readTime: "4 min read",
     category: "Fertility",
     content: [
-      "The fertile window is the time each cycle when pregnancy is possible. You can only get pregnant from sex that happens during the 5 days before ovulation and on the day of ovulation itself.",
+      "The fertile window is the time each cycle when pregnancy is most likely. Pregnancy is most likely from sex during the 5 days before ovulation and on the day of ovulation itself — but cycle timing varies and ovulation can shift, so this window is an estimate, not a guarantee. Vela isn't a method of contraception.",
       "Why 6 days?\n\nSperm can survive in the female reproductive tract for up to 5 days. An egg, once released, is only viable for 12–24 hours. The combination means sex in the days leading up to ovulation can lead to conception.",
       "Identifying your fertile window\n\nVela calculates your fertile window based on your average cycle length, using the standard luteal phase length of 14 days.",
       "Physical signs\n\nYour body produces cervical mucus that changes throughout your cycle. During your fertile window, it becomes clear and stretchy. Some women also experience mild pelvic pain (mittelschmerz) at ovulation.",
@@ -50,13 +50,13 @@ const ARTICLE_CONTENT: Record<
   },
   "bbt-tracking": {
     title: "Basal Body Temperature Tracking",
-    subtitle: "How to use BBT to understand your cycle",
+    subtitle: "How to use BBT to understand your cycle and estimate ovulation",
     readTime: "4 min read",
     category: "Tracking",
     content: [
       "Basal body temperature (BBT) is your body's resting temperature, taken first thing in the morning before any activity. After ovulation, BBT typically rises by 0.2–0.5°C due to progesterone.",
       "How to track BBT\n\nUse a basal thermometer (reads to 2 decimal places). Take your temperature every morning at the same time, before getting out of bed. Log it in the Tracker tab.",
-      "What to look for\n\nA sustained temperature rise of at least 0.2°C lasting 3+ days indicates ovulation has occurred.",
+      "What to look for\n\nA sustained temperature rise of at least 0.2°C lasting 3+ days is a common sign that ovulation has already occurred. On its own, a reading isn't a diagnostic confirmation — treat it as one more data point alongside your other logged signs.",
       "Important note\n\nBBT can be affected by illness, alcohol, poor sleep, or timezone changes. Always note disruptions when logging.",
     ],
   },

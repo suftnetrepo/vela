@@ -65,6 +65,8 @@ export default function CycleSettingsScreen() {
             borderRadius={20}
             paddingHorizontal={16}
             paddingVertical={8}
+            accessibilityRole="button"
+            accessibilityLabel="Save cycle settings"
           >
             <Text
               fontSize={14}
@@ -120,26 +122,41 @@ export default function CycleSettingsScreen() {
               days
             </Text>
           </Stack>
-          <StyledSlider
-            key="cycle-slider"
-            value={cycleInitial}
-            min={20}
-            max={45}
-            step={1}
-            onSlidingComplete={(v) => {
-              cycleLenRef.current = v;
-              setCycleDisplay(v);
+          <Stack
+            accessible
+            accessibilityRole="adjustable"
+            accessibilityLabel="Average cycle length"
+            accessibilityValue={{ min: 20, max: 45, now: cycleDisplay, text: `${cycleDisplay} days` }}
+            accessibilityHint="Swipe up or down to adjust"
+            onAccessibilityAction={(e) => {
+              const delta = e.nativeEvent.actionName === "increment" ? 1 : e.nativeEvent.actionName === "decrement" ? -1 : 0;
+              if (!delta) return;
+              const next = Math.max(20, Math.min(45, cycleLenRef.current + delta));
+              cycleLenRef.current = next;
+              setCycleDisplay(next);
             }}
-            formatLabel={(v) => `${v}d`}
-            colors={{
-              fill: Colors.primary,
-              track: Colors.border,
-              thumbBorder: Colors.primary,
-              tooltipBg: Colors.primaryDark,
-            }}
-            size="md"
-            alwaysShowTooltip
-          />
+          >
+            <StyledSlider
+              key="cycle-slider"
+              value={cycleInitial}
+              min={20}
+              max={45}
+              step={1}
+              onSlidingComplete={(v) => {
+                cycleLenRef.current = v;
+                setCycleDisplay(v);
+              }}
+              formatLabel={(v) => `${v}d`}
+              colors={{
+                fill: Colors.primary,
+                track: Colors.border,
+                thumbBorder: Colors.primary,
+                tooltipBg: Colors.primaryDark,
+              }}
+              size="md"
+              alwaysShowTooltip
+            />
+          </Stack>
           <Stack horizontal justifyContent="space-between">
             <Text fontSize={11} color={Colors.textTertiary}>
               20 days (short)
@@ -188,26 +205,41 @@ export default function CycleSettingsScreen() {
               days
             </Text>
           </Stack>
-          <StyledSlider
-            key="period-slider"
-            value={periodInitial}
-            min={2}
-            max={9}
-            step={1}
-            onSlidingComplete={(v) => {
-              periodLenRef.current = v;
-              setPeriodDisplay(v);
+          <Stack
+            accessible
+            accessibilityRole="adjustable"
+            accessibilityLabel="Average period length"
+            accessibilityValue={{ min: 2, max: 9, now: periodDisplay, text: `${periodDisplay} days` }}
+            accessibilityHint="Swipe up or down to adjust"
+            onAccessibilityAction={(e) => {
+              const delta = e.nativeEvent.actionName === "increment" ? 1 : e.nativeEvent.actionName === "decrement" ? -1 : 0;
+              if (!delta) return;
+              const next = Math.max(2, Math.min(9, periodLenRef.current + delta));
+              periodLenRef.current = next;
+              setPeriodDisplay(next);
             }}
-            formatLabel={(v) => `${v}d`}
-            colors={{
-              fill: Colors.primary,
-              track: Colors.border,
-              thumbBorder: Colors.primary,
-              tooltipBg: Colors.primaryDark,
-            }}
-            size="md"
-            alwaysShowTooltip
-          />
+          >
+            <StyledSlider
+              key="period-slider"
+              value={periodInitial}
+              min={2}
+              max={9}
+              step={1}
+              onSlidingComplete={(v) => {
+                periodLenRef.current = v;
+                setPeriodDisplay(v);
+              }}
+              formatLabel={(v) => `${v}d`}
+              colors={{
+                fill: Colors.primary,
+                track: Colors.border,
+                thumbBorder: Colors.primary,
+                tooltipBg: Colors.primaryDark,
+              }}
+              size="md"
+              alwaysShowTooltip
+            />
+          </Stack>
           <Stack horizontal justifyContent="space-between">
             <Text fontSize={11} color={Colors.textTertiary}>
               2 days

@@ -7,21 +7,9 @@ import { Text } from '@/components/text'
 import { toastService, loaderService, dialogueService } from 'fluent-styles'
 import { useColors } from '../../hooks/useColors'
 import { VelaIcon } from './VelaIcon'
-import {
-  decodeVelaData,
-  payloadToCycles,
-  payloadToDailyLogs,
-  payloadToSymptomLogs,
-  payloadToSettings,
-  getPayloadSummary,
-} from '../../services/velaDataService'
-import { cycleService } from '../../services/cycle.service'
-import { logService } from '../../services/log.service'
-import { settingsService } from '../../services/settings.service'
+import { decodeVelaData, getPayloadSummary } from '../../services/velaDataService'
+import { restoreBackup } from '../../services/restore.service'
 import { useRecordsStore } from '../../stores/records.store'
-import { db } from '../../db/client'
-import { dailyLogs as dailyLogsTable, symptomLogs as symptomLogsTable } from '../../db/schema'
-import { eq } from 'drizzle-orm'
 
 interface ImportDataContentProps {
   onDone: () => void
@@ -33,7 +21,6 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
   const [summary, setSummary] = useState<{ cycles: number; logs: number; symptoms: number; dateRange?: string } | null>(null)
-  const [linkCycles, setLinkCycles] = useState(true)
 
   const performImport = async (rawCode: string) => {
     setError('')
@@ -53,7 +40,7 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
 
       const ok = await dialogueService.confirm({
         title: `Import ${dataTypes.join(' + ')}?`,
-        message: `This will add the data from your export to your Vela. Your existing data won't be deleted.`,
+        message: `Existing entries are kept — only new cycles and days will be added. Nothing you've already logged will be overwritten.`,
         icon: '📥',
         confirmLabel: 'Import',
         destructive: false,
@@ -61,55 +48,26 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
 
       if (!ok) return
 
-      await loaderService.wrap(async () => {
-        // 1. Import settings
-        if (payload.st) {
-          const settingsMap = payloadToSettings(payload)
-          for (const [key, value] of Object.entries(settingsMap)) {
-            await settingsService.set(key, value)
-          }
-        }
-
-        // 2. Import cycles
-        if (payload.cy && payload.cy.length > 0) {
-          const cycles = payloadToCycles(payload)
-          for (const cycle of cycles) {
-            await cycleService.startNewCycle(new Date(cycle.startDate))
-          }
-        }
-
-        // 3. Import daily logs + symptoms
-        if (payload.dl && payload.dl.length > 0) {
-          const logs = payloadToDailyLogs(payload)
-          const symptoms = payloadToSymptomLogs(payload)
-
-          // Upsert daily logs
-          for (const log of logs) {
-            await logService.upsertLog(log.date, log)
-          }
-
-          // Insert symptoms
-          for (const sym of symptoms) {
-            // Find the daily log we just inserted to get its ID
-            const daily = await logService.getByDate(sym.date)
-            if (daily) {
-              await db
-                .insert(symptomLogsTable)
-                .values({
-                  ...sym,
-                  dailyLogId: daily.id,
-                  createdAt: new Date().toISOString(),
-                })
-                .catch(() => {
-                  // Ignore duplicate symptoms
-                })
-            }
-          }
-        }
-      }, { label: 'Importing…', variant: 'spinner' })
+      // restoreBackup runs the whole restore inside one DB transaction: if
+      // anything fails partway through, nothing from this attempt is kept.
+      const result = await loaderService.wrap(
+        () => restoreBackup(payload),
+        { label: 'Importing…', variant: 'spinner' },
+      )
 
       invalidateData()
-      toastService.success('Import successful!', 'Your data has been added to Vela')
+
+      const imported: string[] = []
+      if (result.importedCycles > 0) imported.push(`${result.importedCycles} cycle${result.importedCycles === 1 ? '' : 's'}`)
+      if (result.importedLogs > 0) imported.push(`${result.importedLogs} log${result.importedLogs === 1 ? '' : 's'}`)
+      const importedText = imported.length > 0 ? `Imported ${imported.join(' and ')}.` : 'Nothing new to import.'
+
+      const skipped: string[] = []
+      if (result.skippedCycles > 0) skipped.push(`${result.skippedCycles} cycle${result.skippedCycles === 1 ? '' : 's'}`)
+      if (result.skippedLogs > 0) skipped.push(`${result.skippedLogs} day${result.skippedLogs === 1 ? '' : 's'}`)
+      const skippedText = skipped.length > 0 ? ` Kept your existing ${skipped.join(' and ')} as-is.` : ''
+
+      toastService.success('Import complete', `${importedText}${skippedText}`)
       onDone()
       setCode('')
     } catch (err: any) {
@@ -287,7 +245,7 @@ export function ImportDataContent({ onDone }: ImportDataContentProps) {
         <Stack horizontal gap={8} alignItems="flex-start">
           <VelaIcon name="info" size={16} color={Colors.primary} style={{ marginTop: 2 }} />
           <Text fontSize={12} color={Colors.textPrimary} lineHeight={18} flex={1}>
-            <Text color={Colors.textPrimary} variant='label'>Privacy</Text>: Only your cycle, logs, and settings are imported. Personal data like PIN and biometric settings are kept separate.
+            <Text color={Colors.textPrimary} variant='label'>Privacy</Text>: Only your cycle, logs, and settings are imported — PIN and biometric settings are kept separate. Export codes/files aren't encrypted, so only import ones from a source you trust.
           </Text>
         </Stack>
       </Stack>

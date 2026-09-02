@@ -80,6 +80,10 @@ export const ALL_MOODS: MoodDef[] = [
 // Settings key prefix for mood visibility
 export const MOOD_SETTING_PREFIX = 'mood_visible_'
 
+// Prefix moods are stored under inside symptom_logs.symptom_key so they can
+// share the same table as symptoms (see app/(app)/log.tsx's save flow).
+export const MOOD_KEY_PREFIX = 'mood_'
+
 // Default visible moods (used as fallback and for display in MoodSelector)
 export const MOODS = ALL_MOODS.filter(m => m.defaultVisible)
 

@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Stack,
-  StyledText,
   StyledScrollView,
   StyledPage,
   StyledPressable,
-  StyledSeperator,
   theme,
 } from "fluent-styles";
 import { router } from "expo-router";
@@ -13,28 +11,49 @@ import { Text } from "@/components/text";
 import { useColors } from "../../src/hooks/useColors";
 import { useCycles } from "../../src/hooks/useCycles";
 import { usePrediction } from "../../src/hooks/usePrediction";
+import { usePredictionConfidence } from "../../src/hooks/usePredictionConfidence";
+import { useLogHistory } from "../../src/hooks/useLogHistory";
+import { useHomeInsight } from "../../src/hooks/useHomeInsight";
+import { usePatterns } from "../../src/hooks/usePatterns";
 import { CycleCalendar } from "../../src/components/calendar/CycleCalendar";
 import { TodayCard } from "../../src/components/home/TodayCard";
-import { CycleInfoRow } from "../../src/components/home/CycleInfoRow";
-import { CycleTrendsCard } from "../../src/components/insights/CycleTrendsCard";
+import { CycleForecastCard } from "../../src/components/home/CycleForecastCard";
+import { QuickLogRow } from "../../src/components/home/QuickLogRow";
+import { VelaInsightCard } from "../../src/components/home/VelaInsightCard";
+import { PatternsSummaryCard } from "../../src/components/home/PatternsSummaryCard";
 import { BrandHeader } from "../../src/components/shared/BrandHeader";
 import { VelaIcon } from "../../src/components/shared/VelaIcon";
 import { todayStr } from "../../src/utils/date";
-import { APP_CONFIG } from "../../src/constants/config";
 import { dialogueService, toastService, loaderService } from "fluent-styles";
 import { cycleService } from "../../src/services/cycle.service";
 import { useRecordsStore } from "../../src/stores/records.store";
-import Svg, { Path } from "react-native-svg";
+
+type HomeSection = "dashboard" | "calendar";
 
 export default function HomeScreen() {
   const Colors = useColors();
+  const [activeSection, setActiveSection] = useState<HomeSection>("dashboard");
   const { cycles } = useCycles();
   const prediction = usePrediction(cycles);
+  const confidence = usePredictionConfidence(cycles, prediction);
+  const { logs: logHistory } = useLogHistory();
+  const insight = useHomeInsight(cycles, logHistory, prediction);
+  const patterns = usePatterns(cycles, logHistory, prediction);
   const invalidateData = useRecordsStore((s) => s.invalidateData);
-  const activeCycle = cycles.find((c) => c.isActive === 1) ?? null;
 
   const handleDayPress = (date: string) => {
     router.push({ pathname: "/(app)/log", params: { date } });
+  };
+
+  const openLog = (tab?: "flow" | "symptoms" | "journal", category?: string) => {
+    router.push({
+      pathname: "/(app)/log",
+      params: {
+        date: todayStr(),
+        ...(tab ? { tab } : {}),
+        ...(category ? { category } : {}),
+      },
+    });
   };
 
   const handleStartPeriod = async () => {
@@ -66,14 +85,14 @@ export default function HomeScreen() {
   };
 
   return (
-    <StyledPage  backgroundColor={Colors.background}>
+    <StyledPage showStatusBar  backgroundColor={Colors.background}>
       {/* Premium Brand Header */}
       <Stack
         flexDirection="row"
         alignItems="center"
         justifyContent="space-between"
         paddingHorizontal={20}
-      
+
         backgroundColor={Colors.background}
       >
         {/* Left: Brand Logo + Wordmark */}
@@ -155,97 +174,123 @@ export default function HomeScreen() {
         </Stack>
       )}
 
+      {/* Home section switcher — in-screen navigation, bottom tabs remain unchanged */}
+      <Stack paddingHorizontal={20} paddingTop={10} paddingBottom={8}>
+        <Stack
+          flexDirection="row"
+          backgroundColor={Colors.primaryFaint}
+          borderRadius={20}
+          padding={4}
+          gap={4}
+        >
+          {([
+            { key: "dashboard", label: "Dashboard", icon: "grid" },
+            { key: "calendar", label: "Calendar", icon: "calendar" },
+          ] as const).map((item) => {
+            const selected = activeSection === item.key;
+            return (
+              <StyledPressable
+                key={item.key}
+                onPress={() => setActiveSection(item.key)}
+                flex={1}
+                minHeight={44}
+                borderRadius={16}
+                alignItems="center"
+                justifyContent="center"
+                flexDirection="row"
+                gap={6}
+                backgroundColor={selected ? Colors.surface : "transparent"}
+                borderWidth={selected ? 1 : 0}
+                borderColor={selected ? Colors.border : "transparent"}
+                shadowColor={selected ? "#000" : "transparent"}
+                shadowOffset={{ width: 0, height: 1 }}
+                shadowOpacity={selected ? 0.05 : 0}
+                shadowRadius={5}
+                elevation={selected ? 1 : 0}
+              >
+                <VelaIcon
+                  name={item.icon}
+                  size={15}
+                  color={selected ? Colors.primary : Colors.textSecondary}
+                />
+                <Text
+                  fontSize={13}
+                  fontWeight={selected ? "700" : "600"}
+                  color={selected ? Colors.primary : Colors.textSecondary}
+                >
+                  {item.label}
+                </Text>
+              </StyledPressable>
+            );
+          })}
+        </Stack>
+      </Stack>
+
       <StyledScrollView
         contentContainerStyle={{ paddingBottom: 0, marginBottom: 0 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* 1. Today hero card */}
-        <Stack
-          paddingHorizontal={20}
-          paddingTop={8}
-          paddingBottom={16}
-          shadowColor={theme.colors.rose[800]}
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.06}
-          shadowRadius={12}
-          elevation={3}
-        >
-          <TodayCard
-            prediction={prediction}
-            cycles={cycles}
-            onLogPress={() =>
-              router.push({
-                pathname: "/(app)/log",
-                params: { date: todayStr() },
-              })
-            }
-          />
-        </Stack>
-
-        {/* 2. Calendar */}
-        <Stack paddingHorizontal={20} paddingBottom={16}>
-          <Stack
-            backgroundColor={Colors.surface}
-            borderRadius={24}
-            padding={20}
-            paddingBottom={16}
-            shadowColor="#000"
-            shadowOffset={{ width: 0, height: 2 }}
-            shadowOpacity={0.06}
-            shadowRadius={12}
-            elevation={3}
-          >
-            <CycleCalendar
-              prediction={prediction}
-              cycles={cycles}
-              onDayPress={handleDayPress}
-            />
-          </Stack>
-        </Stack>
-
-        {/* Trust messaging based on cycle history */}
-        {prediction && cycles.length < 3 && (
-          <Stack
-            marginHorizontal={20}
-            marginBottom={12}
-            paddingHorizontal={12}
-            paddingVertical={8}
-            backgroundColor={Colors.surface}
-            borderRadius={12}
-            borderWidth={1}
-            borderColor={Colors.border}
-            alignItems="flex-start"
-          >
-            <Text fontSize={11} fontWeight="500" color={Colors.textTertiary}>
-              💡 Predictions improve as you log more cycles. Keep tracking to see patterns.
-            </Text>
-          </Stack>
+        {activeSection === "dashboard" && (
+          <>
+            <Stack paddingHorizontal={20} paddingTop={8} paddingBottom={16} shadowColor={theme.colors.rose[800]} shadowOffset={{ width: 0, height: 2 }} shadowOpacity={0.06} shadowRadius={12} elevation={3}>
+              <TodayCard prediction={prediction} confidence={confidence} onLogPress={() => openLog()} onStartPeriodPress={handleStartPeriod} onEditCyclePress={() => router.push("/(app)/(settings)/cycle-settings")} onViewInsightsPress={() => router.push("/(app)/insights")} />
+            </Stack>
+            <Stack paddingHorizontal={20} paddingBottom={16}>
+              <VelaInsightCard insight={insight} cyclesLogged={cycles.length} onViewAll={() => router.push("/(app)/insights")} />
+            </Stack>
+            <QuickLogRow onFlowPress={() => openLog("flow")} onMoodPress={() => openLog("journal")} onPainPress={() => openLog("symptoms", "pain")} onEnergyPress={() => openLog("journal")} onMorePress={() => openLog()} onEditPress={() => openLog()} />
+            <Stack paddingHorizontal={20} paddingBottom={16}>
+              <PatternsSummaryCard patterns={patterns} hasHistory={cycles.length > 0} onSeeAll={() => router.push("/(app)/insights")} />
+            </Stack>
+          </>
         )}
 
-        {/* 3. Cycle trends card */}
-        {prediction && (
-          <Stack paddingHorizontal={20} paddingBottom={12}>
-            <CycleTrendsCard
-              prediction={prediction}
-              activeCycle={activeCycle}
-              cyclesUsed={Math.min(
-                cycles.filter((c: any) => c.cycleLength != null).length,
-                APP_CONFIG.prediction.maxCyclesUsed,
-              )}
-              onPress={() => router.push("/(app)/insights")}
-            />
-          </Stack>
+        {activeSection === "calendar" && (
+          <>
+            <Stack paddingHorizontal={20} paddingTop={8} paddingBottom={16}>
+              <Stack
+                backgroundColor={Colors.surface}
+                borderRadius={24}
+                padding={20}
+                paddingBottom={16}
+                borderWidth={1}
+                borderColor={Colors.border}
+                shadowColor="#000"
+                shadowOffset={{ width: 0, height: 2 }}
+                shadowOpacity={0.05}
+                shadowRadius={12}
+                elevation={2}
+              >
+                <Stack flexDirection="row" alignItems="center" justifyContent="space-between" marginBottom={12}>
+                  <Text fontSize={18} fontWeight="700" color={Colors.textPrimary}>Calendar</Text>
+                  <StyledPressable
+                    onPress={() => openLog("flow")}
+                    flexDirection="row"
+                    alignItems="center"
+                    gap={5}
+                    paddingHorizontal={12}
+                    paddingVertical={8}
+                    borderRadius={16}
+                    backgroundColor={Colors.primaryFaint}
+                  >
+                    <VelaIcon name="edit" size={13} color={Colors.primary} />
+                    <Text fontSize={12} fontWeight="600" color={Colors.primaryDark}>Edit period</Text>
+                  </StyledPressable>
+                </Stack>
+                <CycleCalendar prediction={prediction} cycles={cycles} onDayPress={handleDayPress} />
+              </Stack>
+            </Stack>
+
+            <Stack paddingHorizontal={20} paddingBottom={24}>
+              <CycleForecastCard
+                prediction={prediction}
+                confidence={confidence}
+                layout="grid"
+                onViewTimeline={() => router.push("/(app)/tracker")}
+              />
+            </Stack>
+          </>
         )}
-        <StyledSeperator
-          leftLabel="Everyday tips for you  >"
-          leftLabelProps={{
-            color: theme.colors.gray[400],
-          }}
-          marginHorizontal={24}
-          marginBottom={4}
-        />
-        {/* 4. Cycle info row */}
-        <CycleInfoRow prediction={prediction} />
       </StyledScrollView>
     </StyledPage>
   );

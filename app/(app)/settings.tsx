@@ -5,6 +5,7 @@ import {
   StyledPressable, StyledDivider, actionSheetService,
 } from 'fluent-styles'
 import { router } from 'expo-router'
+import Constants from 'expo-constants'
 import { Text } from '@/components/text'
 import { useColors } from '../../src/hooks/useColors'
 import { useSettings } from '../../src/hooks/useSettings'
@@ -23,8 +24,12 @@ function MenuRow({
 }) {
   const Colors = useColors()
   return (
-    <StyledPressable onPress={onPress} flexDirection="row" alignItems="center"
-      paddingVertical={14} paddingHorizontal={16} gap={14} backgroundColor="transparent">
+    <StyledPressable onPress={onPress} disabled={!onPress} flexDirection="row" alignItems="center"
+      paddingVertical={14} paddingHorizontal={16} gap={14} backgroundColor="transparent"
+      accessibilityRole="button"
+      accessibilityLabel={[label, subtitle, badge].filter(Boolean).join(', ')}
+      accessibilityHint={destructive ? 'This action cannot be undone' : undefined}
+      accessibilityState={{ disabled: !onPress }}>
       <Stack width={38} height={38} borderRadius={12}
         backgroundColor={iconBg ?? Colors.primaryFaint} borderWidth={1} borderColor={Colors.border}
         alignItems="center" justifyContent="center">
@@ -94,7 +99,7 @@ export default function SettingsScreen() {
   }
 
   return (
-    <StyledPage flex={1} backgroundColor={Colors.background}>
+    <StyledPage showStatusBar backgroundColor={Colors.background}>
       <StyledPage.Header 
         marginHorizontal={32}
         title="Settings" titleAlignment="left"
@@ -110,7 +115,9 @@ export default function SettingsScreen() {
           borderWidth={1} borderColor={Colors.border}
           shadowColor="#000" shadowOffset={{ width: 0, height: 2 }}
           shadowOpacity={0.08} shadowRadius={12} elevation={3}
-          flexDirection="row" alignItems="center" gap={16}>
+          flexDirection="row" alignItems="center" gap={16}
+          accessibilityRole="button"
+          accessibilityLabel={`My Account, ${settings.isPremium ? 'Premium' : 'Free plan'}`}>
           <Stack width={60} height={60} borderRadius={30} backgroundColor={Colors.primaryFaint}
             alignItems="center" justifyContent="center" borderWidth={1.5} borderColor={Colors.border}>
             <VelaIcon name="vela" size={28} color={Colors.primary} />
@@ -138,7 +145,9 @@ export default function SettingsScreen() {
             borderWidth={1} borderColor="rgba(255,255,255,0.12)"
             shadowColor="#A960DA" shadowOffset={{ width: 0, height: 3 }}
             shadowOpacity={0.18} shadowRadius={12} elevation={4}
-            flexDirection="row" alignItems="center" gap={14}>
+            flexDirection="row" alignItems="center" gap={14}
+            accessibilityRole="button"
+            accessibilityLabel="Unlock Premium: Partner sharing, Reports, All themes">
             {/* <Stack width={46} height={46} borderRadius={23}
               backgroundColor="rgba(255,255,255,0.2)" borderWidth={1} borderColor="rgba(255,255,255,0.25)"
               alignItems="center" justifyContent="center">
@@ -221,7 +230,9 @@ export default function SettingsScreen() {
 
         <PrivacyBadge />
         <Stack alignItems="center" paddingTop={4} gap={3}>
-          <Text fontSize={11} color={Colors.textTertiary}>Vela v1.0.0 · No internet · No analytics</Text>
+          <Text fontSize={11} color={Colors.textTertiary}>
+            Vela v{Constants.expoConfig?.version ?? '1.0.0'} · Your cycle data stays on this device
+          </Text>
         </Stack>
       </StyledScrollView>
     </StyledPage>

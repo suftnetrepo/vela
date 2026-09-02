@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Linking } from "react-native";
 import {
   Stack,
   StyledText,
@@ -26,7 +27,7 @@ const FAQ_DATA: FAQItem[] = [
   {
     category: "Privacy",
     q: "Does Vela send my data anywhere?",
-    a: "No. Vela is 100% offline. All your data is stored locally in a SQLite database on your device. The app has no internet permissions and makes zero network requests — not even to check for updates.",
+    a: "No. Your cycle, symptom, mood, and journal data is stored locally in a SQLite database on your device — Vela has no server for that data and never sends it anywhere. The app does use the internet for one unrelated thing: processing purchases and subscriptions, via Apple/Google and RevenueCat, which only ever see purchase information, never your health data.",
   },
   {
     category: "Privacy",
@@ -68,7 +69,7 @@ const FAQ_DATA: FAQItem[] = [
   {
     category: "BBT & Tracking",
     q: "What is basal body temperature (BBT)?",
-    a: "BBT is your body's resting temperature measured first thing in the morning before any activity. A small rise in BBT (0.2–0.5°C) typically indicates ovulation has occurred. Tracking BBT over multiple cycles can help confirm ovulation patterns.",
+    a: "BBT is your body's resting temperature measured first thing in the morning before any activity. A small rise in BBT (0.2–0.5°C) often follows ovulation. Tracking BBT over multiple cycles adds one more data point alongside your other logged signs — it's not a diagnostic test.",
   },
   {
     category: "BBT & Tracking",
@@ -168,6 +169,8 @@ export default function FAQScreen() {
             }
             clearable
             focusColor={Colors.primary}
+            accessibilityLabel="Search questions"
+            returnKeyType="search"
           />
         </Stack>
 
@@ -187,6 +190,9 @@ export default function FAQScreen() {
             borderRadius={20}
             paddingHorizontal={14}
             paddingVertical={8}
+            accessibilityRole="button"
+            accessibilityLabel="All categories"
+            accessibilityState={{ selected: !activeCategory }}
           >
             <Text
               fontSize={13}
@@ -210,6 +216,9 @@ export default function FAQScreen() {
               borderRadius={20}
               paddingHorizontal={14}
               paddingVertical={8}
+              accessibilityRole="button"
+              accessibilityLabel={cat}
+              accessibilityState={{ selected: activeCategory === cat }}
             >
               <Text
                 fontSize={13}
@@ -257,6 +266,9 @@ export default function FAQScreen() {
                   alignItems="center"
                   padding={16}
                   gap={12}
+                  accessibilityRole="button"
+                  accessibilityLabel={item.q}
+                  accessibilityState={{ expanded: isOpen }}
                 >
                   <Stack
                     width={32}
@@ -336,22 +348,27 @@ export default function FAQScreen() {
             color={Colors.textSecondary}
             lineHeight={20}
           >
-            Since Vela is fully offline, we can't offer in-app chat support. But
-            you can reach us via the App Store review, or find us on GitHub.
+            Since your cycle data never leaves your device, we can't offer in-app
+            chat support tied to your account. But you can email us directly, or
+            reach us via an App Store review.
           </Text>
-          <Stack
+          <StyledPressable
+            onPress={() => Linking.openURL("mailto:support@suftnet.com")}
             backgroundColor={Colors.surface}
             borderRadius={12}
             padding={12}
+            accessibilityRole="link"
+            accessibilityLabel="Email support@suftnet.com"
+            accessibilityHint="Opens your email app"
           >
             <Text
-              fontSize={12}
-              color={Colors.textTertiary}
+              fontSize={13}
+              color={Colors.primary}
               fontWeight="600"
             >
-              github.com/aaghorighor/fluent-styles
+              support@suftnet.com
             </Text>
-          </Stack>
+          </StyledPressable>
         </Stack>
       </StyledScrollView>
     </StyledPage>

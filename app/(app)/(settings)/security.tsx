@@ -185,6 +185,9 @@ export default function SecurityScreen() {
             paddingVertical={14}
             paddingHorizontal={16}
             gap={14}
+            accessibilityRole="button"
+            accessibilityLabel={hasPin ? "Change PIN" : "Set up PIN"}
+            accessibilityHint={hasPin ? "4-digit PIN is active" : "No PIN set — data is unprotected"}
           >
             <Stack
               width={38}
@@ -230,6 +233,9 @@ export default function SecurityScreen() {
                 paddingVertical={14}
                 paddingHorizontal={16}
                 gap={14}
+                accessibilityRole="button"
+                accessibilityLabel="Remove PIN"
+                accessibilityHint="This action cannot be undone"
               >
                 <Stack
                   width={38}
