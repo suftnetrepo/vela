@@ -18,6 +18,9 @@
       "node": "22.13.0",
       "ios": {
         "image": "latest"
+      },
+      "android": {
+        "buildType": "app-bundle"
       }
     }
   },

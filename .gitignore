@@ -11,6 +11,16 @@ expo-env.d.ts
 ios/
 android/
 
+# Android release signing keystore + passwords — never commit. Back this
+# up somewhere durable (password manager / secure cloud storage): losing
+# it means losing the ability to publish updates to this app on Play.
+credentials/
+
+# Downloaded EAS/local build artifacts
+*.aab
+*.apk
+*.ipa
+
 # Environment variables
 .env
 .env.local

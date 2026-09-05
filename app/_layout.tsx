@@ -102,6 +102,11 @@ export default function RootLayout() {
       setBootReady(true)
       setAppReady(true)
 
+      // Android needs a channel to exist before it'll post an alerting
+      // (sound/heads-up) notification — no-op on iOS. Fire-and-forget for
+      // the same reason as refreshScheduledNotifications() below.
+      notificationService.ensureAndroidNotificationChannel()
+
       // Fire-and-forget: recompute the prediction and (re)schedule
       // reminder notifications to match. Not awaited so it never blocks
       // app startup — notification permission prompts / scheduling can

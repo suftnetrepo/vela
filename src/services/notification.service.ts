@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import * as ExpoNotifications from 'expo-notifications'
 import { settingsService } from './settings.service'
 import { cycleService } from './cycle.service'
@@ -19,6 +20,21 @@ export const notificationService = {
   async requestPermissions(): Promise<boolean> {
     const { status } = await ExpoNotifications.requestPermissionsAsync()
     return status === 'granted'
+  },
+
+  // Android 8+ (API 26+) won't post a heads-up/sound notification without a
+  // channel — without this, reminders would silently fall back to a mute,
+  // low-priority default channel instead of actually alerting. iOS has no
+  // concept of channels, so this is a no-op there. Call once at app startup,
+  // before any reminder gets scheduled.
+  async ensureAndroidNotificationChannel(): Promise<void> {
+    if (Platform.OS !== 'android') return
+    await ExpoNotifications.setNotificationChannelAsync('reminders', {
+      name: 'Reminders',
+      importance: ExpoNotifications.AndroidImportance.HIGH,
+      vibrationPattern: [0, 250, 250, 250],
+      sound: 'default',
+    })
   },
 
   async schedulePredictionNotifications(prediction: CyclePrediction): Promise<void> {

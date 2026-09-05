@@ -27,6 +27,7 @@
  *
  * ─────────────────────────────────────────────────────────────────────────────
  */
+import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import Purchases from "react-native-purchases";
 import { PREMIUM_STORAGE_KEY } from "../constants/premium";
@@ -35,10 +36,25 @@ import { PREMIUM_PRODUCTS } from "../constants/premium";
 // ─── RevenueCat Configuration ─────────────────────────────────────────────────
 // Same product IDs across all environments: vela_premium_monthly/yearly/lifetime
 // (Works for both RevenueCat Test Store and Production)
+//
+// RevenueCat issues a separate key per store — an "appl_" key only
+// authenticates against App Store Connect/StoreKit, so reusing it on Android
+// would fail there (this previously wasn't platform-aware at all). Each
+// platform needs its own key from the RevenueCat dashboard (Project
+// settings → API keys), tied to that platform's app.
+const ANDROID_PLACEHOLDER_KEY = "goog_REPLACE_WITH_GOOGLE_PLAY_KEY";
+// Widened to `string` — otherwise TS narrows both consts to their literal
+// types and flags the placeholder-guard comparison below as an "always
+// false" type error, which defeats the point of the check.
+const ANDROID_PRODUCTION_KEY: string = ANDROID_PLACEHOLDER_KEY;
 
 const REVENUECAT_API_KEY = __DEV__
   ? "test_CUwZEYKAHnjpWzNGwwjrKCEILNM"
-  : "appl_DLDmelsrlWRjyPwWCSVYXFouVDP";
+  : Platform.select({
+      ios: "appl_DLDmelsrlWRjyPwWCSVYXFouVDP",
+      android: ANDROID_PRODUCTION_KEY,
+      default: "",
+    })!;
 
 const PREMIUM_ENTITLEMENT_ID = "premium";
 const PREMIUM_PRODUCT_IDS = new Set(Object.values(PREMIUM_PRODUCTS));
@@ -144,6 +160,17 @@ const registerCustomerInfoListener = () => {
 
 export const initializeRevenueCat = async (): Promise<void> => {
   if (isRevenueCatInitialized) return;
+
+  if (
+    !__DEV__ &&
+    Platform.OS === "android" &&
+    ANDROID_PRODUCTION_KEY === ANDROID_PLACEHOLDER_KEY
+  ) {
+    throw new Error(
+      "[Premium] ANDROID_PRODUCTION_KEY is still the placeholder. " +
+        "Set it to the Google Play API key from the RevenueCat dashboard before shipping an Android build.",
+    );
+  }
 
   try {
 
