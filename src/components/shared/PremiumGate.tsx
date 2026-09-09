@@ -18,7 +18,7 @@ export function PremiumGate({ children, feature, description, compact = false }:
   const { isPremium } = usePremium()
 
   React.useEffect(() => {
-    console.log('[PremiumGate] Render state', { feature, isPremium })
+    if (__DEV__) console.log('[PremiumGate] Render state', { feature, isPremium })
   }, [feature, isPremium])
 
   if (isPremium) return <>{children}</>
